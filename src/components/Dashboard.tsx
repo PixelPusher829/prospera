@@ -10,7 +10,7 @@ import {
 	CreditCard,
 	DollarSign,
 } from "lucide-react";
-import { MOCK_SUMMARY, MOCK_TRANSACTIONS, MOCK_GOALS } from "../constants";
+import { MOCK_SUMMARY, MOCK_TRANSACTIONS, MOCK_GOALS } from "../data/constants";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {

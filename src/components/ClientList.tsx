@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, MoreVertical, Mail, Building, X, Save, Trash2, Check, ChevronRight, User, DollarSign, Calendar } from 'lucide-react';
-import { CLIENTS_DATA } from '../constants';
-import { ClientStatus, Client } from '../types';
+import { CLIENTS_DATA } from '../data/constants';
+import { ClientStatus, Client } from "../types/types";
 
 // Component for Inline Editing
 const InlineEditCell: React.FC<{

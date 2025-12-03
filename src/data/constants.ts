@@ -8,7 +8,7 @@ import {
 	Account,
 	Goal,
 	BudgetCategory,
-} from "./types";
+} from "../types/types";
 import { ShoppingBag, Coffee, Car, Home, Zap, HeartPulse } from "lucide-react";
 
 export const MOCK_SUMMARY: FinancialSummary = {

@@ -13,7 +13,7 @@ import {
   BarChart, Bar,
   PieChart, Pie, Cell
 } from 'recharts';
-import { MOCK_SUMMARY, BALANCE_HISTORY, BUDGET_VS_EXPENSE, EXPENSE_STATS } from '../constants';
+import { MOCK_SUMMARY, BALANCE_HISTORY, BUDGET_VS_EXPENSE, EXPENSE_STATS } from '../data/constants';
 import { getFinancialAdvice } from '../services/geminiService';
 
 const Analytics: React.FC = () => {

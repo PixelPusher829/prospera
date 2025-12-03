@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, Plus, ArrowUpRight, ArrowDownRight, MoreHorizontal, Calendar } from 'lucide-react';
-import { MOCK_TRANSACTIONS } from '../constants';
-import { Transaction } from '../types';
+import { MOCK_TRANSACTIONS } from '../data/constants';
+import { Transaction } from "../types/types";
 
 const Transactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS);

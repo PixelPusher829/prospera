@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus, AlertCircle } from 'lucide-react';
-import { MOCK_BUDGET } from '../constants';
+import { MOCK_BUDGET } from '../data/constants';
 
 const Budget: React.FC = () => {
   const totalBudget = MOCK_BUDGET.reduce((acc, curr) => acc + curr.limit, 0);

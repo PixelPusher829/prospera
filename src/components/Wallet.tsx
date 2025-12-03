@@ -13,7 +13,7 @@ import {
 	Bitcoin,
 	CalendarClock,
 } from "lucide-react";
-import { MOCK_ACCOUNTS } from "../constants";
+import { MOCK_ACCOUNTS } from "../data/constants";
 import { Account, AccountType } from "../types";
 
 // Visual Component for Credit Cards (Physical look)

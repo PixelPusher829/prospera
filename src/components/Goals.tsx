@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus, Target, Calendar, Car, Plane, Laptop, MoreVertical } from 'lucide-react';
-import { MOCK_GOALS } from '../constants';
+import { MOCK_GOALS } from '../data/constants';
 import { Goal } from '../types';
 
 const GoalCard: React.FC<{ goal: Goal }> = ({ goal }) => {
