@@ -15,14 +15,16 @@ import {
 } from "lucide-react";
 import { MOCK_ACCOUNTS } from "../data/constants";
 import { Account, AccountType } from "../types";
+import AddEditAccountModal from "./AddEditAccountModal";
 
 // Visual Component for Credit Cards (Physical look)
-const CreditCardVisual: React.FC<{ account: Account }> = ({ account }) => {
+const CreditCardVisual: React.FC<{ account: Account, onEdit: (account: Account) => void }> = ({ account, onEdit }) => {
 	return (
 		<div
+            onClick={() => onEdit(account)}
 			className={`relative p-6 rounded-2xl shadow-lg bg-gradient-to-r ${
 				account.colorTheme || "from-slate-700 to-slate-900"
-			} text-white overflow-hidden aspect-[1.58/1] flex flex-col justify-between group transition-transform hover:-translate-y-1`}
+			} text-white overflow-hidden aspect-[1.58/1] flex flex-col justify-between group transition-transform hover:-translate-y-1 cursor-pointer`}
 		>
 			{/* Background decoration */}
 			<div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
@@ -77,9 +79,11 @@ const CreditCardVisual: React.FC<{ account: Account }> = ({ account }) => {
 };
 
 // Loan Card Row
-const LoanRow: React.FC<{ account: Account }> = ({ account }) => {
+const LoanRow: React.FC<{ account: Account, onEdit: (account: Account) => void }> = ({ account, onEdit }) => {
 	return (
-		<div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between hover:border-violet-200 transition-colors">
+		<div 
+            onClick={() => onEdit(account)}
+            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between hover:border-violet-200 transition-colors cursor-pointer">
 			<div className="flex items-start justify-between mb-4">
 				<div className="flex items-center gap-4">
 					<div className="p-3 bg-red-50 text-red-500 rounded-xl">
@@ -126,11 +130,13 @@ const LoanRow: React.FC<{ account: Account }> = ({ account }) => {
 };
 
 // Simple List Row for Liquid Accounts
-const BankAccountRow: React.FC<{ account: Account }> = ({ account }) => {
+const BankAccountRow: React.FC<{ account: Account, onEdit: (account: Account) => void }> = ({ account, onEdit }) => {
 	const Icon = account.type === "Cash" ? Banknote : Landmark;
 
 	return (
-		<div className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors group">
+		<div 
+            onClick={() => onEdit(account)}
+            className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors group cursor-pointer">
 			<div className="flex items-center gap-4">
 				<div className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-white group-hover:shadow-md transition-all">
 					<Icon size={20} />
@@ -153,12 +159,14 @@ const BankAccountRow: React.FC<{ account: Account }> = ({ account }) => {
 };
 
 // Investment Card Row
-const InvestmentRow: React.FC<{ account: Account }> = ({ account }) => {
+const InvestmentRow: React.FC<{ account: Account, onEdit: (account: Account) => void }> = ({ account, onEdit }) => {
 	const isCrypto = account.currency === "BTC" || account.currency === "ETH";
 	const Icon = isCrypto ? Bitcoin : TrendingUp;
 
 	return (
-		<div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-violet-200 transition-colors">
+		<div 
+            onClick={() => onEdit(account)}
+            className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-violet-200 transition-colors cursor-pointer">
 			<div className="flex justify-between items-start mb-4">
 				<div
 					className={`p-3 rounded-2xl ${
@@ -187,112 +195,142 @@ const InvestmentRow: React.FC<{ account: Account }> = ({ account }) => {
 };
 
 const Wallet: React.FC = () => {
+  const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);
 	const [activeTab, setActiveTab] = useState<
 		"overview" | "accounts" | "cards" | "loans" | "investments"
 	>("overview");
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controls both add/edit modal
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null); // For editing
+  const [accountTypeToAdd, setAccountTypeToAdd] = useState<AccountType | 'Investment' | 'Loan'>('Cash');
+
+  const handleSaveAccount = (savedAccount: Account) => {
+    if (savedAccount.id && accounts.some(a => a.id === savedAccount.id)) {
+      // Update existing account
+      setAccounts(prev => prev.map(a => a.id === savedAccount.id ? savedAccount : a));
+    } else {
+      // Add new account
+      setAccounts(prev => [savedAccount, ...prev]);
+    }
+    setIsModalOpen(false); // Close modal after save
+    setSelectedAccount(null); // Clear selected account
+  };
+
+  const openAddAccountModal = (type: AccountType | 'Investment' | 'Loan') => {
+    setAccountTypeToAdd(type);
+    setSelectedAccount(null); // Clear selected account for add mode
+    setIsModalOpen(true);
+  };
+
+  const openEditAccountModal = (account: Account) => {
+    setAccountTypeToAdd(account.type === 'Investment' ? 'Investment' : account.type === 'Loan' ? 'Loan' : account.type as AccountType);
+    setSelectedAccount(account);
+    setIsModalOpen(true);
+  };
 
 	// Group accounts logically
-	const liquidAccounts = MOCK_ACCOUNTS.filter((a) =>
+	const liquidAccounts = accounts.filter((a) =>
 		["Cash", "Debit", "Savings"].includes(a.type)
 	);
-	const creditCards = MOCK_ACCOUNTS.filter((a) => a.type === "Credit");
-	const loanAccounts = MOCK_ACCOUNTS.filter((a) => a.type === "Loan");
-	const investAccounts = MOCK_ACCOUNTS.filter((a) =>
+	const creditCards = accounts.filter((a) => a.type === "Credit");
+	const loanAccounts = accounts.filter((a) => a.type === "Loan");
+	const investAccounts = accounts.filter((a) =>
 		["Investment"].includes(a.type)
 	);
 
-	const totalAssets = MOCK_ACCOUNTS.reduce(
+	const totalAssets = accounts.reduce(
 		(sum, acc) => (acc.balance > 0 ? sum + acc.balance : sum),
 		0
 	);
-	const totalLiabilities = MOCK_ACCOUNTS.reduce(
+	const totalLiabilities = accounts.reduce(
 		(sum, acc) => (acc.balance < 0 ? sum + Math.abs(acc.balance) : sum),
 		0
 	);
 	const netWorth = totalAssets - totalLiabilities;
 
 	return (
-		<div className="p-6 lg:p-10 max-w-[1600px] mx-auto min-h-full space-y-8">
-			{/* Header */}
-			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-				<div>
-					<h1 className="text-3xl font-bold text-slate-900">
-						My Wallet
-					</h1>
-					<p className="text-slate-500 mt-1">
-						Centralized overview of all your assets and debts
-					</p>
-				</div>
-				<button className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200">
-					<Plus size={18} />
-					Link Account
-				</button>
-			</div>
-
-			{/* Top Level Summary Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-				{/* Net Worth */}
-				<div className="bg-slate-900 text-white p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[160px]">
-					<div className="absolute top-0 right-0 p-8 opacity-10">
-						<WalletIcon size={80} />
-					</div>
-					<div>
-						<p className="text-slate-400 font-medium mb-1">
-							Net Worth
-						</p>
-						<h2 className="text-3xl font-bold">
-							${netWorth.toLocaleString()}
-						</h2>
-					</div>
-					<div className="flex items-center gap-2 text-sm bg-white/10 w-fit px-3 py-1.5 rounded-lg backdrop-blur-md">
-						<ArrowUpRight size={16} className="text-green-400" />
-						<span>+2.4% vs last month</span>
-					</div>
-				</div>
-
-				{/* Total Assets */}
-				<div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between min-h-[160px]">
-					<div className="flex items-center gap-3 mb-2">
-						<div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
-							<TrendingUp size={20} />
+		    <div className="p-6 lg:p-10 max-w-[1600px] mx-auto min-h-full space-y-8">
+					{/* Header */}
+					<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+						<div>
+							<h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+								My Wallet
+							</h1>
+							<p className="text-slate-500 dark:text-slate-400 mt-1">
+								Centralized overview of all your assets and debts
+							</p>
 						</div>
-						<span className="font-semibold text-slate-700">
-							Total Assets
-						</span>
+						<button 
+		          onClick={() => openAddAccountModal('Cash')}
+		          className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200"
+		        >
+							<Plus size={18} />
+							Link Account
+						</button>
 					</div>
-					<div>
-						<h2 className="text-2xl font-bold text-emerald-600">
-							${totalAssets.toLocaleString()}
-						</h2>
-						<p className="text-xs text-slate-400 mt-1">
-							Cash, Savings, Investments
-						</p>
-					</div>
-				</div>
-
-				{/* Total Liabilities */}
-				<div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between min-h-[160px]">
-					<div className="flex items-center gap-3 mb-2">
-						<div className="p-2 bg-red-100 text-red-600 rounded-lg">
-							<ShieldCheck size={20} />
+		
+					{/* Top Level Summary Cards */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+						{/* Net Worth */}
+						<div className="bg-slate-900 text-white p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[160px]">
+							<div className="absolute top-0 right-0 p-8 opacity-10">
+								<WalletIcon size={80} />
+							</div>
+							<div>
+								<p className="text-slate-400 dark:text-violet-200 font-medium mb-1">
+									Net Worth
+								</p>
+								<h2 className="text-3xl font-bold text-white">
+									${netWorth.toLocaleString()}
+								</h2>
+							</div>
+							<div className="flex items-center gap-2 text-sm bg-white/10 w-fit px-3 py-1.5 rounded-lg backdrop-blur-md">
+								<ArrowUpRight size={16} className="text-green-400" />
+								<span>+2.4% vs last month</span>
+							</div>
 						</div>
-						<span className="font-semibold text-slate-700">
-							Total Debts
-						</span>
+		
+						{/* Total Assets */}
+						<div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col justify-between min-h-[160px]">
+							<div className="flex items-center gap-3 mb-2">
+								<div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg dark:bg-emerald-900/30 dark:text-emerald-400">
+									<TrendingUp size={20} />
+								</div>
+								<span className="font-semibold text-slate-700 dark:text-white">
+									Total Assets
+								</span>
+							</div>
+							<div>
+								<h2 className="text-2xl font-bold text-emerald-600">
+									${totalAssets.toLocaleString()}
+								</h2>
+								<p className="text-xs text-slate-400 dark:text-slate-300 mt-1">
+									Cash, Savings, Investments
+								</p>
+							</div>
+						</div>
+		
+						{/* Total Liabilities */}
+						<div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col justify-between min-h-[160px]">
+							<div className="flex items-center gap-3 mb-2">
+								<div className="p-2 bg-red-100 text-red-600 rounded-lg dark:bg-red-900/30 dark:text-red-400">
+									<ShieldCheck size={20} />
+								</div>
+								<span className="font-semibold text-slate-700 dark:text-white">
+									Total Debts
+								</span>
+							</div>
+							<div>
+								<h2 className="text-2xl font-bold text-red-600">
+									${totalLiabilities.toLocaleString()}
+								</h2>
+								<p className="text-xs text-slate-400 dark:text-slate-300 mt-1">
+									Credit Cards, Loans
+								</p>
+							</div>
+						</div>
 					</div>
-					<div>
-						<h2 className="text-2xl font-bold text-red-600">
-							${totalLiabilities.toLocaleString()}
-						</h2>
-						<p className="text-xs text-slate-400 mt-1">
-							Credit Cards, Loans
-						</p>
-					</div>
-				</div>
-			</div>
-
 			{/* Tab Navigation */}
-			<div className="flex gap-2 p-1 bg-slate-100 rounded-2xl w-fit flex-wrap">
+			<div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl w-fit flex-wrap">
 				{["overview", "accounts", "cards", "loans", "investments"].map(
 					(tab) => (
 						<button
@@ -302,8 +340,8 @@ const Wallet: React.FC = () => {
                   px-6 py-2.5 rounded-xl text-sm font-medium capitalize transition-all
                   ${
 						activeTab === tab
-							? "bg-white text-slate-900 shadow-sm"
-							: "text-slate-500 hover:text-slate-900"
+							? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+							: "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
 					}
                `}
 						>
@@ -322,12 +360,12 @@ const Wallet: React.FC = () => {
 							{/* Banking Section */}
 							<div className="space-y-4">
 								<div className="flex items-center justify-between">
-									<h3 className="font-bold text-xl text-slate-900">
+									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
 										Banking & Cash
 									</h3>
 									<button
 										onClick={() => setActiveTab("accounts")}
-										className="text-sm text-violet-600 font-medium hover:text-violet-700"
+										className="text-sm text-violet-600 font-medium hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
 									>
 										View All
 									</button>
@@ -337,6 +375,7 @@ const Wallet: React.FC = () => {
 										<BankAccountRow
 											key={acc.id}
 											account={acc}
+                                            onEdit={openEditAccountModal}
 										/>
 									))}
 								</div>
@@ -345,14 +384,14 @@ const Wallet: React.FC = () => {
 							{/* Investments Section */}
 							<div className="pt-2">
 								<div className="flex items-center justify-between mb-4">
-									<h3 className="font-bold text-xl text-slate-900">
+									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
 										Top Investments
 									</h3>
 									<button
 										onClick={() =>
 											setActiveTab("investments")
 										}
-										className="text-sm text-violet-600 font-medium hover:text-violet-700"
+										className="text-sm text-violet-600 font-medium hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
 									>
 										View All
 									</button>
@@ -362,27 +401,28 @@ const Wallet: React.FC = () => {
 										<InvestmentRow
 											key={acc.id}
 											account={acc}
+                                            onEdit={openEditAccountModal}
 										/>
 									))}
 								</div>
 							</div>
 
 							{/* Loans Section Moved Here */}
-							<div className="space-y-4 pt-8 border-t border-slate-200">
+							<div className="space-y-4 pt-8 border-t border-slate-200 dark:border-slate-700">
 								<div className="flex items-center justify-between">
-									<h3 className="font-bold text-xl text-slate-900">
+									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
 										Loans
 									</h3>
 									<button
 										onClick={() => setActiveTab("loans")}
-										className="text-sm text-violet-600 font-medium hover:text-violet-700"
+										className="text-sm text-violet-600 font-medium hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
 									>
 										View All
 									</button>
 								</div>
 								<div className="flex flex-col gap-4">
 									{loanAccounts.slice(0, 2).map((acc) => (
-										<LoanRow key={acc.id} account={acc} />
+										<LoanRow key={acc.id} account={acc} onEdit={openEditAccountModal} />
 									))}
 								</div>
 							</div>
@@ -393,12 +433,12 @@ const Wallet: React.FC = () => {
 							{/* Cards Section */}
 							<div className="space-y-4">
 								<div className="flex items-center justify-between">
-									<h3 className="font-bold text-xl text-slate-900">
+									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
 										Credit Cards
 									</h3>
 									<button
 										onClick={() => setActiveTab("cards")}
-										className="text-sm text-violet-600 font-medium hover:text-violet-700"
+										className="text-sm text-violet-600 font-medium hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
 									>
 										View All
 									</button>
@@ -409,7 +449,7 @@ const Wallet: React.FC = () => {
 											key={acc.id}
 											className="transform scale-90 origin-top-left sm:scale-100 sm:origin-top"
 										>
-											<CreditCardVisual account={acc} />
+											<CreditCardVisual account={acc} onEdit={openEditAccountModal} />
 										</div>
 									))}
 								</div>
@@ -424,7 +464,9 @@ const Wallet: React.FC = () => {
 						{liquidAccounts.map((acc) => (
 							<BankAccountRow key={acc.id} account={acc} />
 						))}
-						<button className="w-full h-auto min-h-[100px] border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all flex flex-col items-center justify-center gap-2">
+						<button 
+              onClick={() => openAddAccountModal('Cash')}
+              className="w-full h-auto min-h-[100px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
 							<Plus size={24} />
 							Add Bank Account
 						</button>
@@ -438,7 +480,7 @@ const Wallet: React.FC = () => {
 							<div key={acc.id} className="space-y-2">
 								<CreditCardVisual account={acc} />
 								<div className="flex justify-between items-center px-4">
-									<span className="text-xs text-slate-400">
+									<span className="text-xs text-slate-400 dark:text-slate-500">
 										Current Balance
 									</span>
 									<span className="text-sm font-bold text-red-500">
@@ -448,7 +490,9 @@ const Wallet: React.FC = () => {
 								</div>
 							</div>
 						))}
-						<button className="w-full h-auto min-h-[220px] border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all flex flex-col items-center justify-center gap-2">
+						<button 
+              onClick={() => openAddAccountModal('Credit')}
+              className="w-full h-auto min-h-[220px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
 							<Plus size={24} />
 							Add Credit Card
 						</button>
@@ -461,7 +505,9 @@ const Wallet: React.FC = () => {
 						{loanAccounts.map((acc) => (
 							<LoanRow key={acc.id} account={acc} />
 						))}
-						<button className="w-full h-auto min-h-[180px] border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all flex flex-col items-center justify-center gap-2">
+						<button 
+              onClick={() => openAddAccountModal('Loan')}
+              className="w-full h-auto min-h-[180px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
 							<Plus size={24} />
 							Add Loan
 						</button>
@@ -474,15 +520,25 @@ const Wallet: React.FC = () => {
 						{investAccounts.map((acc) => (
 							<InvestmentRow key={acc.id} account={acc} />
 						))}
-						<button className="w-full h-auto min-h-[180px] border-2 border-dashed border-slate-200 rounded-3xl text-slate-400 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all flex flex-col items-center justify-center gap-2">
+						<button 
+              onClick={() => openAddAccountModal('Investment')}
+              className="w-full h-auto min-h-[180px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
 							<Plus size={24} />
 							Add Investment
 						</button>
 					</div>
 				)}
 			</div>
+      <AddEditAccountModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSaveAccount={handleSaveAccount}
+        accountType={accountTypeToAdd}
+        account={selectedAccount}
+      />
 		</div>
 	);
 };
 
 export default Wallet;
+

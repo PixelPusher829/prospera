@@ -37,7 +37,7 @@ const Analytics: React.FC = () => {
           <p className="text-slate-500 mt-1">Deep dive into financial trends and AI insights</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 font-medium text-sm transition-colors shadow-sm">
+          <button className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 font-medium transition-colors shadow-sm">
             <LayoutGrid size={18} />
             Export Report
           </button>

@@ -20,8 +20,28 @@ const Settings: React.FC = () => {
 		language: "English",
 		twoFactor: true,
 	});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (activeSection === 'profile') {
+      if (!formData.name.trim()) {
+        newErrors.name = 'Name cannot be empty.';
+      }
+      if (!formData.email.trim()) {
+        newErrors.email = 'Email cannot be empty.';
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Email is invalid.';
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length > 0;
+  };
 
 	const handleSave = () => {
+    if (validate()) {
+      return;
+    }
 		// Mock save
 		alert("Settings saved successfully!");
 	};
@@ -101,14 +121,16 @@ const Settings: React.FC = () => {
 									<input
 										type="text"
 										value={formData.name}
-										onChange={(e) =>
+										onChange={(e) => {
 											setFormData({
 												...formData,
 												name: e.target.value,
-											})
-										}
-										className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all"
+											});
+                                            setErrors(prev => ({...prev, name: ''}));
+                                        }}
+										className={`w-full px-4 py-2.5 rounded-xl border ${errors.name ? 'border-red-500' : 'border-slate-200 dark:border-slate-600'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all`}
 									/>
+                                    {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
 								</div>
 								<div>
 									<label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -117,14 +139,16 @@ const Settings: React.FC = () => {
 									<input
 										type="email"
 										value={formData.email}
-										onChange={(e) =>
+										onChange={(e) => {
 											setFormData({
 												...formData,
 												email: e.target.value,
-											})
-										}
-										className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all"
+											});
+                                            setErrors(prev => ({...prev, email: ''}));
+                                        }}
+										className={`w-full px-4 py-2.5 rounded-xl border ${errors.email ? 'border-red-500' : 'border-slate-200 dark:border-slate-600'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all`}
 									/>
+                                    {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
 								</div>
 								<div>
 									<label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -312,7 +336,8 @@ const Settings: React.FC = () => {
 					<div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-end">
 						<button
 							onClick={handleSave}
-							className="flex items-center gap-2 px-8 py-3 bg-slate-900 dark:bg-violet-600 text-white rounded-xl hover:opacity-90 transition-opacity font-medium shadow-lg"
+                            disabled={Object.keys(errors).some(key => errors[key]) || !formData.name.trim() || !formData.email.trim()}
+							className="flex items-center gap-2 px-8 py-3 bg-slate-900 dark:bg-violet-600 text-white rounded-xl hover:opacity-90 transition-opacity font-medium shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
 						>
 							<Save size={18} />
 							Save Changes

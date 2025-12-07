@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, MoreVertical, Mail, Building, X, Save, Trash2, Check, ChevronRight, User, DollarSign, Calendar } from 'lucide-react';
+import { Search, Filter, MoreVertical, Mail, Building, X, Save, Trash2, Check, ChevronRight, User, DollarSign, Calendar, Plus, ArrowDownUp, ChevronLeft } from 'lucide-react';
 import { CLIENTS_DATA } from '../data/constants';
 import { ClientStatus, Client } from "../types/types";
+import AddClientDrawer from './AddClientDrawer';
 
 // Component for Inline Editing
 const InlineEditCell: React.FC<{
@@ -65,11 +66,18 @@ const ClientList: React.FC = () => {
   // Drawer State
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [drawerForm, setDrawerForm] = useState<Partial<Client>>({});
 
-  // Filtering Logic
-  const filteredClients = useMemo(() => {
-    return clients.filter(client => {
+  // Pagination & Sorting States
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [sortField, setSortField] = useState<keyof Client | null>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  // Filtering, Sorting, Pagination Logic
+  const paginatedAndSortedClients = useMemo(() => {
+    let currentClients = clients.filter(client => {
       const matchesSearch = 
         client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         client.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -79,7 +87,53 @@ const ClientList: React.FC = () => {
 
       return matchesSearch && matchesStatus;
     });
+
+    if (sortField) {
+      currentClients.sort((a, b) => {
+        const aValue = a[sortField];
+        const bValue = b[sortField];
+
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+          return sortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+        }
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+        }
+        return 0;
+      });
+    }
+
+    // Apply pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return currentClients.slice(indexOfFirstItem, indexOfLastItem);
+  }, [clients, searchQuery, statusFilter, sortField, sortDirection, currentPage, itemsPerPage]);
+
+  const totalClients = useMemo(() => {
+    return clients.filter(client => {
+      const matchesSearch = 
+        client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.email.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesStatus = statusFilter === 'All' || client.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    }).length;
   }, [clients, searchQuery, statusFilter]);
+
+  const totalPages = Math.ceil(totalClients / itemsPerPage);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const handleSort = (field: keyof Client) => {
+    if (sortField === field) {
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc'); // Default to ascending for new sort field
+    }
+  };
 
   // Selection Logic
   const toggleSelection = (id: string) => {
@@ -93,16 +147,20 @@ const ClientList: React.FC = () => {
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.size === filteredClients.length) {
+    if (selectedIds.size === paginatedAndSortedClients.length && paginatedAndSortedClients.length > 0) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(filteredClients.map(c => c.id)));
+      setSelectedIds(new Set(paginatedAndSortedClients.map(c => c.id)));
     }
   };
 
   // CRUD Operations
   const updateClient = (id: string, updates: Partial<Client>) => {
     setClients(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+  };
+
+  const handleAddClient = (newClient: Client) => {
+    setClients(prev => [newClient, ...prev]);
   };
 
   const handleBulkStatusChange = (newStatus: ClientStatus) => {
@@ -137,16 +195,23 @@ const ClientList: React.FC = () => {
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Clients</h1>
-          <p className="text-slate-500 mt-1">Manage your client relationships</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Clients</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage your client relationships</p>
         </div>
         
         <div className="flex items-center gap-3 w-full md:w-auto">
+          <button 
+            onClick={() => setIsAddDrawerOpen(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200"
+          >
+            <Plus size={18} />
+            Add Client
+          </button>
           {/* Status Filter */}
           <select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-600"
+            className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-600 dark:text-slate-300"
           >
             <option value="All">All Status</option>
             <option value={ClientStatus.Active}>Active</option>
@@ -162,10 +227,10 @@ const ClientList: React.FC = () => {
               placeholder="Search clients..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all text-sm text-slate-900 dark:text-white"
             />
           </div>
-          <button className="p-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600">
+          <button className="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">
             <Filter size={18} />
           </button>
         </div>
@@ -173,9 +238,9 @@ const ClientList: React.FC = () => {
 
       {/* Bulk Actions Floating Bar */}
       {selectedIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-6 z-10 animate-in fade-in slide-in-from-bottom-4">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-slate-700 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-6 z-10 animate-in fade-in slide-in-from-bottom-4">
           <span className="text-sm font-medium">{selectedIds.size} selected</span>
-          <div className="h-4 w-px bg-slate-700"></div>
+          <div className="h-4 w-px bg-slate-700 dark:bg-slate-600"></div>
           <div className="flex items-center gap-2">
             <button 
               onClick={() => handleBulkStatusChange(ClientStatus.Active)}
@@ -203,34 +268,54 @@ const ClientList: React.FC = () => {
       )}
 
       {/* Main Table */}
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
         <div className="overflow-x-auto min-h-[400px]">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-100">
+              <tr className="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700">
                 <th className="py-4 px-6 w-12">
                    <input 
                     type="checkbox" 
-                    checked={selectedIds.size === filteredClients.length && filteredClients.length > 0}
+                    checked={selectedIds.size === paginatedAndSortedClients.length && paginatedAndSortedClients.length > 0}
                     onChange={toggleSelectAll}
-                    className="w-4 h-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500"
+                    className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-violet-600 focus:ring-violet-500"
                    />
                 </th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Company</th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Revenue</th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Last Contact</th>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('name')}>
+                  <div className="flex items-center gap-1">
+                    Name {sortField === 'name' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('company')}>
+                  <div className="flex items-center gap-1">
+                    Company {sortField === 'company' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('status')}>
+                  <div className="flex items-center gap-1">
+                    Status {sortField === 'status' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700" onClick={() => handleSort('revenue')}>
+                  <div className="flex items-center justify-end gap-1">
+                    Revenue {sortField === 'revenue' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
+                  </div>
+                </th>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700" onClick={() => handleSort('lastContact')}>
+                  <div className="flex items-center justify-end gap-1">
+                    Last Contact {sortField === 'lastContact' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
+                  </div>
+                </th>
                 <th className="py-4 px-6 w-16"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filteredClients.map((client) => (
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+              {paginatedAndSortedClients.map((client) => (
                 <tr 
                   key={client.id} 
                   className={`
                     group transition-colors cursor-pointer
-                    ${selectedIds.has(client.id) ? 'bg-violet-50/50' : 'hover:bg-slate-50/50'}
+                    ${selectedIds.has(client.id) ? 'bg-violet-50/50 dark:bg-violet-900/20' : 'hover:bg-slate-50/50 dark:hover:bg-slate-700/50'}
                   `}
                   onClick={() => openDrawer(client)}
                 >
@@ -239,30 +324,30 @@ const ClientList: React.FC = () => {
                       type="checkbox" 
                       checked={selectedIds.has(client.id)}
                       onChange={() => toggleSelection(client.id)}
-                      className="w-4 h-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500"
+                      className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-violet-600 focus:ring-violet-500"
                     />
                   </td>
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-bold">
+                      <div className="w-10 h-10 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold">
                         {client.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-900">
+                        <div className="font-semibold text-slate-900 dark:text-white">
                           <InlineEditCell 
                             value={client.name} 
                             onSave={(val) => updateClient(client.id, { name: val })} 
                           />
                         </div>
-                        <div className="text-xs text-slate-500 flex items-center gap-1">
+                        <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
                           <Mail size={10} /> {client.email}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                     <div className="flex items-center gap-2 text-sm text-slate-700">
-                        <Building size={14} className="text-slate-400"/>
+                     <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <Building size={14} className="text-slate-400 dark:text-slate-500"/>
                         <InlineEditCell 
                             value={client.company} 
                             onSave={(val) => updateClient(client.id, { company: val })} 
@@ -277,7 +362,7 @@ const ClientList: React.FC = () => {
                         appearance-none pl-3 pr-8 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:ring-2 focus:ring-violet-500/20 outline-none
                         ${client.status === ClientStatus.Active ? 'bg-green-100 text-green-800' : ''}
                         ${client.status === ClientStatus.Pending ? 'bg-amber-100 text-amber-800' : ''}
-                        ${client.status === ClientStatus.Inactive ? 'bg-slate-100 text-slate-800' : ''}
+                        ${client.status === ClientStatus.Inactive ? 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200' : ''}
                        `}
                        style={{ backgroundImage: 'none' }} 
                      >
@@ -286,7 +371,7 @@ const ClientList: React.FC = () => {
                        <option value={ClientStatus.Inactive}>Inactive</option>
                      </select>
                   </td>
-                  <td className="py-4 px-6 text-right font-medium text-slate-900">
+                  <td className="py-4 px-6 text-right font-medium text-slate-900 dark:text-white">
                     <InlineEditCell 
                         value={client.revenue} 
                         type="number"
@@ -295,7 +380,7 @@ const ClientList: React.FC = () => {
                         onSave={(val) => updateClient(client.id, { revenue: Number(val) })} 
                     />
                   </td>
-                  <td className="py-4 px-6 text-right text-sm text-slate-500">
+                  <td className="py-4 px-6 text-right text-sm text-slate-500 dark:text-slate-400">
                     {client.lastContact}
                   </td>
                   <td className="py-4 px-6 text-center">
@@ -305,9 +390,9 @@ const ClientList: React.FC = () => {
                   </td>
                 </tr>
               ))}
-              {filteredClients.length === 0 && (
+              {paginatedAndSortedClients.length === 0 && (
                  <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-500">
+                    <td colSpan={8} className="py-12 text-center text-slate-500 dark:text-slate-400">
                        No clients found matching your filters.
                     </td>
                  </tr>
@@ -315,7 +400,41 @@ const ClientList: React.FC = () => {
             </tbody>
           </table>
         </div>
+        {/* Pagination Controls */}
+        <div className="p-4 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-700">
+          <button 
+            onClick={() => paginate(currentPage - 1)} 
+            disabled={currentPage === 1}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={16} /> Previous
+          </button>
+          <div className="flex gap-1">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button 
+                key={i + 1}
+                onClick={() => paginate(i + 1)}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium ${currentPage === i + 1 ? 'bg-violet-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+          <button 
+            onClick={() => paginate(currentPage + 1)} 
+            disabled={currentPage === totalPages}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next <ChevronRight size={16} />
+          </button>
+        </div>
       </div>
+
+      <AddClientDrawer 
+        isOpen={isAddDrawerOpen} 
+        onClose={() => setIsAddDrawerOpen(false)}
+        onAddClient={handleAddClient}
+      />
 
       {/* Slide-out Drawer Overlay */}
       {isDrawerOpen && (
@@ -347,17 +466,17 @@ const ClientList: React.FC = () => {
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
                  
                  {/* Identity Card */}
-                 <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
+                 <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl">
                     <div className="w-16 h-16 rounded-full bg-violet-600 text-white flex items-center justify-center text-2xl font-bold">
                        {drawerForm.name?.charAt(0)}
                     </div>
                     <div>
-                       <h3 className="font-bold text-lg text-slate-900">{drawerForm.name}</h3>
+                       <h3 className="font-bold text-lg text-slate-900 dark:text-white">{drawerForm.name}</h3>
                        <span className={`
                           inline-block px-2 py-0.5 rounded text-xs font-medium mt-1
                           ${drawerForm.status === ClientStatus.Active ? 'bg-green-100 text-green-800' : ''}
                           ${drawerForm.status === ClientStatus.Pending ? 'bg-amber-100 text-amber-800' : ''}
-                          ${drawerForm.status === ClientStatus.Inactive ? 'bg-slate-200 text-slate-800' : ''}
+                          ${drawerForm.status === ClientStatus.Inactive ? 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200' : ''}
                        `}>
                           {drawerForm.status}
                        </span>

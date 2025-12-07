@@ -295,6 +295,36 @@ export const MOCK_TRANSACTIONS: Transaction[] = [
 		accountId: "1",
 		status: "cleared",
 	},
+    {
+		id: "8",
+		date: "2023-10-19",
+		payee: "Freelance Project - Q3",
+		category: "Income",
+		amount: 2500.0,
+		type: "income",
+		accountId: "1",
+		status: "cleared",
+	},
+	{
+		id: "9",
+		date: "2023-10-18",
+		payee: "Investment Dividend",
+		category: "Investments",
+		amount: 150.75,
+		type: "income",
+		accountId: "4",
+		status: "cleared",
+	},
+	{
+		id: "10",
+		date: "2023-10-17",
+		payee: "Rental Income",
+		category: "Income",
+		amount: 800.0,
+		type: "income",
+		accountId: "1",
+		status: "pending",
+	},
 ];
 
 export const MOCK_GOALS: Goal[] = [
@@ -376,4 +406,17 @@ export const MOCK_BUDGET: BudgetCategory[] = [
 		color: "#ec4899",
 		icon: HeartPulse,
 	},
+];
+
+export const COLOR_PALETTE: string[] = [
+  "#8b5cf6", // violet-500
+  "#ec4899", // pink-500
+  "#10b981", // emerald-500
+  "#f59e0b", // amber-500
+  "#3b82f6", // blue-500
+  "#ef4444", // red-500
+  "#6366f1", // indigo-500
+  "#f97316", // orange-500
+  "#06b6d4", // cyan-500
+  "#a855f7", // purple-500
 ];

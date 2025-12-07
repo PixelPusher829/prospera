@@ -11,11 +11,10 @@ import {
 	DollarSign,
 } from "lucide-react";
 import { MOCK_SUMMARY, MOCK_TRANSACTIONS, MOCK_GOALS } from "../data/constants";
-import { useNavigate } from "react-router-dom";
 
-const Dashboard: React.FC = () => {
-	const navigate = useNavigate();
-
+const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
+	setActiveTab,
+}) => {
 	return (
 		<div className="p-6 lg:p-10 max-w-[1600px] mx-auto space-y-8">
 			{/* Welcome Section */}
@@ -29,7 +28,7 @@ const Dashboard: React.FC = () => {
 					</p>
 				</div>
 				<button
-					onClick={() => navigate("/transactions")}
+					onClick={() => setActiveTab("transactions")}
 					className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200 dark:shadow-none"
 				>
 					<Plus size={18} />
@@ -92,7 +91,7 @@ const Dashboard: React.FC = () => {
 				{/* Active Goals Summary */}
 				<div
 					className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between h-48 cursor-pointer hover:border-violet-200 dark:hover:border-violet-700 transition-colors"
-					onClick={() => navigate("/goals")}
+					onClick={() => setActiveTab("goals")}
 				>
 					<div>
 						<div className="flex items-center gap-2 mb-2">
@@ -170,7 +169,7 @@ const Dashboard: React.FC = () => {
 							Recent Transactions
 						</h3>
 						<button
-							onClick={() => navigate("/transactions")}
+							onClick={() => setActiveTab("transactions")}
 							className="text-sm text-violet-600 dark:text-violet-400 font-medium hover:text-violet-700 dark:hover:text-violet-300"
 						>
 							View All
