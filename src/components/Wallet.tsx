@@ -14,7 +14,7 @@ import {
 	CalendarClock,
 } from "lucide-react";
 import { MOCK_ACCOUNTS } from "../data/constants";
-import { Account, AccountType } from "../types";
+import { Account, AccountType } from "../types/types";
 import AddEditAccountModal from "./AddEditAccountModal";
 
 // Visual Component for Credit Cards (Physical look)
@@ -62,16 +62,7 @@ const CreditCardVisual: React.FC<{ account: Account, onEdit: (account: Account) 
 							James Barnes
 						</p>
 					</div>
-					{account.expiry && (
-						<div className="text-right">
-							<p className="text-[10px] uppercase opacity-60 mb-0.5">
-								Expires
-							</p>
-							<p className="text-sm font-medium tracking-wide">
-								{account.expiry}
-							</p>
-						</div>
-					)}
+
 				</div>
 			</div>
 		</div>
@@ -202,6 +193,16 @@ const Wallet: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Controls both add/edit modal
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null); // For editing
   const [accountTypeToAdd, setAccountTypeToAdd] = useState<AccountType | 'Investment' | 'Loan'>('Cash');
+  const [isSyncingBank, setIsSyncingBank] = useState(false); // New state for fake bank sync
+  const [showGlobalSyncSuccessModal, setShowGlobalSyncSuccessModal] = useState(false); // New state for global sync notification modal
+
+  const handleFakeBankSync = () => {
+    setIsSyncingBank(true);
+    setTimeout(() => {
+      setIsSyncingBank(false);
+      setShowGlobalSyncSuccessModal(true); // Show modal instead of simple notification
+    }, 3000); // Simulate 3 seconds of syncing
+  };
 
   const handleSaveAccount = (savedAccount: Account) => {
     if (savedAccount.id && accounts.some(a => a.id === savedAccount.id)) {
@@ -259,16 +260,59 @@ const Wallet: React.FC = () => {
 								Centralized overview of all your assets and debts
 							</p>
 						</div>
-						<button 
-		          onClick={() => openAddAccountModal('Cash')}
-		          className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200"
-		        >
-							<Plus size={18} />
-							Link Account
-						</button>
+						<div className="flex items-center gap-4">
+							<button 
+								onClick={() => openAddAccountModal('Cash')}
+								className="flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl hover:bg-slate-100 font-medium transition-all shadow-lg shadow-slate-100 border border-slate-200"
+							>
+								<Plus size={18} />
+								Link Account
+							</button>
+							<button 
+								onClick={handleFakeBankSync}
+								disabled={isSyncingBank}
+								className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200 disabled:bg-violet-400 disabled:cursor-not-allowed"
+							>
+								{isSyncingBank ? (
+									<>
+										<svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+											<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+											<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+										</svg>
+										Syncing...
+									</>
+								) : (
+									<>
+										<WalletIcon size={18} />
+										Sync All Banks
+									</>
+								)}
+							</button>
+						</div>
 					</div>
-		
-					{/* Top Level Summary Cards */}
+
+      <AddEditAccountModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSaveAccount={handleSaveAccount}
+        accountType={accountTypeToAdd}
+        account={selectedAccount}
+      />
+
+      {showGlobalSyncSuccessModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm m-4 p-6 text-center">
+            <h3 className="text-xl font-bold text-slate-900 mb-4">Bank Sync Complete!</h3>
+            <p className="text-slate-600 mb-6">Your financial data has been successfully updated.</p>
+            <button
+              onClick={() => setShowGlobalSyncSuccessModal(false)}
+              className="px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 						{/* Net Worth */}
 						<div className="bg-slate-900 text-white p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[160px]">
@@ -339,10 +383,10 @@ const Wallet: React.FC = () => {
 							className={`
                   px-6 py-2.5 rounded-xl text-sm font-medium capitalize transition-all
                   ${
-						activeTab === tab
-							? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
-							: "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-					}
+										activeTab === tab
+											? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+											: "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+									}
                `}
 						>
 							{tab}
@@ -462,7 +506,7 @@ const Wallet: React.FC = () => {
 				{activeTab === "accounts" && (
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 						{liquidAccounts.map((acc) => (
-							<BankAccountRow key={acc.id} account={acc} />
+							<BankAccountRow key={acc.id} account={acc} onEdit={openEditAccountModal} />
 						))}
 						<button 
               onClick={() => openAddAccountModal('Cash')}
@@ -478,7 +522,7 @@ const Wallet: React.FC = () => {
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{creditCards.map((acc) => (
 							<div key={acc.id} className="space-y-2">
-								<CreditCardVisual account={acc} />
+								<CreditCardVisual account={acc} onEdit={openEditAccountModal} />
 								<div className="flex justify-between items-center px-4">
 									<span className="text-xs text-slate-400 dark:text-slate-500">
 										Current Balance
@@ -503,7 +547,7 @@ const Wallet: React.FC = () => {
 				{activeTab === "loans" && (
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{loanAccounts.map((acc) => (
-							<LoanRow key={acc.id} account={acc} />
+							<LoanRow key={acc.id} account={acc} onEdit={openEditAccountModal} />
 						))}
 						<button 
               onClick={() => openAddAccountModal('Loan')}
@@ -518,7 +562,7 @@ const Wallet: React.FC = () => {
 				{activeTab === "investments" && (
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{investAccounts.map((acc) => (
-							<InvestmentRow key={acc.id} account={acc} />
+							<InvestmentRow key={acc.id} account={acc} onEdit={openEditAccountModal} />
 						))}
 						<button 
               onClick={() => openAddAccountModal('Investment')}
@@ -529,13 +573,6 @@ const Wallet: React.FC = () => {
 					</div>
 				)}
 			</div>
-      <AddEditAccountModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSaveAccount={handleSaveAccount}
-        accountType={accountTypeToAdd}
-        account={selectedAccount}
-      />
 		</div>
 	);
 };
