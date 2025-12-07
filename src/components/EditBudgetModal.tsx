@@ -75,7 +75,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isOpen, onClose, onSa
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl m-4">
-        <div className="p-6 border-b flex justify-between items-center">
+        <div className="p-6 flex justify-between items-center">
           <h2 className="text-xl font-bold">Edit Budget</h2>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full">
             <X size={20} />

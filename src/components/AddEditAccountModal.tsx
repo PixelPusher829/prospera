@@ -206,7 +206,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({ isOpen, onClo
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md m-4">
-        <div className="p-6 border-b flex justify-between items-center">
+        <div className="p-6 flex justify-between items-center">
           <h2 className="text-xl font-bold">{account ? 'Edit' : 'Add'} {accountType} Account</h2>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full">
             <X size={20} />

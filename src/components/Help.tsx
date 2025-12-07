@@ -21,40 +21,7 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
 };
 
 const Help: React.FC = () => {
-  const [form, setForm] = useState({
-    subject: '',
-    message: ''
-  });
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-  
-  const validate = () => {
-    const newErrors: { [key: string]: string } = {};
-    if (!form.subject) newErrors.subject = 'Subject is required.';
-    if (!form.message) newErrors.message = 'Message is required.';
-    return newErrors;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors = validate();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    console.log('Message Sent:', form);
-    alert('Your message has been sent!');
-    setForm({ subject: '', message: '' });
-    setErrors({});
-  };
   return (
     <div className="p-6 lg:p-10 max-w-[1200px] mx-auto min-h-full">
       <div className="text-center mb-12">
@@ -96,7 +63,7 @@ const Help: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-12">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Frequently Asked Questions</h2>
           <div className="space-y-4">
@@ -119,45 +86,7 @@ const Help: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-slate-900 dark:bg-slate-800 text-white rounded-3xl p-8 relative overflow-hidden">
-           <div className="absolute top-0 right-0 p-12 opacity-5">
-              <MessageCircle size={120} />
-           </div>
-           <h3 className="text-2xl font-bold mb-2">Still have questions?</h3>
-           <p className="text-slate-400 mb-6">We're here to help you manage your finances better.</p>
-           
-           <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
-              <div>
-                 <label className="block text-xs uppercase font-bold text-slate-400 mb-1">Subject</label>
-                 <input 
-                   type="text" 
-                   name="subject"
-                   value={form.subject}
-                   onChange={handleInputChange}
-                   className={`w-full bg-slate-800 dark:bg-slate-900 border rounded-xl px-4 py-3 text-white focus:outline-none ${errors.subject ? 'border-red-500' : 'border-slate-700 focus:border-violet-500'}`} 
-                 />
-                 {errors.subject && <p className="text-xs text-red-500 mt-1">{errors.subject}</p>}
-              </div>
-              <div>
-                 <label className="block text-xs uppercase font-bold text-slate-400 mb-1">Message</label>
-                 <textarea 
-                   rows={4} 
-                   name="message"
-                   value={form.message}
-                   onChange={handleInputChange}
-                   className={`w-full bg-slate-800 dark:bg-slate-900 border rounded-xl px-4 py-3 text-white focus:outline-none ${errors.message ? 'border-red-500' : 'border-slate-700 focus:border-violet-500'}`}
-                 ></textarea>
-                 {errors.message && <p className="text-xs text-red-500 mt-1">{errors.message}</p>}
-              </div>
-              <button 
-                type="submit"
-                disabled={!form.subject || !form.message}
-                className="w-full py-3 bg-violet-600 hover:bg-violet-700 rounded-xl font-bold transition-colors disabled:bg-violet-400 disabled:cursor-not-allowed"
-              >
-                 Send Message
-              </button>
-           </form>
-        </div>
+
       </div>
     </div>
   );

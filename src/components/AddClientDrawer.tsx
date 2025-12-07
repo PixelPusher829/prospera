@@ -74,7 +74,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
       `}>
         <div className="h-full flex flex-col">
           {/* Drawer Header */}
-          <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+          <div className="p-6 flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-slate-900">Add New Client</h2>
               <p className="text-sm text-slate-500">Enter the details for the new client.</p>
