@@ -27,8 +27,6 @@ const Transactions: React.FC = () => {
     return Array.from(categories);
   }, [transactions]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); 
   const [selectedTransactionIds, setSelectedTransactionIds] = useState<Set<string>>(new Set()); // New state for bulk actions
 
   const handleSaveTransaction = (savedTransaction: Transaction) => {
@@ -103,14 +101,6 @@ const Transactions: React.FC = () => {
     return currentTransactions;
   }, [transactions, searchTerm, transactionTypeFilter, selectedAccountTypeFilter, sortField, sortDirection, startDate, endDate, minAmount, maxAmount, statusFilter, selectedCategories]);
 
-  // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedAndFilteredTransactions.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(sortedAndFilteredTransactions.length / itemsPerPage);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   // Bulk actions logic
   const toggleSelection = (id: string) => {
     const newSelected = new Set(selectedTransactionIds);
@@ -123,10 +113,10 @@ const Transactions: React.FC = () => {
   };
 
   const toggleSelectAll = () => {
-    if (selectedTransactionIds.size === currentItems.length && currentItems.length > 0) {
+    if (selectedTransactionIds.size === sortedAndFilteredTransactions.length && sortedAndFilteredTransactions.length > 0) {
       setSelectedTransactionIds(new Set());
     } else {
-      setSelectedTransactionIds(new Set(currentItems.map(t => t.id)));
+      setSelectedTransactionIds(new Set(sortedAndFilteredTransactions.map(t => t.id)));
     }
   };
 
@@ -320,7 +310,7 @@ const Transactions: React.FC = () => {
                 <th className="py-4 px-6 w-12">
                    <input 
                     type="checkbox" 
-                    checked={selectedTransactionIds.size === currentItems.length && currentItems.length > 0}
+                    checked={selectedTransactionIds.size === sortedAndFilteredTransactions.length && sortedAndFilteredTransactions.length > 0}
                     onChange={toggleSelectAll}
                     className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-violet-600 focus:ring-violet-500"
                    />
@@ -358,9 +348,9 @@ const Transactions: React.FC = () => {
                 <th className="py-4 px-6 w-10"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-              {currentItems.map((t) => (
-                <tr key={t.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors group">
+            <tbody className="">
+              {sortedAndFilteredTransactions.map((t) => (
+                <tr key={t.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors group focus:outline-none border-b border-slate-100 dark:border-slate-700">
                   <td className="py-4 px-6">
                     <input 
                       type="checkbox" 
@@ -413,33 +403,6 @@ const Transactions: React.FC = () => {
           </table>
         </div>
         {/* Pagination Controls */}
-        <div className="p-4 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-700">
-          <button 
-            onClick={() => paginate(currentPage - 1)} 
-            disabled={currentPage === 1}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronLeft size={16} /> Previous
-          </button>
-          <div className="flex gap-1">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button 
-                key={i + 1}
-                onClick={() => paginate(i + 1)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium ${currentPage === i + 1 ? 'bg-violet-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-          <button 
-            onClick={() => paginate(currentPage + 1)} 
-            disabled={currentPage === totalPages}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Next <ChevronRight size={16} />
-          </button>
-        </div>
       </div>
       <AddEditTransactionModal 
         isOpen={isModalOpen}

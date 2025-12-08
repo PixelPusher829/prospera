@@ -67,16 +67,15 @@ const ClientList: React.FC = () => {
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
+  const [isStatusFilterOpen, setIsStatusFilterOpen] = useState(false);
   const [drawerForm, setDrawerForm] = useState<Partial<Client>>({});
 
-  // Pagination & Sorting States
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  // Sorting States
   const [sortField, setSortField] = useState<keyof Client | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   // Filtering, Sorting, Pagination Logic
-  const paginatedAndSortedClients = useMemo(() => {
+  const sortedClients = useMemo(() => {
     let currentClients = clients.filter(client => {
       const matchesSearch = 
         client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -103,28 +102,8 @@ const ClientList: React.FC = () => {
       });
     }
 
-    // Apply pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return currentClients.slice(indexOfFirstItem, indexOfLastItem);
-  }, [clients, searchQuery, statusFilter, sortField, sortDirection, currentPage, itemsPerPage]);
-
-  const totalClients = useMemo(() => {
-    return clients.filter(client => {
-      const matchesSearch = 
-        client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        client.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        client.email.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesStatus = statusFilter === 'All' || client.status === statusFilter;
-
-      return matchesSearch && matchesStatus;
-    }).length;
-  }, [clients, searchQuery, statusFilter]);
-
-  const totalPages = Math.ceil(totalClients / itemsPerPage);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    return currentClients;
+  }, [clients, searchQuery, statusFilter, sortField, sortDirection]);
 
   const handleSort = (field: keyof Client) => {
     if (sortField === field) {
@@ -147,10 +126,10 @@ const ClientList: React.FC = () => {
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.size === paginatedAndSortedClients.length && paginatedAndSortedClients.length > 0) {
+    if (selectedIds.size === sortedClients.length && sortedClients.length > 0) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(paginatedAndSortedClients.map(c => c.id)));
+      setSelectedIds(new Set(sortedClients.map(c => c.id)));
     }
   };
 
@@ -200,24 +179,44 @@ const ClientList: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <button 
-            onClick={() => setIsAddDrawerOpen(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200"
-          >
-            <Plus size={18} />
-            Add Client
-          </button>
           {/* Status Filter */}
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-600 dark:text-slate-300"
-          >
-            <option value="All">All Status</option>
-            <option value={ClientStatus.Active}>Active</option>
-            <option value={ClientStatus.Pending}>Pending</option>
-            <option value={ClientStatus.Inactive}>Inactive</option>
-          </select>
+          <div className="relative">
+            <button 
+              onClick={() => setIsStatusFilterOpen(!isStatusFilterOpen)}
+              className="flex items-center justify-between w-full md:w-48 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-600 dark:text-slate-300"
+            >
+              <span>{statusFilter === 'All' ? 'All Statuses' : statusFilter}</span>
+              <ChevronRight size={14} className={`rotate-90 text-slate-400 transition-transform ${isStatusFilterOpen ? 'transform rotate-[-90deg]' : ''}`} />
+            </button>
+            {isStatusFilterOpen && (
+              <div className="absolute top-full left-0 mt-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg z-10">
+                <div 
+                  onClick={() => { setStatusFilter('All'); setIsStatusFilterOpen(false); }}
+                  className="px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
+                >
+                  All Statuses
+                </div>
+                <div 
+                  onClick={() => { setStatusFilter(ClientStatus.Active); setIsStatusFilterOpen(false); }}
+                  className="px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
+                >
+                  Active
+                </div>
+                <div 
+                  onClick={() => { setStatusFilter(ClientStatus.Pending); setIsStatusFilterOpen(false); }}
+                  className="px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
+                >
+                  Pending
+                </div>
+                <div 
+                  onClick={() => { setStatusFilter(ClientStatus.Inactive); setIsStatusFilterOpen(false); }}
+                  className="px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
+                >
+                  Inactive
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Search */}
           <div className="relative flex-1 md:w-64">
@@ -232,6 +231,13 @@ const ClientList: React.FC = () => {
           </div>
           <button className="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">
             <Filter size={18} />
+          </button>
+          <button 
+            onClick={() => setIsAddDrawerOpen(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 font-medium transition-all shadow-lg shadow-violet-200"
+          >
+            <Plus size={18} />
+            Add Client
           </button>
         </div>
       </div>
@@ -276,32 +282,32 @@ const ClientList: React.FC = () => {
                 <th className="py-4 px-6 w-12">
                    <input 
                     type="checkbox" 
-                    checked={selectedIds.size === paginatedAndSortedClients.length && paginatedAndSortedClients.length > 0}
+                    checked={selectedIds.size === sortedClients.length && sortedClients.length > 0}
                     onChange={toggleSelectAll}
                     className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-violet-600 focus:ring-violet-500"
                    />
                 </th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('name')}>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700 focus:outline-none" onClick={() => handleSort('name')}>
                   <div className="flex items-center gap-1">
                     Name {sortField === 'name' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
                   </div>
                 </th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('company')}>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700 focus:outline-none" onClick={() => handleSort('company')}>
                   <div className="flex items-center gap-1">
                     Company {sortField === 'company' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
                   </div>
                 </th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('status')}>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700 focus:outline-none" onClick={() => handleSort('status')}>
                   <div className="flex items-center gap-1">
                     Status {sortField === 'status' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
                   </div>
                 </th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700" onClick={() => handleSort('revenue')}>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700 focus:outline-none" onClick={() => handleSort('revenue')}>
                   <div className="flex items-center justify-end gap-1">
                     Revenue {sortField === 'revenue' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
                   </div>
                 </th>
-                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700" onClick={() => handleSort('lastContact')}>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700 focus:outline-none" onClick={() => handleSort('lastContact')}>
                   <div className="flex items-center justify-end gap-1">
                     Last Contact {sortField === 'lastContact' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
                   </div>
@@ -309,12 +315,12 @@ const ClientList: React.FC = () => {
                 <th className="py-4 px-6 w-16"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-              {paginatedAndSortedClients.map((client) => (
+            <tbody className="">
+              {sortedClients.map((client) => (
                 <tr 
                   key={client.id} 
                   className={`
-                    group transition-colors cursor-pointer
+                    group transition-colors cursor-pointer focus:outline-none border-b border-slate-100 dark:border-slate-700
                     ${selectedIds.has(client.id) ? 'bg-violet-50/50 dark:bg-violet-900/20' : 'hover:bg-slate-50/50 dark:hover:bg-slate-700/50'}
                   `}
                   onClick={() => openDrawer(client)}
@@ -359,7 +365,7 @@ const ClientList: React.FC = () => {
                        value={client.status}
                        onChange={(e) => updateClient(client.id, { status: e.target.value as ClientStatus })}
                        className={`
-                        appearance-none pl-3 pr-8 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:ring-2 focus:ring-violet-500/20 outline-none
+                        appearance-none text-center px-4 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:ring-2 focus:ring-violet-500/20 outline-none
                         ${client.status === ClientStatus.Active ? 'bg-green-100 text-green-800' : ''}
                         ${client.status === ClientStatus.Pending ? 'bg-amber-100 text-amber-800' : ''}
                         ${client.status === ClientStatus.Inactive ? 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200' : ''}
@@ -390,7 +396,7 @@ const ClientList: React.FC = () => {
                   </td>
                 </tr>
               ))}
-              {paginatedAndSortedClients.length === 0 && (
+              {sortedClients.length === 0 && (
                  <tr>
                     <td colSpan={8} className="py-12 text-center text-slate-500 dark:text-slate-400">
                        No clients found matching your filters.
@@ -401,33 +407,6 @@ const ClientList: React.FC = () => {
           </table>
         </div>
         {/* Pagination Controls */}
-        <div className="p-4 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-700">
-          <button 
-            onClick={() => paginate(currentPage - 1)} 
-            disabled={currentPage === 1}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronLeft size={16} /> Previous
-          </button>
-          <div className="flex gap-1">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button 
-                key={i + 1}
-                onClick={() => paginate(i + 1)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium ${currentPage === i + 1 ? 'bg-violet-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-          <button 
-            onClick={() => paginate(currentPage + 1)} 
-            disabled={currentPage === totalPages}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Next <ChevronRight size={16} />
-          </button>
-        </div>
       </div>
 
       <AddClientDrawer 
