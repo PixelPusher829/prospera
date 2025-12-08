@@ -7,12 +7,26 @@ import AddEditTransactionModal from './AddEditTransactionModal';
 const Transactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS);
   const [searchTerm, setSearchTerm] = useState('');
-  const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all');
-  const [selectedAccountId, setSelectedAccountId] = useState<string>('all');
+  const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'income' | 'expense'>('all');
+  const [selectedAccountTypeFilter, setSelectedAccountTypeFilter] = useState<AccountType | 'all'>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [sortField, setSortField] = useState<keyof Transaction | null>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [minAmount, setMinAmount] = useState('');
+  const [maxAmount, setMaxAmount] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'cleared' | 'pending'>('all');
+  const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const allCategories = useMemo(() => {
+    const categories = new Set(MOCK_TRANSACTIONS.map(t => t.category));
+    return Array.from(categories);
+  }, [transactions]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); 
   const [selectedTransactionIds, setSelectedTransactionIds] = useState<Set<string>>(new Set()); // New state for bulk actions
@@ -50,15 +64,20 @@ const Transactions: React.FC = () => {
     let currentTransactions = transactions.filter(t => {
       const matchesSearch = t.payee.toLowerCase().includes(searchTerm.toLowerCase()) || 
                             t.category.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesType = typeFilter === 'all' || t.type === typeFilter;
-      const matchesAccount = selectedAccountId === 'all' || t.accountId === selectedAccountId;
-      return matchesSearch && matchesType && matchesAccount;
+      const matchesType = transactionTypeFilter === 'all' || t.type === transactionTypeFilter;
+      const account = MOCK_ACCOUNTS.find(a => a.id === t.accountId);
+      const matchesAccountType = selectedAccountTypeFilter === 'all' || account?.type === selectedAccountTypeFilter;
+      const matchesDate = (!startDate || new Date(t.date) >= new Date(startDate)) && (!endDate || new Date(t.date) <= new Date(endDate));
+      const matchesAmount = (!minAmount || t.amount >= parseFloat(minAmount)) && (!maxAmount || t.amount <= parseFloat(maxAmount));
+      const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(t.category);
+      return matchesSearch && matchesType && matchesAccountType && matchesDate && matchesAmount && matchesStatus && matchesCategory;
     });
 
     if (sortField) {
       currentTransactions.sort((a, b) => {
-        const aValue = a[sortField];
-        const bValue = b[sortField];
+        let aValue: any = a[sortField];
+        let bValue: any = b[sortField];
 
         if (typeof aValue === 'string' && typeof bValue === 'string') {
           // Special handling for date strings to ensure correct sorting
@@ -72,12 +91,17 @@ const Transactions: React.FC = () => {
         if (typeof aValue === 'number' && typeof bValue === 'number') {
           return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
         }
+        if (sortField === 'accountType') {
+          aValue = MOCK_ACCOUNTS.find(acc => acc.id === a.accountId)?.type || '';
+          bValue = MOCK_ACCOUNTS.find(acc => acc.id === b.accountId)?.type || '';
+          return sortDirection === 'asc' ? String(aValue).localeCompare(String(bValue)) : String(bValue).localeCompare(String(aValue));
+        }
         return 0;
       });
     }
 
     return currentTransactions;
-  }, [transactions, searchTerm, typeFilter, selectedAccountId, sortField, sortDirection]);
+  }, [transactions, searchTerm, transactionTypeFilter, selectedAccountTypeFilter, sortField, sortDirection, startDate, endDate, minAmount, maxAmount, statusFilter, selectedCategories]);
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -146,31 +170,120 @@ const Transactions: React.FC = () => {
          </div>
          <div className="flex gap-2">
             <select 
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as any)}
+              value={transactionTypeFilter}
+              onChange={(e) => setTransactionTypeFilter(e.target.value as any)}
               className="px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-600 dark:text-slate-300"
             >
-              <option value="all">All Types</option>
+              <option value="all">All Transaction Types</option>
               <option value="income">Income</option>
               <option value="expense">Expense</option>
             </select>
-            {/* Account Filter */}
+            {/* Account Type Filter */}
             <select
-              value={selectedAccountId}
-              onChange={(e) => setSelectedAccountId(e.target.value)}
+              value={selectedAccountTypeFilter}
+              onChange={(e) => setSelectedAccountTypeFilter(e.target.value as AccountType | 'all')}
               className="px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-600 dark:text-slate-300"
             >
-              <option value="all">All Accounts</option>
-              {MOCK_ACCOUNTS.map(account => (
-                <option key={account.id} value={account.id}>{account.name}</option>
-              ))}
+              <option value="all">All Account Types</option>
+              <option value="Cash">Cash</option>
+              <option value="Debit">Debit</option>
+              <option value="Credit">Credit</option>
+              <option value="Savings">Savings</option>
+              <option value="Loan">Loan</option>
+              <option value="Investment">Investment</option>
             </select>
-            <button className="p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
-               <Calendar size={18} />
-            </button>
-            <button className="p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
-               <Filter size={18} />
-            </button>
+            <div className="relative">
+              <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)} className="p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+                 <Calendar size={18} />
+              </button>
+              {isDatePickerOpen && (
+                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 z-10 w-60">
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Start Date</label>
+                      <input type="date" value={startDate || ''} onChange={e => setStartDate(e.target.value)} className="w-full px-3 py-2 border rounded-lg bg-white border-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-white text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">End Date</label>
+                      <input type="date" value={endDate || ''} onChange={e => setEndDate(e.target.value)} className="w-full px-3 py-2 border rounded-lg bg-white border-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-white text-sm" />
+                    </div>
+                    <button
+                      onClick={() => {
+                        setStartDate(null);
+                        setEndDate(null);
+                      }}
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <button onClick={() => setIsCustomFilterOpen(!isCustomFilterOpen)} className="p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+                 <Filter size={18} />
+              </button>
+              {isCustomFilterOpen && (
+                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 z-10 w-60">
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Min Amount</label>
+                      <input type="number" value={minAmount} onChange={e => setMinAmount(e.target.value)} className="w-full px-3 py-2 border rounded-lg bg-white border-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-white text-sm" placeholder="e.g., 10" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Max Amount</label>
+                      <input type="number" value={maxAmount} onChange={e => setMaxAmount(e.target.value)} className="w-full px-3 py-2 border rounded-lg bg-white border-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-white text-sm" placeholder="e.g., 500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Status</label>
+                      <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as 'all' | 'cleared' | 'pending')} className="w-full px-3 py-2 border rounded-lg bg-white border-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-white text-sm">
+                        <option value="all">All Statuses</option>
+                        <option value="cleared">Cleared</option>
+                        <option value="pending">Pending</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Categories</label>
+                      <div className="max-h-32 overflow-y-auto border border-slate-200 dark:border-slate-600 rounded-lg p-2">
+                        {allCategories.map(category => (
+                          <div key={category} className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              id={`category-${category}`}
+                              value={category}
+                              checked={selectedCategories.includes(category)}
+                              onChange={e => {
+                                if (e.target.checked) {
+                                  setSelectedCategories([...selectedCategories, category]);
+                                } else {
+                                  setSelectedCategories(selectedCategories.filter(c => c !== category));
+                                }
+                              }}
+                              className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-500"
+                            />
+                            <label htmlFor={`category-${category}`} className="text-sm text-slate-600 dark:text-slate-300">
+                              {category}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setMinAmount('');
+                        setMaxAmount('');
+                        setStatusFilter('all');
+                        setSelectedCategories([]);
+                      }}
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
          </div>
       </div>
 
@@ -227,6 +340,11 @@ const Transactions: React.FC = () => {
                     Category {sortField === 'category' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
                   </div>
                 </th>
+                <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700" onClick={() => handleSort('accountType')}>
+                  <div className="flex items-center gap-1">
+                    Account Type {sortField === 'accountType' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
+                  </div>
+                </th>
                 <th className="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right cursor-pointer hover:text-slate-700" onClick={() => handleSort('amount')}>
                   <div className="flex items-center justify-end gap-1">
                     Amount {sortField === 'amount' && <ArrowDownUp size={14} className={sortDirection === 'desc' ? 'rotate-180' : ''} />}
@@ -266,6 +384,7 @@ const Transactions: React.FC = () => {
                        {t.category}
                      </span>
                   </td>
+                  <td className="py-4 px-6 text-sm text-slate-500 dark:text-slate-400">{MOCK_ACCOUNTS.find(a => a.id === t.accountId)?.type}</td>
                   <td className={`py-4 px-6 text-right font-bold text-sm ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-slate-700 dark:text-white'}`}>
                     {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
                   </td>
