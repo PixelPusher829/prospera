@@ -47,7 +47,7 @@ const Budget: React.FC = () => {
             {/* Master Progress */}
             <div className="w-full bg-white/10 dark:bg-white/20 h-4 rounded-full overflow-hidden">
                <div 
-                  className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" 
+                  className="h-full rounded-full bg-gradient-to-r from-green-500 to-green-400" 
                   style={{ width: `${Math.min(100, (totalSpent/totalBudget)*100)}%` }}
                ></div>
             </div>
@@ -68,7 +68,10 @@ const Budget: React.FC = () => {
                <div key={item.id} className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700">
                   <div className="flex items-start justify-between mb-4">
                      <div className="flex items-center gap-4">
-                        <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300">
+                        <div 
+                          className="p-3 rounded-2xl"
+                          style={{ backgroundColor: `${item.color}20`, color: item.color }}
+                        >
                            <Icon size={24} />
                         </div>
                         <div>

@@ -12,11 +12,12 @@ interface EditBudgetModalProps {
 
 const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isOpen, onClose, onSave, initialBudget }) => {
   const [budget, setBudget] = useState<BudgetCategory[]>([]);
+  const [openColorPickerId, setOpenColorPickerId] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [id: string]: { [field: string]: string } }>({});
 
   useEffect(() => {
     // Deep copy and reset errors when modal opens
-    setBudget(JSON.parse(JSON.stringify(initialBudget))); 
+    setBudget(initialBudget.map(cat => ({ ...cat }))); 
     setErrors({});
   }, [initialBudget, isOpen]);
 
@@ -109,15 +110,27 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isOpen, onClose, onSa
                    </div>
                    {categoryErrors.limit && <p className="text-xs text-red-500 mt-1">{categoryErrors.limit}</p>}
                 </div>
-                <div className="col-span-2 flex items-center gap-1 flex-wrap">
-                   {COLOR_PALETTE.map(color => (
-                       <div 
+                <div className="col-span-2 relative">
+                   <div 
+                     onClick={() => setOpenColorPickerId(openColorPickerId === category.id ? null : category.id)}
+                     className="w-8 h-8 rounded-full cursor-pointer border-2 border-white dark:border-slate-800 shadow-sm"
+                     style={{ backgroundColor: category.color }}
+                   ></div>
+                   {openColorPickerId === category.id && (
+                     <div className="absolute top-full left-0 mt-2 bg-white dark:bg-slate-700 p-3 rounded-xl shadow-lg border border-slate-100 dark:border-slate-600 z-10 grid grid-cols-5 gap-2 w-max">
+                       {COLOR_PALETTE.map(color => (
+                         <div 
                            key={color}
-                           onClick={() => handleCategoryChange(category.id, 'color', color)}
+                           onClick={() => {
+                             handleCategoryChange(category.id, 'color', color);
+                             setOpenColorPickerId(null);
+                           }}
                            className={`w-6 h-6 rounded-full cursor-pointer border-2 ${category.color === color ? 'border-violet-500' : 'border-transparent'}`}
                            style={{ backgroundColor: color }}
-                       ></div>
-                   ))}
+                         ></div>
+                       ))}
+                     </div>
+                   )}
                 </div>
                 <div className="col-span-3 text-right pt-1">
                   <button
