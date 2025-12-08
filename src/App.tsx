@@ -25,7 +25,7 @@ const Header: React.FC<{ onMenuClick: () => void; isDarkMode: boolean }> = ({
 				>
 					<Menu size={24} />
 				</button>
-				<span className="font-bold text-xl text-slate-900 dark:text-white">
+				<span className="font-bold text-xl text-slate-700 dark:text-white">
 					Prospera
 				</span>
 			</div>
@@ -48,7 +48,7 @@ const Header: React.FC<{ onMenuClick: () => void; isDarkMode: boolean }> = ({
 					</button>
 					<div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800">
 						<div className="text-right hidden sm:block">
-							<div className="text-sm font-bold text-slate-900 dark:text-white">
+							<div className="text-sm font-bold text-slate-700 dark:text-white">
 								James Barnes
 							</div>
 							<div className="text-xs text-slate-500 dark:text-slate-400">

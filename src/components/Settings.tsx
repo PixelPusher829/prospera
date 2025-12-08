@@ -50,7 +50,7 @@ const Settings: React.FC = () => {
 		<div className="p-6 lg:p-10 max-w-[1200px] mx-auto min-h-full">
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
 				<div>
-					<h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+					<h1 className="text-3xl font-bold text-slate-700 dark:text-white">
 						Settings
 					</h1>
 					<p className="text-slate-500 dark:text-slate-400 mt-1">
@@ -83,7 +83,7 @@ const Settings: React.FC = () => {
                 ${
 					activeSection === item.id
 						? "bg-violet-600 text-white shadow-lg shadow-violet-200/50"
-						: "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200"
+						: "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
 				}
               `}
 						>
@@ -128,7 +128,7 @@ const Settings: React.FC = () => {
 											});
                                             setErrors(prev => ({...prev, name: ''}));
                                         }}
-										className={`w-full px-4 py-2.5 rounded-xl border ${errors.name ? 'border-red-500' : 'border-slate-200 dark:border-slate-600'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all`}
+										className={`w-full px-4 py-2.5 rounded-xl border ${errors.name ? 'border-red-500' : 'border-slate-200 dark:border-slate-600'} bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all`}
 									/>
                                     {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
 								</div>
@@ -146,7 +146,7 @@ const Settings: React.FC = () => {
 											});
                                             setErrors(prev => ({...prev, email: ''}));
                                         }}
-										className={`w-full px-4 py-2.5 rounded-xl border ${errors.email ? 'border-red-500' : 'border-slate-200 dark:border-slate-600'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all`}
+										className={`w-full px-4 py-2.5 rounded-xl border ${errors.email ? 'border-red-500' : 'border-slate-200 dark:border-slate-600'} bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all`}
 									/>
                                     {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
 								</div>
@@ -167,7 +167,7 @@ const Settings: React.FC = () => {
 													language: e.target.value,
 												})
 											}
-											className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none appearance-none transition-all"
+											className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none appearance-none transition-all"
 										>
 											<option>English</option>
 											<option>Spanish</option>
@@ -187,7 +187,7 @@ const Settings: React.FC = () => {
 												currency: e.target.value,
 											})
 										}
-										className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none appearance-none transition-all"
+										className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none appearance-none transition-all"
 									>
 										<option>USD ($)</option>
 										<option>EUR (€)</option>
@@ -200,13 +200,13 @@ const Settings: React.FC = () => {
 
 					{activeSection === "notifications" && (
 						<div className="space-y-6">
-							<h3 className="font-bold text-lg text-slate-900 dark:text-white">
+							<h3 className="font-bold text-lg text-slate-700 dark:text-white">
 								Email Notifications
 							</h3>
 							<div className="space-y-4">
 								<div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900 rounded-xl">
 									<div>
-										<p className="font-medium text-slate-900 dark:text-white">
+										<p className="font-medium text-slate-700 dark:text-white">
 											Weekly Report
 										</p>
 										<p className="text-sm text-slate-500 dark:text-slate-400">
@@ -232,7 +232,7 @@ const Settings: React.FC = () => {
 								</div>
 								<div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900 rounded-xl">
 									<div>
-										<p className="font-medium text-slate-900 dark:text-white">
+										<p className="font-medium text-slate-700 dark:text-white">
 											Marketing & Updates
 										</p>
 										<p className="text-sm text-slate-500 dark:text-slate-400">
@@ -264,7 +264,7 @@ const Settings: React.FC = () => {
 						<div className="space-y-6">
 							<div className="flex items-center gap-3 mb-4">
 								<Lock className="text-violet-600" size={24} />
-								<h3 className="font-bold text-lg text-slate-900 dark:text-white">
+								<h3 className="font-bold text-lg text-slate-700 dark:text-white">
 									Security Settings
 								</h3>
 							</div>
@@ -277,7 +277,7 @@ const Settings: React.FC = () => {
 											size={20}
 										/>
 										<div>
-											<p className="font-medium text-slate-900 dark:text-white">
+											<p className="font-medium text-slate-700 dark:text-white">
 												Two-Factor Authentication
 											</p>
 											<p className="text-sm text-slate-600 dark:text-slate-400">
@@ -299,7 +299,7 @@ const Settings: React.FC = () => {
 								<input
 									type="password"
 									placeholder="••••••••"
-									className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none mb-4"
+									className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-white outline-none mb-4"
 								/>
 
 								<label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -308,7 +308,7 @@ const Settings: React.FC = () => {
 								<input
 									type="password"
 									placeholder="••••••••"
-									className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none"
+									className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-white outline-none"
 								/>
 							</div>
 						</div>
@@ -320,7 +320,7 @@ const Settings: React.FC = () => {
 								size={48}
 								className="mx-auto text-slate-300 dark:text-slate-600 mb-4"
 							/>
-							<h3 className="text-lg font-bold text-slate-900 dark:text-white">
+							<h3 className="text-lg font-bold text-slate-700 dark:text-white">
 								Payment Method
 							</h3>
 							<p className="text-slate-500 dark:text-slate-400 mb-6">

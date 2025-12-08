@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { FinancialSummary, ChartDataPoint, ExpenseCategory } from "../types";
+import { FinancialSummary, ChartDataPoint, ExpenseCategory } from "../types/types";
 
 const apiKey = process.env.API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });

@@ -76,7 +76,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
           {/* Drawer Header */}
           <div className="p-6 flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Add New Client</h2>
+              <h2 className="text-xl font-bold text-slate-700">Add New Client</h2>
               <p className="text-sm text-slate-500">Enter the details for the new client.</p>
             </div>
             <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full text-slate-500">
@@ -96,7 +96,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
                     name="name"
                     value={newClient.name}
                     onChange={handleInputChange}
-                    className="flex-1 outline-none text-sm text-slate-900 bg-transparent"
+                    className="flex-1 outline-none text-sm text-slate-700 bg-transparent"
                     placeholder="e.g., John Doe"
                   />
                 </div>
@@ -112,7 +112,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
                     name="email"
                     value={newClient.email}
                     onChange={handleInputChange}
-                    className="flex-1 outline-none text-sm text-slate-900 bg-transparent"
+                    className="flex-1 outline-none text-sm text-slate-700 bg-transparent"
                     placeholder="e.g., john.doe@example.com"
                   />
                 </div>
@@ -128,7 +128,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
                     name="company"
                     value={newClient.company}
                     onChange={handleInputChange}
-                    className="flex-1 outline-none text-sm text-slate-900 bg-transparent"
+                    className="flex-1 outline-none text-sm text-slate-700 bg-transparent"
                     placeholder="e.g., Acme Inc."
                   />
                 </div>
@@ -145,7 +145,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
                       name="revenue"
                       value={newClient.revenue}
                       onChange={handleInputChange}
-                      className="flex-1 outline-none text-sm text-slate-900"
+                      className="flex-1 outline-none text-sm text-slate-700"
                     />
                   </div>
                 </div>
@@ -156,7 +156,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({ isOpen, onClose, onAd
                       name="status"
                       value={newClient.status}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none text-sm text-slate-900 appearance-none bg-white"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none text-sm text-slate-700 appearance-none bg-white"
                     >
                       <option value={ClientStatus.Pending}>Pending</option>
                       <option value={ClientStatus.Active}>Active</option>

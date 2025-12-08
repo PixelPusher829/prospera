@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, DollarSign, Calendar, Type } from 'lucide-react';
-import { Transaction } from '../types';
+import { Transaction } from '../types/types';
 
 interface AddEditTransactionModalProps {
   isOpen: boolean;

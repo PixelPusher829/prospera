@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Trash2, Plus, DollarSign } from 'lucide-react';
-import { BudgetCategory } from '../types';
+import { BudgetCategory } from '../types/types';
 import { COLOR_PALETTE } from '../data/constants';
 
 interface EditBudgetModalProps {

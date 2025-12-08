@@ -13,7 +13,7 @@ import {
 	Bitcoin,
 	CalendarClock,
 } from "lucide-react";
-import { MOCK_ACCOUNTS } from "../data/constants";
+import { MOCK_ACCOUNTS, INVESTMENT_CATEGORIES } from "../data/constants";
 import { Account, AccountType } from "../types/types";
 import AddEditAccountModal from "./AddEditAccountModal";
 
@@ -81,7 +81,7 @@ const LoanRow: React.FC<{ account: Account, onEdit: (account: Account) => void }
 						<ShieldCheck size={24} />
 					</div>
 					<div>
-						<h4 className="font-bold text-lg text-slate-900">
+						<h4 className="font-bold text-lg text-slate-700">
 							{account.name}
 						</h4>
 						<p className="text-sm text-slate-500">
@@ -93,7 +93,7 @@ const LoanRow: React.FC<{ account: Account, onEdit: (account: Account) => void }
 					<span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
 						Remaining
 					</span>
-					<span className="text-xl font-bold text-slate-900">
+					<span className="text-xl font-bold text-slate-700">
 						${Math.abs(account.balance).toLocaleString()}
 					</span>
 				</div>
@@ -127,20 +127,20 @@ const BankAccountRow: React.FC<{ account: Account, onEdit: (account: Account) =>
 	return (
 		<div 
             onClick={() => onEdit(account)}
-            className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors group cursor-pointer">
+            className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:border-violet-200 transition-colors group cursor-pointer">
 			<div className="flex items-center gap-4">
-				<div className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-white group-hover:shadow-md transition-all">
+				<div className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center transition-all">
 					<Icon size={20} />
 				</div>
 				<div>
-					<h4 className="font-bold text-slate-900">{account.name}</h4>
+					<h4 className="font-bold text-slate-700">{account.name}</h4>
 					<p className="text-xs text-slate-500">
 						{account.accountNumber} • {account.institution}
 					</p>
 				</div>
 			</div>
 			<div className="text-right">
-				<h4 className="font-bold text-slate-900 text-lg">
+				<h4 className="font-bold text-slate-700 text-lg">
 					${account.balance.toLocaleString()}
 				</h4>
 				<p className="text-xs text-slate-400">Available</p>
@@ -150,33 +150,39 @@ const BankAccountRow: React.FC<{ account: Account, onEdit: (account: Account) =>
 };
 
 // Investment Card Row
-const InvestmentRow: React.FC<{ account: Account, onEdit: (account: Account) => void }> = ({ account, onEdit }) => {
-	const isCrypto = account.currency === "BTC" || account.currency === "ETH";
-	const Icon = isCrypto ? Bitcoin : TrendingUp;
+	const InvestmentRow: React.FC<{ account: Account, onEdit: (account: Account) => void }> = ({ account, onEdit }) => {
+	console.log("InvestmentRow - account:", account);
+	const category = account.investmentCategory
+		? INVESTMENT_CATEGORIES.find(cat => cat.value === account.investmentCategory)
+		: null;
+	console.log("InvestmentRow - category:", category);
+
+	const IconComponent = category?.icon || TrendingUp; // Default to TrendingUp if no category or icon
+	console.log("InvestmentRow - IconComponent:", IconComponent);
+
+	let iconBgClass = category?.iconBgClass || "bg-slate-100"; // Default light background
+	let iconTextColorClass = category?.iconTextColorClass || "text-slate-600"; // Default icon color
+	console.log("InvestmentRow - iconBgClass:", iconBgClass, "iconTextColorClass:", iconTextColorClass);
 
 	return (
-		<div 
+		<div
             onClick={() => onEdit(account)}
             className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-violet-200 transition-colors cursor-pointer">
 			<div className="flex justify-between items-start mb-4">
 				<div
-					className={`p-3 rounded-2xl ${
-						isCrypto
-							? "bg-orange-50 text-orange-500"
-							: "bg-violet-50 text-violet-600"
-					}`}
+					className={`p-3 rounded-2xl ${iconBgClass} ${iconTextColorClass}`}
 				>
-					<Icon size={24} />
+					<IconComponent size={24} />
 				</div>
 				<span className="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded-lg">
 					+12.5%
 				</span>
 			</div>
-			<h4 className="font-bold text-lg text-slate-900">{account.name}</h4>
+			<h4 className="font-bold text-lg text-slate-700">{account.name}</h4>
 			<p className="text-sm text-slate-500 mb-4">{account.institution}</p>
 			<div className="pt-4 border-t border-slate-100">
 				<p className="text-xs text-slate-400 mb-1">Total Value</p>
-				<p className="text-2xl font-bold text-slate-900">
+				<p className="text-2xl font-bold text-slate-700">
 					{account.currency === "BTC" ? "₿" : "$"}
 					{account.balance.toLocaleString()}
 				</p>
@@ -184,7 +190,6 @@ const InvestmentRow: React.FC<{ account: Account, onEdit: (account: Account) => 
 		</div>
 	);
 };
-
 const Wallet: React.FC = () => {
   const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);
 	const [activeTab, setActiveTab] = useState<
@@ -195,6 +200,12 @@ const Wallet: React.FC = () => {
   const [accountTypeToAdd, setAccountTypeToAdd] = useState<AccountType | 'Investment' | 'Loan'>('Cash');
   const [isSyncingBank, setIsSyncingBank] = useState(false); // New state for fake bank sync
   const [showGlobalSyncSuccessModal, setShowGlobalSyncSuccessModal] = useState(false); // New state for global sync notification modal
+
+  const handleDeleteAccount = (accountId: string) => {
+    setAccounts(prevAccounts => prevAccounts.filter(acc => acc.id !== accountId));
+    setIsModalOpen(false); // Close modal after deletion
+    setSelectedAccount(null); // Clear selected account
+  };
 
   const handleFakeBankSync = () => {
     setIsSyncingBank(true);
@@ -253,7 +264,7 @@ const Wallet: React.FC = () => {
 					{/* Header */}
 					<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 						<div>
-							<h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+							<h1 className="text-3xl font-bold text-slate-700 dark:text-white">
 								My Wallet
 							</h1>
 							<p className="text-slate-500 dark:text-slate-400 mt-1">
@@ -263,7 +274,7 @@ const Wallet: React.FC = () => {
 						<div className="flex items-center gap-4">
 							<button 
 								onClick={() => openAddAccountModal('Cash')}
-								className="flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl hover:bg-slate-100 font-medium transition-all shadow-lg shadow-slate-100 border border-slate-200"
+								className="flex items-center gap-2 px-6 py-3 bg-white text-slate-700 rounded-xl hover:bg-slate-100 font-medium transition-all shadow-lg shadow-slate-100 border border-slate-200"
 							>
 								<Plus size={18} />
 								Link Account
@@ -291,18 +302,18 @@ const Wallet: React.FC = () => {
 						</div>
 					</div>
 
-      <AddEditAccountModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSaveAccount={handleSaveAccount}
-        accountType={accountTypeToAdd}
-        account={selectedAccount}
-      />
-
+            <AddEditAccountModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSaveAccount={handleSaveAccount}
+              onDeleteAccount={handleDeleteAccount}
+              defaultAccountType={accountTypeToAdd}
+              account={selectedAccount}
+            />
       {showGlobalSyncSuccessModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm m-4 p-6 text-center">
-            <h3 className="text-xl font-bold text-slate-900 mb-4">Bank Sync Complete!</h3>
+            <h3 className="text-xl font-bold text-slate-700 mb-4">Bank Sync Complete!</h3>
             <p className="text-slate-600 mb-6">Your financial data has been successfully updated.</p>
             <button
               onClick={() => setShowGlobalSyncSuccessModal(false)}
@@ -384,8 +395,8 @@ const Wallet: React.FC = () => {
                   px-6 py-2.5 rounded-xl text-sm font-medium capitalize transition-all
                   ${
 										activeTab === tab
-											? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
-											: "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+											? "bg-white dark:bg-slate-900 text-slate-700 dark:text-white shadow-sm"
+											: "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white"
 									}
                `}
 						>
@@ -404,7 +415,7 @@ const Wallet: React.FC = () => {
 							{/* Banking Section */}
 							<div className="space-y-4">
 								<div className="flex items-center justify-between">
-									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
+									<h3 className="font-bold text-xl text-slate-700 dark:text-white">
 										Banking & Cash
 									</h3>
 									<button
@@ -428,7 +439,7 @@ const Wallet: React.FC = () => {
 							{/* Investments Section */}
 							<div className="pt-2">
 								<div className="flex items-center justify-between mb-4">
-									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
+									<h3 className="font-bold text-xl text-slate-700 dark:text-white">
 										Top Investments
 									</h3>
 									<button
@@ -454,7 +465,7 @@ const Wallet: React.FC = () => {
 							{/* Loans Section Moved Here */}
 							<div className="space-y-4 pt-8 border-t border-slate-200 dark:border-slate-700">
 								<div className="flex items-center justify-between">
-									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
+									<h3 className="font-bold text-xl text-slate-700 dark:text-white">
 										Loans
 									</h3>
 									<button
@@ -477,7 +488,7 @@ const Wallet: React.FC = () => {
 							{/* Cards Section */}
 							<div className="space-y-4">
 								<div className="flex items-center justify-between">
-									<h3 className="font-bold text-xl text-slate-900 dark:text-white">
+									<h3 className="font-bold text-xl text-slate-700 dark:text-white">
 										Credit Cards
 									</h3>
 									<button
@@ -510,7 +521,7 @@ const Wallet: React.FC = () => {
 						))}
 						<button 
               onClick={() => openAddAccountModal('Cash')}
-              className="w-full h-auto min-h-[100px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
+              className="w-full h-auto border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
 							<Plus size={24} />
 							Add Bank Account
 						</button>
@@ -527,19 +538,14 @@ const Wallet: React.FC = () => {
 									<span className="text-xs text-slate-400 dark:text-slate-500">
 										Current Balance
 									</span>
-									<span className="text-sm font-bold text-red-500">
+									<span className="text-lg font-bold text-red-500">
 										$
 										{Math.abs(acc.balance).toLocaleString()}
 									</span>
 								</div>
 							</div>
 						))}
-						<button 
-              onClick={() => openAddAccountModal('Credit')}
-              className="w-full h-auto min-h-[220px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500 font-medium hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition-all flex flex-col items-center justify-center gap-2">
-							<Plus size={24} />
-							Add Credit Card
-						</button>
+
 					</div>
 				)}
 

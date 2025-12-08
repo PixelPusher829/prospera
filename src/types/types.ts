@@ -74,6 +74,9 @@ export interface Account {
   accountNumber?: string;
   expiry?: string;
   colorTheme?: string;
+  investmentCategory?: string;
+  iconBgClass?: string;
+  iconTextColorClass?: string;
 }
 
 export interface Goal {

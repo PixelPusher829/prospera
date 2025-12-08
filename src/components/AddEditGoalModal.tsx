@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Target, DollarSign, Calendar } from 'lucide-react';
-import { Goal } from '../types';
+import { Goal } from '../types/types';
 import { COLOR_PALETTE } from '../data/constants';
 
 interface AddEditGoalModalProps {

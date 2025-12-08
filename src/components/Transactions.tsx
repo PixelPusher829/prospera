@@ -117,7 +117,7 @@ const Transactions: React.FC = () => {
     <div className="p-6 lg:p-10 max-w-[1600px] mx-auto min-h-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Transactions</h1>
+          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">Transactions</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">Record and categorize your spending</p>
         </div>
         
@@ -141,7 +141,7 @@ const Transactions: React.FC = () => {
               placeholder="Search payee or category..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-900 dark:text-white"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-slate-700 dark:text-white"
             />
          </div>
          <div className="flex gap-2">
@@ -258,7 +258,7 @@ const Transactions: React.FC = () => {
                        <div className={`p-2 rounded-full ${t.type === 'income' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400'}`}>
                           {t.type === 'income' ? <ArrowDownRight size={14} /> : <ArrowUpRight size={14} />}
                        </div>
-                       <span className="text-slate-900 dark:text-white font-medium text-sm">{t.payee}</span>
+                       <span className="text-slate-700 dark:text-white font-medium text-sm">{t.payee}</span>
                     </div>
                   </td>
                   <td className="py-4 px-6">
@@ -266,7 +266,7 @@ const Transactions: React.FC = () => {
                        {t.category}
                      </span>
                   </td>
-                  <td className={`py-4 px-6 text-right font-bold text-sm ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-slate-900 dark:text-white'}`}>
+                  <td className={`py-4 px-6 text-right font-bold text-sm ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-slate-700 dark:text-white'}`}>
                     {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
                   </td>
                   <td className="py-4 px-6 text-center">

@@ -134,7 +134,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({ isOpen, onClo
             value={currentAccount.balance}
             onChange={handleInputChange}
             readOnly={!isEditable}
-            className={`w-full pl-7 pr-3 py-2 rounded-lg transition-colors ${errors.balance ? 'border-red-500 border' : 'border-transparent'} ${!isEditable ? 'bg-slate-100 text-slate-500' : ''}`}
+            className={`w-full pl-7 pr-3 py-2 rounded-lg transition-colors border ${errors.balance ? 'border-red-500' : 'border-slate-200'} ${!isEditable ? 'bg-slate-100 text-slate-500' : 'bg-transparent'}`}
             placeholder="e.g., 5000"
           />
         </div>
@@ -150,7 +150,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({ isOpen, onClo
           {!account && selectedAccountType === 'Cash' && ( // Render label and input only if Cash and adding new account
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1">Balance</label>
-              {renderBalanceInput(true)} // Always editable when shown for new Cash account
+              {renderBalanceInput(true)} {/* Always editable when shown for new Cash account */}
               {errors.balance && <p className="text-xs text-red-500 mt-1">{errors.balance}</p>}
             </div>
           )}
@@ -216,7 +216,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({ isOpen, onClo
               <input type="text" name="name" value={currentAccount.name} onChange={handleInputChange} className={`w-full px-3 py-2 border rounded-lg transition-colors bg-transparent ${errors.name ? 'border-red-500' : 'border-slate-200'}`} placeholder="e.g., Car Loan" />
               {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
             </div>
-            ) : ( // If editing existing account, show Sync Account button
+            {account && (
               <div>
                 <button
                   onClick={handleSyncIndividualAccount}

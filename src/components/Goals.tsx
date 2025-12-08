@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Target, Calendar, Car, Plane, Laptop, MoreVertical } from 'lucide-react';
 import { MOCK_GOALS } from '../data/constants';
-import { Goal } from '../types';
+import { Goal } from '../types/types';
 import AddEditGoalModal from './AddEditGoalModal';
 
 const GoalCard: React.FC<{ goal: Goal, onEdit: (goal: Goal) => void }> = ({ goal, onEdit }) => {
@@ -29,7 +29,7 @@ const GoalCard: React.FC<{ goal: Goal, onEdit: (goal: Goal) => void }> = ({ goal
                 {getIcon()}
              </div>
              <div>
-                <h3 className="font-bold text-slate-900 dark:text-white text-lg">{goal.name}</h3>
+                <h3 className="font-bold text-slate-700 dark:text-white text-lg">{goal.name}</h3>
                 <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-1">
                    <Calendar size={12} />
                    Target: {goal.deadline}
@@ -45,7 +45,7 @@ const GoalCard: React.FC<{ goal: Goal, onEdit: (goal: Goal) => void }> = ({ goal
        </div>
 
        <div className="mb-2 flex justify-between items-end">
-          <span className="text-3xl font-bold text-slate-900 dark:text-white">${goal.currentAmount.toLocaleString()}</span>
+          <span className="text-3xl font-bold text-slate-700 dark:text-white">${goal.currentAmount.toLocaleString()}</span>
           <span className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">of ${goal.targetAmount.toLocaleString()}</span>
        </div>
 
@@ -98,7 +98,7 @@ const Goals: React.FC = () => {
     <div className="p-6 lg:p-10 max-w-[1600px] mx-auto min-h-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Financial Goals</h1>
+          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">Financial Goals</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">Track your savings targets</p>
         </div>
         <button 

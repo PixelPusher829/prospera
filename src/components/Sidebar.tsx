@@ -15,7 +15,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import { NavItem, SidebarProps } from '../types';
+import { NavItem, SidebarProps } from '../types/types';
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/' },
@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
           {/* Collapse Toggle Button (Desktop Only) */}
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:flex absolute -right-3 top-9 w-6 h-6 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-full items-center justify-center text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-sm z-50 hover:bg-slate-50 dark:hover:bg-slate-600"
+            className="hidden lg:flex absolute -right-3 top-9 w-6 h-6 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-full items-center justify-center text-slate-500 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white shadow-sm z-50 hover:bg-slate-50 dark:hover:bg-slate-600"
           >
             {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
             <div className="w-10 h-10 bg-black dark:bg-white rounded-full flex items-center justify-center text-white dark:text-black font-bold text-xl shrink-0">
               P
             </div>
-            <span className={`text-2xl font-bold text-slate-900 dark:text-white overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+            <span className={`text-2xl font-bold text-slate-700 dark:text-white overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
               Prospera
             </span>
           </div>
@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
                     w-full flex items-center gap-4 px-3 py-3 rounded-2xl transition-all duration-200
                     ${isActive 
                       ? 'bg-violet-600 text-white shadow-lg shadow-violet-200/50' 
-                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-white'
                     }
                     ${isCollapsed ? 'justify-center' : ''}
                   `}
@@ -109,7 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
                 w-full flex items-center gap-4 px-3 py-3 rounded-2xl transition-colors
                 ${activeTab === 'settings' 
                   ? 'bg-violet-600 text-white shadow-lg shadow-violet-200/50' 
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                 }
                 ${isCollapsed ? 'justify-center' : ''}
               `}
@@ -128,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
                 w-full flex items-center gap-4 px-3 py-3 rounded-2xl transition-colors
                 ${activeTab === 'help' 
                   ? 'bg-violet-600 text-white shadow-lg shadow-violet-200/50' 
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                 }
                 ${isCollapsed ? 'justify-center' : ''}
               `}

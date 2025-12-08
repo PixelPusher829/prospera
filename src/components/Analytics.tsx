@@ -33,7 +33,7 @@ const Analytics: React.FC = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
+          <h1 className="text-3xl font-bold text-slate-700">Analytics</h1>
           <p className="text-slate-500 mt-1">Deep dive into financial trends and AI insights</p>
         </div>
         <div className="flex items-center gap-3">
@@ -52,10 +52,10 @@ const Analytics: React.FC = () => {
           <div className="flex justify-between items-start">
              <div>
                <div className="flex items-center gap-2 mb-2">
-                 <div className="p-2 bg-slate-50 rounded-full"><DollarSign size={16} className="text-slate-900"/></div>
-                 <span className="font-semibold text-slate-900">Total balance</span>
+                 <div className="p-2 bg-slate-50 rounded-full"><DollarSign size={16} className="text-slate-700"/></div>
+                 <span className="font-semibold text-slate-700">Total balance</span>
                </div>
-               <h2 className="text-4xl font-bold text-slate-900 mt-2">${MOCK_SUMMARY.balance.toLocaleString()}</h2>
+               <h2 className="text-4xl font-bold text-slate-700 mt-2">${MOCK_SUMMARY.balance.toLocaleString()}</h2>
              </div>
              <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold text-slate-600">
                 USD <ChevronDown size={14}/>
@@ -87,10 +87,10 @@ const Analytics: React.FC = () => {
           <div className="flex justify-between items-start">
              <div>
                <div className="flex items-center gap-2 mb-2">
-                 <div className="p-2 bg-slate-50 rounded-full"><CreditCard size={16} className="text-slate-900"/></div>
-                 <span className="font-semibold text-slate-900">Income</span>
+                 <div className="p-2 bg-slate-50 rounded-full"><CreditCard size={16} className="text-slate-700"/></div>
+                 <span className="font-semibold text-slate-700">Income</span>
                </div>
-               <h2 className="text-4xl font-bold text-slate-900 mt-2">${MOCK_SUMMARY.income.toLocaleString()}</h2>
+               <h2 className="text-4xl font-bold text-slate-700 mt-2">${MOCK_SUMMARY.income.toLocaleString()}</h2>
              </div>
              <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold text-slate-600">
                 USD <ChevronDown size={14}/>
@@ -120,10 +120,10 @@ const Analytics: React.FC = () => {
           <div className="flex justify-between items-start">
              <div>
                <div className="flex items-center gap-2 mb-2">
-                 <div className="p-2 bg-slate-50 rounded-full"><DollarSign size={16} className="text-slate-900"/></div>
-                 <span className="font-semibold text-slate-900">Expense</span>
+                 <div className="p-2 bg-slate-50 rounded-full"><DollarSign size={16} className="text-slate-700"/></div>
+                 <span className="font-semibold text-slate-700">Expense</span>
                </div>
-               <h2 className="text-4xl font-bold text-slate-900 mt-2">${MOCK_SUMMARY.expense.toLocaleString()}</h2>
+               <h2 className="text-4xl font-bold text-slate-700 mt-2">${MOCK_SUMMARY.expense.toLocaleString()}</h2>
              </div>
              <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold text-slate-600">
                 USD <ChevronDown size={14}/>
@@ -154,7 +154,7 @@ const Analytics: React.FC = () => {
         {/* Balance Overview - Area Chart */}
         <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-lg text-slate-900">Total balance overview</h3>
+            <h3 className="font-bold text-lg text-slate-700">Total balance overview</h3>
             <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
                    <span className="w-2 h-2 rounded-full bg-violet-500"></span>
@@ -212,7 +212,7 @@ const Analytics: React.FC = () => {
         {/* Statistics - Donut */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col">
           <div className="flex justify-between items-center mb-4">
-             <h3 className="font-bold text-lg text-slate-900">Statistics</h3>
+             <h3 className="font-bold text-lg text-slate-700">Statistics</h3>
              <button className="text-slate-400 hover:text-slate-600 text-sm flex items-center gap-1">Details <ChevronDown size={14}/></button>
           </div>
           <p className="text-xs text-slate-400 mb-6">You have an increase of expenses in several categories this month</p>
@@ -221,7 +221,7 @@ const Analytics: React.FC = () => {
              {/* Center Text */}
              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-xs text-slate-400">This month expense</span>
-                <span className="text-2xl font-bold text-slate-900">${MOCK_SUMMARY.expense.toLocaleString()}</span>
+                <span className="text-2xl font-bold text-slate-700">${MOCK_SUMMARY.expense.toLocaleString()}</span>
              </div>
              <ResponsiveContainer width="100%" height="100%">
                <PieChart>
@@ -259,7 +259,7 @@ const Analytics: React.FC = () => {
         {/* Budget vs Expense - Bar Chart */}
         <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
            <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-lg text-slate-900">Comparing of budget and expense</h3>
+            <h3 className="font-bold text-lg text-slate-700">Comparing of budget and expense</h3>
             <div className="flex items-center gap-4 text-sm">
                  <div className="flex items-center gap-2">
                    <span className="w-2 h-2 rounded-full bg-violet-500"></span>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, AlertCircle } from 'lucide-react';
 import { MOCK_BUDGET } from '../data/constants';
-import { BudgetCategory } from '../types';
+import { BudgetCategory } from '../types/types';
 import EditBudgetModal from './EditBudgetModal';
 
 const Budget: React.FC = () => {
@@ -19,7 +19,7 @@ const Budget: React.FC = () => {
     <div className="p-6 lg:p-10 max-w-[1600px] mx-auto min-h-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Monthly Budget</h1>
+          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">Monthly Budget</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">Keep your spending in check</p>
         </div>
         <button 
@@ -72,12 +72,12 @@ const Budget: React.FC = () => {
                            <Icon size={24} />
                         </div>
                         <div>
-                           <h3 className="font-bold text-slate-900 dark:text-white">{item.name}</h3>
+                           <h3 className="font-bold text-slate-700 dark:text-white">{item.name}</h3>
                            <p className="text-xs text-slate-500 dark:text-slate-400">Limit: ${item.limit}</p>
                         </div>
                      </div>
                      <div className="text-right">
-                        <span className={`text-xl font-bold ${isOver ? 'text-red-500' : 'text-slate-900 dark:text-white'}`}>
+                        <span className={`text-xl font-bold ${isOver ? 'text-red-500' : 'text-slate-700 dark:text-white'}`}>
                            ${item.spent}
                         </span>
                      </div>
