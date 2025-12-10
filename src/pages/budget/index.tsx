@@ -1,9 +1,9 @@
 import { AlertCircle, Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { MOCK_BUDGET } from "@/data/constants";
-import type { BudgetCategory } from "@/types/types";
-import EditBudgetModal from "@/components/utils/EditBudgetModal";
+import { MOCK_BUDGET } from "@/shared/data/constants";
+import type { BudgetCategory } from "@/shared/types/types";
+import EditBudgetModal from "@/pages/budget/EditBudgetModal";
 
 const Budget: React.FC = () => {
   const [budget, setBudget] = useState<BudgetCategory[]>(MOCK_BUDGET);
@@ -29,7 +29,7 @@ const Budget: React.FC = () => {
         </div>
         <button
           onClick={() => setIsEditModalOpen(true)}
-          className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
         >
           <Plus size={18} />
           Edit Budget

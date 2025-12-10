@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { INVESTMENT_CATEGORIES, MOCK_ACCOUNTS } from "@/data/constants";
-import type { Account, AccountType } from "@/types/types";
-import AddEditAccountModal from "@/components/utils/AddEditAccountModal";
+import { INVESTMENT_CATEGORIES, MOCK_ACCOUNTS } from "@/shared/data/constants";
+import type { Account, AccountType } from "@/shared/types/types";
+import AddEditAccountModal from "@/pages/wallet/AddEditAccountModal";
 
 // Visual Component for Credit Cards (Physical look)
 const CreditCardVisual: React.FC<{
@@ -80,7 +80,7 @@ const LoanRow: React.FC<{
             <ShieldCheck size={24} />
           </div>
           <div>
-            <h4 className="text-lg font-bold text-slate-00">{account.name}</h4>
+            <h4 className="text-slate-00 text-lg font-bold">{account.name}</h4>
             <p className="text-sm text-slate-500">{account.institution}</p>
           </div>
         </div>
@@ -303,7 +303,7 @@ const Wallet: React.FC = () => {
           <button
             onClick={handleFakeBankSync}
             disabled={isSyncingBank}
-            className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-violet-400"
+            className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-violet-400"
           >
             {isSyncingBank ? (
               <>

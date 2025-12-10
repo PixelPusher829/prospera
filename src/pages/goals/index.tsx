@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { MOCK_GOALS } from "@/data/constants";
-import type { Goal } from "@/types/types";
-import AddEditGoalModal from "@/components/utils/AddEditGoalModal";
+import { MOCK_GOALS } from "@/shared/data/constants";
+import type { Goal } from "@/shared/types/types";
+import AddEditGoalModal from "@/pages/goals/AddEditGoalModal";
 
 const GoalCard: React.FC<{ goal: Goal; onEdit: (goal: Goal) => void }> = ({
   goal,
@@ -141,7 +141,7 @@ const Goals: React.FC = () => {
         </div>
         <button
           onClick={openAddModal}
-          className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
         >
           <Plus size={18} />
           Create New Goal

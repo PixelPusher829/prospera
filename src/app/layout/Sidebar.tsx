@@ -1,50 +1,50 @@
 import {
-	ArrowRightLeft,
-	BarChart2,
-	ChevronLeft,
-	ChevronRight,
-	HelpCircle,
-	LayoutDashboard,
-	LogOut,
-	Moon,
-	PieChart,
-	Settings,
-	Sun,
-	Target,
-	Users,
-	Wallet,
+  ArrowRightLeft,
+  BarChart2,
+  ChevronLeft,
+  ChevronRight,
+  HelpCircle,
+  LayoutDashboard,
+  LogOut,
+  Moon,
+  PieChart,
+  Settings,
+  Sun,
+  Target,
+  Users,
+  Wallet,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import logo from "@/images/logo.svg";
-import type { NavItem, SidebarProps } from "@/types/types";
+import logo from "@/shared/assets/logo.svg";
+import type { NavItem, SidebarProps } from "@/shared/types/types";
 
 const NAV_ITEMS: NavItem[] = [
-	{ id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/" },
-	{ id: "analytics", label: "Analytics", icon: BarChart2, path: "/analytics" },
-	{
-		id: "transactions",
-		label: "Transactions",
-		icon: ArrowRightLeft,
-		path: "/transactions",
-	},
-	{ id: "wallet", label: "Wallet", icon: Wallet, path: "/wallet" },
-	{ id: "budget", label: "Budget", icon: PieChart, path: "/budget" },
-	{ id: "goals", label: "Goals", icon: Target, path: "/goals" },
-	{ id: "clients", label: "Client List", icon: Users, path: "/clients" },
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/" },
+  { id: "analytics", label: "Analytics", icon: BarChart2, path: "/analytics" },
+  {
+    id: "transactions",
+    label: "Transactions",
+    icon: ArrowRightLeft,
+    path: "/transactions",
+  },
+  { id: "wallet", label: "Wallet", icon: Wallet, path: "/wallet" },
+  { id: "budget", label: "Budget", icon: PieChart, path: "/budget" },
+  { id: "goals", label: "Goals", icon: Target, path: "/goals" },
+  { id: "clients", label: "Client List", icon: Users, path: "/clients" },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({
-	activeTab,
-	setActiveTab,
-	isMobileOpen,
-	setIsMobileOpen,
-	isDarkMode,
-	toggleTheme,
+  activeTab,
+  setActiveTab,
+  isMobileOpen,
+  setIsMobileOpen,
+  isDarkMode,
+  toggleTheme,
 }) => {
-	const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-	return (
+  return (
     <>
       {/* Mobile Overlay */}
       {isMobileOpen && (
@@ -80,9 +80,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Logo */}
           <div
-            className={`mb-10 flex items-center ${isCollapsed ? "justify-center" : "px-6 gap-4"}`}
+            className={`mb-10 flex items-center ${isCollapsed ? "justify-center" : "gap-4 px-6"}`}
           >
-              <img src={logo} alt="" className="w-8" />
+            <img src={logo} alt="" className="w-8" />
             <span
               className={`overflow-hidden text-3xl font-bold whitespace-nowrap text-slate-700 transition-all duration-300 dark:text-white ${isCollapsed ? "hidden w-0 opacity-0" : "w-auto opacity-100"}`}
             >

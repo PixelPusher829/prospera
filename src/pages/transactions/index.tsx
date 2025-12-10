@@ -13,9 +13,9 @@ import {
 } from "lucide-react"; // Import X for bulk actions
 import type React from "react";
 import { useMemo, useState } from "react";
-import { MOCK_ACCOUNTS, MOCK_TRANSACTIONS } from "@/data/constants";
-import type { Transaction } from "@/types/types";
-import AddEditTransactionModal from "@/components/utils/AddEditTransactionModal";
+import { MOCK_ACCOUNTS, MOCK_TRANSACTIONS } from "@/shared/data/constants";
+import type { Transaction } from "@/shared/types/types";
+import AddEditTransactionModal from "@/pages/transactions/AddEditTransactionModal";
 
 const Transactions: React.FC = () => {
   const [transactions, setTransactions] =
@@ -216,7 +216,7 @@ const Transactions: React.FC = () => {
         <div className="flex w-full items-center gap-3 md:w-auto">
           <button
             onClick={openAddModal}
-            className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+            className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
           >
             <Plus size={18} />
             Add Transaction

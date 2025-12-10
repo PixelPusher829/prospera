@@ -18,9 +18,9 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
-import { CLIENTS_DATA } from "@/data/constants";
-import { type Client, ClientStatus } from "@/types/types";
-import AddClientDrawer from "@/components/utils/AddClientDrawer";
+import { CLIENTS_DATA } from "@/shared/data/constants";
+import { type Client, ClientStatus } from "@/shared/types/types";
+import AddClientDrawer from "@/pages/client-list/AddClientDrawer";
 
 // Component for Inline Editing
 const InlineEditCell: React.FC<{
@@ -289,7 +289,7 @@ const ClientList: React.FC = () => {
           </button>
           <button
             onClick={() => setIsAddDrawerOpen(true)}
-            className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+            className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
           >
             <Plus size={18} />
             Add Client
