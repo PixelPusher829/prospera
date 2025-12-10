@@ -30,6 +30,7 @@ import {
   MOCK_SUMMARY,
 } from "@/shared/data/constants";
 import { getFinancialAdvice } from "@/shared/services/geminiService";
+import Header from "@/shared/components/layout/Header";
 
 const Analytics: React.FC = () => {
   const [insight, setInsight] = useState<string>("");
@@ -49,20 +50,19 @@ const Analytics: React.FC = () => {
   return (
     <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
       {/* Header Section */}
-      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700">Analytics</h1>
-          <p className="mt-1 text-slate-500">
-            Deep dive into financial trends and AI insights
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50">
-            <LayoutGrid size={18} />
-            Export Report
-          </button>
-        </div>
-      </div>
+      <Header
+        heading="Analytics"
+        subheading="Deep dive into financial trends and AI insights"
+      >
+        {" "}
+        <button
+          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+          type="button"
+        >
+          <LayoutGrid size={18} />
+          Export Report
+        </button>
+      </Header>
 
       {/* Stats Row */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

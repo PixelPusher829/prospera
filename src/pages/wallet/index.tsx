@@ -13,6 +13,7 @@ import { useState } from "react";
 import { INVESTMENT_CATEGORIES, MOCK_ACCOUNTS } from "@/shared/data/constants";
 import type { Account, AccountType } from "@/shared/types/types";
 import AddEditAccountModal from "@/pages/wallet/AddEditAccountModal";
+import Header from "@/shared/components/layout/Header";
 
 // Visual Component for Credit Cards (Physical look)
 const CreditCardVisual: React.FC<{
@@ -282,16 +283,10 @@ const Wallet: React.FC = () => {
 
   return (
     <div className="mx-auto min-h-full max-w-[1600px] space-y-8 p-6 lg:p-10">
-      {/* Header */}
-      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">
-            My Wallet
-          </h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400">
-            Centralized overview of all your assets and debts
-          </p>
-        </div>
+      <Header
+        heading="My Wallet"
+        subheading="Centralized overview of all your assets and debts"
+      >
         <div className="flex items-center gap-4">
           <button
             onClick={() => openAddAccountModal("Cash")}
@@ -337,7 +332,7 @@ const Wallet: React.FC = () => {
             )}
           </button>
         </div>
-      </div>
+      </Header>
 
       <AddEditAccountModal
         isOpen={isModalOpen}

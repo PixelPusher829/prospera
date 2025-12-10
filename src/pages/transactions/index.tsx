@@ -16,6 +16,7 @@ import { useMemo, useState } from "react";
 import { MOCK_ACCOUNTS, MOCK_TRANSACTIONS } from "@/shared/data/constants";
 import type { Transaction } from "@/shared/types/types";
 import AddEditTransactionModal from "@/pages/transactions/AddEditTransactionModal";
+import Header from "@/shared/components/layout/Header";
 
 const Transactions: React.FC = () => {
   const [transactions, setTransactions] =
@@ -203,16 +204,11 @@ const Transactions: React.FC = () => {
 
   return (
     <div className="mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
-      <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">
-            Transactions
-          </h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400">
-            Record and categorize your spending
-          </p>
-        </div>
-
+      <Header
+        heading="Transactions"
+        subheading="Record and categorize your spending"
+        className="mb-8"
+      >
         <div className="flex w-full items-center gap-3 md:w-auto">
           <button
             onClick={openAddModal}
@@ -222,7 +218,7 @@ const Transactions: React.FC = () => {
             Add Transaction
           </button>
         </div>
-      </div>
+      </Header>
 
       {/* Filters */}
       <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm md:flex-row dark:border-slate-700 dark:bg-slate-800">

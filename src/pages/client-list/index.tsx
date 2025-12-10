@@ -1,14 +1,10 @@
 import {
   ArrowDownUp,
   Building,
-  Calendar,
-  Check,
-  ChevronLeft,
   ChevronRight,
   DollarSign,
   Filter,
   Mail,
-  MoreVertical,
   Plus,
   Save,
   Search,
@@ -21,6 +17,7 @@ import { useMemo, useState } from "react";
 import { CLIENTS_DATA } from "@/shared/data/constants";
 import { type Client, ClientStatus } from "@/shared/types/types";
 import AddClientDrawer from "@/pages/client-list/AddClientDrawer";
+import Header from "@/shared/components/layout/Header";
 
 // Component for Inline Editing
 const InlineEditCell: React.FC<{
@@ -203,16 +200,12 @@ const ClientList: React.FC = () => {
   return (
     <div className="relative mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
       {/* Header & Controls */}
-      <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">
-            Clients
-          </h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400">
-            Manage your client relationships
-          </p>
-        </div>
-
+      <Header
+        heading="Clients"
+        subheading="Manage your client relationships"
+        className="mb-8"
+      >
+        {" "}
         <div className="flex w-full items-center gap-3 md:w-auto">
           {/* Status Filter */}
           <div className="relative">
@@ -295,7 +288,7 @@ const ClientList: React.FC = () => {
             Add Client
           </button>
         </div>
-      </div>
+      </Header>
 
       {/* Bulk Actions Floating Bar */}
       {selectedIds.size > 0 && (

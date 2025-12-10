@@ -10,8 +10,8 @@ import {
 import type React from "react";
 import { useState } from "react";
 import { MOCK_GOALS } from "@/shared/data/constants";
-import type { Goal } from "@/shared/types/types";
 import AddEditGoalModal from "@/pages/goals/AddEditGoalModal";
+import Header from "@/shared/components/layout/Header";
 
 const GoalCard: React.FC<{ goal: Goal; onEdit: (goal: Goal) => void }> = ({
   goal,
@@ -130,15 +130,11 @@ const Goals: React.FC = () => {
 
   return (
     <div className="mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
-      <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">
-            Financial Goals
-          </h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400">
-            Track your savings targets
-          </p>
-        </div>
+      <Header
+        heading="Financial Goals"
+        subheading="Track your savings targets"
+        className="mb-10"
+      >
         <button
           onClick={openAddModal}
           className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
@@ -146,7 +142,7 @@ const Goals: React.FC = () => {
           <Plus size={18} />
           Create New Goal
         </button>
-      </div>
+      </Header>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {goals.map((goal) => (

@@ -16,6 +16,7 @@ import {
   MOCK_SUMMARY,
   MOCK_TRANSACTIONS,
 } from "@/shared/data/constants";
+import Header from "@/shared/components/layout/Header";
 import AddEditTransactionModal from "@/pages/transactions/AddEditTransactionModal";
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
@@ -27,23 +28,18 @@ const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
   return (
     <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
       {/* Welcome Section */}
-      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">
-            Good Morning, James!
-          </h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400">
-            Here is your financial health check for today.
-          </p>
-        </div>
+      <Header
+        heading="Good Morning, James!"
+        subheading="Here is your financial health check for today."
+      >
         <button
           onClick={() => setIsAddTransactionModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 dark:shadow-none"
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
         >
           <Plus size={18} />
           Quick Add Transaction
         </button>
-      </div>
+      </Header>
 
       {/* Hero Cards - Net Worth & Safe to Spend */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

@@ -1,64 +1,62 @@
 import {
-	Bell,
-	CreditCard,
-	Globe,
-	Lock,
-	Save,
-	Shield,
-	User,
+  Bell,
+  CreditCard,
+  Globe,
+  Lock,
+  Save,
+  Shield,
+  User,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import Header from "@/shared/components/layout/Header";
 
 const Settings: React.FC = () => {
-	const [activeSection, setActiveSection] = useState("profile");
-	const [formData, setFormData] = useState({
-		name: "James Barnes",
-		email: "james@prospera.com",
-		notifications: true,
-		marketing: false,
-		currency: "USD",
-		language: "English",
-		twoFactor: true,
-	});
-	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [activeSection, setActiveSection] = useState("profile");
+  const [formData, setFormData] = useState({
+    name: "James Barnes",
+    email: "james@prospera.com",
+    notifications: true,
+    marketing: false,
+    currency: "USD",
+    language: "English",
+    twoFactor: true,
+  });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-	const validate = () => {
-		const newErrors: { [key: string]: string } = {};
-		if (activeSection === "profile") {
-			if (!formData.name.trim()) {
-				newErrors.name = "Name cannot be empty.";
-			}
-			if (!formData.email.trim()) {
-				newErrors.email = "Email cannot be empty.";
-			} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-				newErrors.email = "Email is invalid.";
-			}
-		}
-		setErrors(newErrors);
-		return Object.keys(newErrors).length > 0;
-	};
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (activeSection === "profile") {
+      if (!formData.name.trim()) {
+        newErrors.name = "Name cannot be empty.";
+      }
+      if (!formData.email.trim()) {
+        newErrors.email = "Email cannot be empty.";
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = "Email is invalid.";
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length > 0;
+  };
 
-	const handleSave = () => {
-		if (validate()) {
-			return;
-		}
-		// Mock save
-		alert("Settings saved successfully!");
-	};
+  const handleSave = () => {
+    if (validate()) {
+      return;
+    }
+    // Mock save
+    alert("Settings saved successfully!");
+  };
 
-	return (
+  return (
     <div className="mx-auto min-h-full max-w-[1200px] p-6 lg:p-10">
-      <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-700 dark:text-white">
-            Settings
-          </h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400">
-            Manage your account preferences
-          </p>
-        </div>
-      </div>
+      <Header
+        heading="Settings"
+        subheading="Manage your account preferences"
+        className="mb-8"
+      >
+        <></>
+      </Header>
 
       <div className="flex flex-col gap-8 lg:flex-row">
         {/* Settings Navigation */}
