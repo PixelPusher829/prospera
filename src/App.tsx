@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { Bell, Menu, Search } from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { HashRouter as Router } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import Dashboard from "./components/Dashboard";
-import Analytics from "./components/Analytics";
-import ClientList from "./components/ClientList";
-import Transactions from "./components/Transactions";
-import Wallet from "./components/Wallet";
-import Goals from "./components/Goals";
-import Budget from "./components/Budget";
-import Settings from "./components/Settings";
-import Help from "./components/Help";
-import { Bell, Search, Menu } from "lucide-react";
+import Sidebar from "@/components/layout/Sidebar";
+import Analytics from "@/components/pages/Analytics";
+import Budget from "@/components/pages/Budget";
+import ClientList from "@/components/pages/ClientList";
+import Dashboard from "@/components/pages/Dashboard";
+import Goals from "@/components/pages/Goals";
+import Help from "@/components/pages/Help";
+import Settings from "@/components/pages/Settings";
+import Transactions from "@/components/pages/Transactions";
+import Wallet from "@/components/pages/Wallet";
 
 const Header: React.FC<{ onMenuClick: () => void; isDarkMode: boolean }> = ({
 	onMenuClick,
@@ -128,9 +129,7 @@ const App: React.FC = () => {
 						onMenuClick={() => setIsMobileOpen(true)}
 						isDarkMode={isDarkMode}
 					/>
-					<div className="flex-1 overflow-auto">
-						{renderContent()}
-					</div>
+					<div className="flex-1 overflow-auto">{renderContent()}</div>
 				</main>
 			</div>
 		</Router>

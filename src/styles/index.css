@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@layer base {
+  :root {
+    --primary-red: #f05b57;
+    --primary-pink: #ec1b69;
+  }
+}
+
+@layer utilities {
+  .bg-primary-gradient {
+    @apply bg-gradient-to-b from-[var(--primary-red)] to-[var(--primary-pink)];
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
 	width: 6px;

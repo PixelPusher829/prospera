@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#linear-gradient2);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        fill: none;
+      }
+
+      .st3 {
+        opacity: 0;
+      }
+
+      .st4 {
+        fill: url(#linear-gradient3);
+      }
+
+      .st5 {
+        fill: #f4f4f4;
+      }
+
+      .st6 {
+        fill: url(#linear-gradient);
+      }
+
+      .st7 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st2" y="0" width="512" height="512" rx="77.5" ry="77.5"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="244.2" y1="-1049.5" x2="464.6" y2="-843.9" gradientTransform="translate(907.1 643.7) rotate(-90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ec1b69"/>
+      <stop offset="1" stop-color="#f05b57"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient1" x1="348.4" y1="-806" x2="508" y2="-657.2" gradientTransform="translate(907.1 643.7) rotate(-90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ec1b69"/>
+      <stop offset="1" stop-color="#f05b57"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient2" x1="259.7" y1="-855" x2="449.9" y2="-677.6" gradientTransform="translate(907.1 643.7) rotate(-90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ec1b69"/>
+      <stop offset="1" stop-color="#f05b57"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient3" x1="349.8" y1="-644.9" x2="487.5" y2="-516.5" gradientTransform="translate(907.1 643.7) rotate(-90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ec1b69"/>
+      <stop offset="1" stop-color="#f05b57"/>
+    </linearGradient>
+  </defs>
+  <g id="Object">
+    <g>
+      <g class="st7">
+        <g>
+          <rect class="st5" y="0" width="512" height="512"/>
+          <g class="st3">
+            <path class="st6" d="M102,111.3L33.2,387.6c-5.4,25.1-27.5,43-53.1,43h-74.9c-15.7,0-27.4-14.5-24.1-29.8L-50.1,124.4c5.3-25.1,27.5-43,53.1-43h74.9c15.7,0,27.4,14.5,24.1,29.8h0Z"/>
+            <path class="st1" d="M292.9,97.1l-28.4,132.9c-8.9,41.6-45.6,71.3-88.1,71.3h-60.4c-8.3,0-14.4-7.6-12.7-15.7l28.4-132.9c8.9-41.6,45.6-71.3,88.1-71.3h60.4c8.3,0,14.4,7.6,12.7,15.7h0Z"/>
+          </g>
+        </g>
+      </g>
+      <g id="Logogram">
+        <path class="st0" d="M263,135.1l-59.4,238.5c-4.6,21.6-23.7,37.1-45.8,37.1h-64.6c-13.6,0-23.7-12.5-20.8-25.8l59.4-238.5c4.6-21.6,23.7-37.1,45.8-37.1h64.6c13.6,0,23.7,12.5,20.8,25.8h0Z"/>
+        <path class="st4" d="M427.7,122.9l-24.5,114.7c-7.7,35.9-39.4,61.5-76,61.5h-52.1c-7.1,0-12.5-6.6-11-13.6l24.5-114.7c7.7-35.9,39.4-61.5,76-61.5h52.1c7.1,0,12.5,6.6,11,13.6h0Z"/>
+      </g>
+    </g>
+  </g>
+</svg>
