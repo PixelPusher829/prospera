@@ -1,5 +1,5 @@
-import type React from "react";
 import { CalendarClock, ShieldCheck } from "lucide-react";
+import type React from "react";
 import type { Account } from "@/shared/types/types";
 
 interface LoanRowProps {

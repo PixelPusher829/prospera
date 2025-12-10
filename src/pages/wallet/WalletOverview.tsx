@@ -1,9 +1,9 @@
 import type React from "react";
+import type { Account } from "@/shared/types/types";
 import BankAccountRow from "./BankAccountRow";
+import CreditCardVisual from "./CreditCardVisual";
 import InvestmentRow from "./InvestmentRow";
 import LoanRow from "./LoanRow";
-import CreditCardVisual from "./CreditCardVisual";
-import type { Account } from "@/shared/types/types";
 
 interface WalletOverviewProps {
 	liquidAccounts: Account[];

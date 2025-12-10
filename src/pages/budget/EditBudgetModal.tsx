@@ -29,12 +29,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 		// Deep copy and reset errors when modal opens
 		setBudget(initialBudget.map((cat) => ({ ...cat })));
 		setErrors({});
-	}, [initialBudget, isOpen]);
-
-	useEffect(() => {
-		// Validate on every budget change
-		validate(budget);
-	}, [budget]);
+	}, [initialBudget]);
 
 	const handleCategoryChange = (
 		id: string,

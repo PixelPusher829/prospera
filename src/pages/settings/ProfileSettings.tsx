@@ -1,5 +1,7 @@
 import { Globe } from "lucide-react";
 import type React from "react";
+import profile from "@/shared/assets/profile.jpg";
+
 
 interface ProfileSettingsProps {
 	formData: any;
@@ -18,7 +20,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 		<div className="space-y-6">
 			<div className="flex items-center gap-6 border-b border-slate-100 pb-6 dark:border-slate-700">
 				<img
-					src="https://picsum.photos/100/100"
+					src={profile}
 					alt="Profile"
 					className="h-20 w-20 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
 				/>

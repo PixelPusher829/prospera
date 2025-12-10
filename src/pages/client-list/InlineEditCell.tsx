@@ -32,7 +32,6 @@ const InlineEditCell: React.FC<InlineEditCellProps> = ({
 	if (isEditing) {
 		return (
 			<input
-				autoFocus
 				type={type}
 				value={tempValue}
 				onChange={(e) => setTempValue(e.target.value)}

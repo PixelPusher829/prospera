@@ -1,5 +1,5 @@
-import type React from "react";
 import { TrendingUp } from "lucide-react";
+import type React from "react";
 import { INVESTMENT_CATEGORIES } from "@/shared/data/constants";
 import type { Account } from "@/shared/types/types";
 

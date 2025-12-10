@@ -2,20 +2,16 @@ import { Plus, Wallet as WalletIcon } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import AddEditAccountModal from "@/pages/wallet/AddEditAccountModal";
-import Header from "@/shared/components/layout/Header";
-import type { Account, AccountType } from "@/shared/types/types";
+import Header from "@/shared/layout/Header";
 import { MOCK_ACCOUNTS } from "@/shared/data/constants";
-import CreditCardVisual from "./CreditCardVisual";
-import LoanRow from "./LoanRow";
-import BankAccountRow from "./BankAccountRow";
-import InvestmentRow from "./InvestmentRow";
+import type { Account, AccountType } from "@/shared/types/types";
 import GlobalSyncSuccessModal from "./GlobalSyncSuccessModal";
-import WalletSummaryCards from "./WalletSummaryCards";
-import WalletOverview from "./WalletOverview";
 import WalletAccountsTab from "./WalletAccountsTab";
 import WalletCardsTab from "./WalletCardsTab";
-import WalletLoansTab from "./WalletLoansTab";
 import WalletInvestmentsTab from "./WalletInvestmentsTab";
+import WalletLoansTab from "./WalletLoansTab";
+import WalletOverview from "./WalletOverview";
+import WalletSummaryCards from "./WalletSummaryCards";
 
 const Wallet: React.FC = () => {
 	const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);

@@ -2,7 +2,7 @@ import { Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import AddEditTransactionModal from "@/pages/transactions/AddEditTransactionModal";
-import Header from "@/shared/components/layout/Header";
+import Header from "@/shared/layout/Header";
 import { MOCK_GOALS } from "@/shared/data/constants";
 import CashFlow from "./CashFlow";
 import HeroCard from "./HeroCard";
@@ -10,67 +10,67 @@ import Notifications from "./Notifications";
 import RecentTransactions from "./RecentTransactions";
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
-	setActiveTab,
+  setActiveTab,
 }) => {
-	const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
-		useState(false);
+  const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
+    useState(false);
 
-	return (
-		<div className="container">
-			{/* Welcome Section */}
-			<Header
-				heading="Good Morning, James!"
-				subheading="Here is your financial health check for today."
-			>
-				<button
-					onClick={() => setIsAddTransactionModalOpen(true)}
-					className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
-				>
-					<Plus size={18} />
-					Quick Add Transaction
-				</button>
-			</Header>
+  return (
+    <div className="container">
+      {/* Welcome Section */}
+      <Header
+        heading="Good Morning, James!"
+        subheading="Here is your financial health check for today."
+      >
+        <button
+          onClick={() => setIsAddTransactionModalOpen(true)}
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+        >
+          <Plus size={18} />
+          Quick Add Transaction
+        </button>
+      </Header>
 
-			{/* Hero Cards */}
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-				<HeroCard
-					type="primary"
-					title="Total Net Worth"
-					value="$54,710.50"
-					percentage="+2.4% this month"
-					icon="wallet"
-				/>
-				<HeroCard
-					type="secondary"
-					title="Safe to Spend"
-					value="Monthly Budget"
-					percentage="38%"
-					progress={38}
-					icon="dollar"
-					onClick={() => setActiveTab("budget")}
-				/>
-				<HeroCard
-					type="secondary"
-					title="Top Goal"
-					value={MOCK_GOALS[0].name}
-					percentage="34%"
-					progress={34}
-					icon="target"
-					onClick={() => setActiveTab("goals")}
-				/>
-				<Notifications />
-			</div>
+      {/* Hero Cards */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <HeroCard
+          type="primary"
+          title="Total Net Worth"
+          value="$54,710.50"
+          percentage="+2.4% this month"
+          icon="wallet"
+        />
+        <HeroCard
+          type="secondary"
+          title="Safe to Spend"
+          value="Monthly Budget"
+          percentage="38%"
+          progress={38}
+          icon="dollar"
+          onClick={() => setActiveTab("budget")}
+        />
+        <HeroCard
+          type="secondary"
+          title="Top Goal"
+          value={MOCK_GOALS[0].name}
+          percentage="34%"
+          progress={34}
+          icon="target"
+          onClick={() => setActiveTab("goals")}
+        />
+        <Notifications />
+      </div>
 
-			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-				<RecentTransactions setActiveTab={setActiveTab} />
-				<CashFlow />
-			</div>
-			<AddEditTransactionModal
-				isOpen={isAddTransactionModalOpen}
-				onClose={() => setIsAddTransactionModalOpen(false)}
-			/>
-		</div>
-	);
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <RecentTransactions setActiveTab={setActiveTab} />
+        <CashFlow />
+      </div>
+      <AddEditTransactionModal
+        isOpen={isAddTransactionModalOpen}
+        onClose={() => setIsAddTransactionModalOpen(false)}
+      />
+    </div>
+  );
 };
 
 export default Dashboard;

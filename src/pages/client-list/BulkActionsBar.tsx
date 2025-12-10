@@ -1,6 +1,6 @@
-import type React from "react";
 import { X } from "lucide-react";
-import { ClientStatus, type Client } from "@/shared/types/types";
+import type React from "react";
+import { type Client, ClientStatus } from "@/shared/types/types";
 
 interface BulkActionsBarProps {
 	selectedIds: Set<string>;
@@ -12,7 +12,6 @@ interface BulkActionsBarProps {
 
 const BulkActionsBar: React.FC<BulkActionsBarProps> = ({
 	selectedIds,
-	sortedClients,
 	handleBulkStatusChange,
 	handleBulkDelete,
 	setSelectedIds,
@@ -29,23 +28,27 @@ const BulkActionsBar: React.FC<BulkActionsBarProps> = ({
 				<button
 					onClick={() => handleBulkStatusChange(ClientStatus.Active)}
 					className="text-xs font-medium transition-colors hover:text-green-400"
+					type="button"
 				>
 					Set Active
 				</button>
 				<button
 					onClick={() => handleBulkStatusChange(ClientStatus.Inactive)}
 					className="text-xs font-medium transition-colors hover:text-slate-400"
+					type="button"
 				>
 					Set Inactive
 				</button>
 				<button
 					onClick={handleBulkDelete}
 					className="ml-2 text-xs font-medium text-red-400 transition-colors hover:text-red-300"
+					type="button"
 				>
 					Delete
 				</button>
 			</div>
-			<button onClick={() => setSelectedIds(new Set())} className="ml-2">
+			<button onClick={() => setSelectedIds(new Set())} className="ml-2" aria-label="close"
+				type="button">
 				<X size={16} />
 			</button>
 		</div>

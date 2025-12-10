@@ -1,5 +1,5 @@
+import { ChevronRight, Filter, Plus, Search } from "lucide-react";
 import type React from "react";
-import { Plus, Search, ChevronRight, Filter } from "lucide-react";
 import { ClientStatus } from "@/shared/types/types";
 
 interface ClientListHeaderProps {
@@ -28,6 +28,7 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 				<button
 					onClick={() => setIsStatusFilterOpen(!isStatusFilterOpen)}
 					className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-600 focus:ring-2 focus:ring-pink-500/20 focus:outline-none md:w-48 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+					type="button"
 				>
 					<span>{statusFilter === "All" ? "All Statuses" : statusFilter}</span>
 					<ChevronRight
@@ -43,8 +44,16 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 							onClick={() => {
 								setStatusFilter("All");
 								setIsStatusFilterOpen(false);
+								
+							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									setStatusFilter("All");
+									setIsStatusFilterOpen(false);
+								}
 							}}
 							className="cursor-pointer px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"
+							tabIndex={0}
 						>
 							All Statuses
 						</div>
@@ -52,6 +61,12 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 							onClick={() => {
 								setStatusFilter(ClientStatus.Active);
 								setIsStatusFilterOpen(false);
+							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									setStatusFilter(ClientStatus.Active);
+									setIsStatusFilterOpen(false);
+								}
 							}}
 							className="cursor-pointer px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"
 						>
@@ -62,6 +77,12 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 								setStatusFilter(ClientStatus.Pending);
 								setIsStatusFilterOpen(false);
 							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									setStatusFilter(ClientStatus.Pending);
+									setIsStatusFilterOpen(false);
+								}
+							}}
 							className="cursor-pointer px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"
 						>
 							Pending
@@ -70,6 +91,12 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 							onClick={() => {
 								setStatusFilter(ClientStatus.Inactive);
 								setIsStatusFilterOpen(false);
+							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									setStatusFilter(ClientStatus.Inactive);
+									setIsStatusFilterOpen(false);
+								}
 							}}
 							className="cursor-pointer px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"
 						>

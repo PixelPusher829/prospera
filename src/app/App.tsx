@@ -12,8 +12,8 @@ import {
 	Transactions,
 	Wallet,
 } from "@/pages";
-import Sidebar from "@/shared/components/layout/Sidebar";
-import Header from "../shared/components/layout/Topbar";
+import Sidebar from "@/shared/layout/sidebar";
+import Header from "../shared/layout/Topbar";
 
 const App: React.FC = () => {
 	const [activeTab, setActiveTab] = useState("dashboard");

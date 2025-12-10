@@ -1,12 +1,12 @@
-import type React from "react";
 import {
 	ArrowDownRight,
 	ArrowDownUp,
 	ArrowUpRight,
 	MoreHorizontal,
 } from "lucide-react";
-import type { Transaction } from "@/shared/types/types";
+import type React from "react";
 import { MOCK_ACCOUNTS } from "@/shared/data/constants";
+import type { Transaction } from "@/shared/types/types";
 
 interface TransactionsTableProps {
 	sortedAndFilteredTransactions: Transaction[];

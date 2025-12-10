@@ -1,7 +1,7 @@
-import type React from "react";
 import { Plus } from "lucide-react";
-import LoanRow from "./LoanRow";
+import type React from "react";
 import type { Account, AccountType } from "@/shared/types/types";
+import LoanRow from "./LoanRow";
 
 interface WalletLoansTabProps {
 	loanAccounts: Account[];

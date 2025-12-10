@@ -1,15 +1,7 @@
+import { Calendar, Filter, Search } from "lucide-react";
 import type React from "react";
-import { useState, useMemo } from "react";
-import {
-	Calendar,
-	ChevronLeft,
-	ChevronRight,
-	Filter,
-	Search,
-	X,
-} from "lucide-react";
+import { useMemo, useState } from "react";
 import type { AccountType, Transaction } from "@/shared/types/types";
-import { MOCK_ACCOUNTS, MOCK_TRANSACTIONS } from "@/shared/data/constants";
 
 interface TransactionFiltersProps {
 	searchTerm: string;

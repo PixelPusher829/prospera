@@ -1,5 +1,5 @@
-import type React from "react";
 import { X } from "lucide-react";
+import type React from "react";
 import type { Transaction } from "@/shared/types/types";
 
 interface BulkActionsTransactionsBarProps {

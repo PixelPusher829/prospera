@@ -1,5 +1,5 @@
-import type React from "react";
 import { Plus } from "lucide-react";
+import type React from "react";
 
 interface AddGoalPlaceholderCardProps {
 	openAddModal: () => void;

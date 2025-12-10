@@ -1,10 +1,10 @@
-import type React from "react";
 import {
 	ArrowUpRight,
 	ShieldCheck,
 	TrendingUp,
 	Wallet as WalletIcon,
 } from "lucide-react";
+import type React from "react";
 
 interface WalletSummaryCardsProps {
 	netWorth: number;

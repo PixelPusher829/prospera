@@ -1,5 +1,5 @@
-import type React from "react";
 import { AlertCircle } from "lucide-react";
+import type React from "react";
 import type { BudgetCategory } from "@/shared/types/types";
 
 interface BudgetCategoryListProps {

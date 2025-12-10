@@ -1,5 +1,5 @@
-import type React from "react";
 import { Banknote, Landmark } from "lucide-react";
+import type React from "react";
 import type { Account } from "@/shared/types/types";
 
 interface BankAccountRowProps {

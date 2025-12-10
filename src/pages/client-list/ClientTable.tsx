@@ -1,5 +1,5 @@
-import type React from "react";
 import { ArrowDownUp, Building, ChevronRight, Mail } from "lucide-react";
+import type React from "react";
 import { type Client, ClientStatus } from "@/shared/types/types";
 import InlineEditCell from "./InlineEditCell";
 

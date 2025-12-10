@@ -1,4 +1,3 @@
-import type React from "react";
 import {
 	Calendar,
 	Car,
@@ -7,6 +6,7 @@ import {
 	Plane,
 	Target,
 } from "lucide-react";
+import type React from "react";
 import type { Goal } from "@/shared/types/types";
 
 interface GoalCardProps {

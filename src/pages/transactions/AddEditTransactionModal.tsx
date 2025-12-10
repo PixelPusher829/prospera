@@ -1,4 +1,4 @@
-import { Calendar, DollarSign, Save, Type, X } from "lucide-react";
+import { Save, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { Transaction } from "../types/types";

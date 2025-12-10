@@ -1,14 +1,14 @@
-import type React from "react";
 import {
-	X,
-	User,
-	Mail,
 	Building,
-	DollarSign,
 	ChevronRight,
+	DollarSign,
+	Mail,
 	Save,
 	Trash2,
+	User,
+	X,
 } from "lucide-react";
+import type React from "react";
 import type { Client } from "@/shared/types/types";
 import { ClientStatus } from "@/shared/types/types";
 

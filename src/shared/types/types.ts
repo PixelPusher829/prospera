@@ -30,13 +30,6 @@ export interface ExpenseCategory {
 	[key: string]: any;
 }
 
-export interface NavItem {
-	id: string;
-	label: string;
-	icon: React.ComponentType<any>;
-	path: string;
-}
-
 export interface FinancialSummary {
 	balance: number;
 	income: number;
@@ -102,15 +95,6 @@ export interface BudgetCategory {
 	spent: number;
 	color: string;
 	icon: React.ComponentType<any>;
-}
-
-export interface SidebarProps {
-	activeTab: string;
-	setActiveTab: (id: string) => void;
-	isMobileOpen: boolean;
-	setIsMobileOpen: (open: boolean) => void;
-	isDarkMode: boolean;
-	toggleTheme: () => void;
 }
 
 export interface UserSettings {

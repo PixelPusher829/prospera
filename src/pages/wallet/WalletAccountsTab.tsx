@@ -1,7 +1,7 @@
-import type React from "react";
 import { Plus } from "lucide-react";
-import BankAccountRow from "./BankAccountRow";
+import type React from "react";
 import type { Account, AccountType } from "@/shared/types/types";
+import BankAccountRow from "./BankAccountRow";
 
 interface WalletAccountsTabProps {
 	liquidAccounts: Account[];

@@ -1,5 +1,4 @@
 import type React from "react";
-import type { BudgetCategory } from "@/shared/types/types";
 
 interface BudgetSummaryProps {
 	totalSpent: number;

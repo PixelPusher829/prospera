@@ -6,7 +6,7 @@ export default function Header({
 	subheading,
 	className,
 }: {
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	heading: string;
 	subheading: string;
 	className?: string;
