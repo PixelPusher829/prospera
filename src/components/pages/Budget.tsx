@@ -3,20 +3,20 @@ import type React from "react";
 import { useState } from "react";
 import { MOCK_BUDGET } from "@/data/constants";
 import type { BudgetCategory } from "@/types/types";
-import EditBudgetModal from "@/utils/EditBudgetModal";
+import EditBudgetModal from "@/components/utils/EditBudgetModal";
 
 const Budget: React.FC = () => {
-	const [budget, setBudget] = useState<BudgetCategory[]>(MOCK_BUDGET);
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [budget, setBudget] = useState<BudgetCategory[]>(MOCK_BUDGET);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-	const totalBudget = budget.reduce((acc, curr) => acc + curr.limit, 0);
-	const totalSpent = budget.reduce((acc, curr) => acc + curr.spent, 0);
+  const totalBudget = budget.reduce((acc, curr) => acc + curr.limit, 0);
+  const totalSpent = budget.reduce((acc, curr) => acc + curr.spent, 0);
 
-	const handleSaveBudget = (updatedBudget: BudgetCategory[]) => {
-		setBudget(updatedBudget);
-	};
+  const handleSaveBudget = (updatedBudget: BudgetCategory[]) => {
+    setBudget(updatedBudget);
+  };
 
-	return (
+  return (
     <div className="mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
       <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
@@ -29,7 +29,7 @@ const Budget: React.FC = () => {
         </div>
         <button
           onClick={() => setIsEditModalOpen(true)}
-          className="bg-primary-gradient flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+          className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
         >
           <Plus size={18} />
           Edit Budget
@@ -60,7 +60,7 @@ const Budget: React.FC = () => {
           {/* Master Progress */}
           <div className="h-4 w-full overflow-hidden rounded-full bg-white/10 dark:bg-white/20">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-green-500 to-green-400"
+              className="h-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600"
               style={{
                 width: `${Math.min(100, (totalSpent / totalBudget) * 100)}%`,
               }}

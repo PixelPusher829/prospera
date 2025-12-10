@@ -1,8 +1,8 @@
 import { DollarSign, Plus, Save, Trash2, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { COLOR_PALETTE } from "../data/constants";
-import type { BudgetCategory } from "../types/types";
+import { COLOR_PALETTE } from "@/data/constants";
+import type { BudgetCategory } from "@/types/types";
 
 interface EditBudgetModalProps {
 	isOpen: boolean;
@@ -109,7 +109,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 								key={category.id}
 								className="grid grid-cols-14 gap-4 items-start"
 							>
-								<div className="col-span-5">
+								<div className="col-span-6">
 									<input
 										type="text"
 										value={category.name}
@@ -125,7 +125,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 										</p>
 									)}
 								</div>
-								<div className="col-span-4">
+								<div className="col-span-5">
 									<div className="relative">
 										<span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
 											$
@@ -150,18 +150,18 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 										</p>
 									)}
 								</div>
-								<div className="col-span-2 relative">
+								<div className="col-span-1 relative flex h-full items-top mt-2 justify-center">
 									<div
 										onClick={() =>
 											setOpenColorPickerId(
 												openColorPickerId === category.id ? null : category.id,
 											)
 										}
-										className="w-8 h-8 rounded-full cursor-pointer border-2 border-white dark:border-slate-800 shadow-sm"
+										className="w-7 h-7 rounded-full cursor-pointer border-2 border-white dark:border-slate-800 shadow-sm"
 										style={{ backgroundColor: category.color }}
 									></div>
 									{openColorPickerId === category.id && (
-										<div className="absolute top-full left-0 mt-2 bg-white dark:bg-slate-700 p-3 rounded-xl shadow-lg border border-slate-100 dark:border-slate-600 z-10 grid grid-cols-5 gap-2 w-max">
+										<div className="absolute top-8 mt-2 bg-white dark:bg-slate-700 p-3 rounded-xl shadow-lg border border-slate-100 dark:border-slate-600 z-10 grid grid-cols-5 gap-2 w-max">
 											{COLOR_PALETTE.map((color) => (
 												<div
 													key={color}
@@ -176,7 +176,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 										</div>
 									)}
 								</div>
-								<div className="col-span-3 text-right pt-1">
+								<div className="col-span-2 text-right pt-1">
 									<button
 										onClick={() => handleRemoveCategory(category.id)}
 										className="p-2 text-red-500 hover:bg-red-100 rounded-full"
@@ -189,7 +189,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 					})}
 					<button
 						onClick={handleAddCategory}
-						className="w-full mt-4 flex items-center justify-center gap-2 py-3 border-2 border-dashed rounded-lg text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition-all"
+						className="w-full mt-4 flex items-center justify-center gap-2 py-3 border-2 border-dashed rounded-lg border-slate-200 text-slate-400 hover:bg-slate-50 hover:border-slate-400 transition-all"
 					>
 						<Plus size={18} /> Add Category
 					</button>

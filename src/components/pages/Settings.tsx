@@ -339,7 +339,7 @@ const Settings: React.FC = () => {
                 !formData.name.trim() ||
                 !formData.email.trim()
               }
-              className="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-3 font-medium text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-violet-600"
+              className="flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3 font-medium text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-violet-600"
             >
               <Save size={18} />
               Save Changes

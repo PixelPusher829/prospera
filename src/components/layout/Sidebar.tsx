@@ -80,7 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Logo */}
           <div
-            className={`mb-10 flex items-center ${isCollapsed ? "justify-center" : "px-6 gap-3"}`}
+            className={`mb-10 flex items-center ${isCollapsed ? "justify-center" : "px-6 gap-4"}`}
           >
               <img src={logo} alt="" className="w-8" />
             <span
@@ -104,11 +104,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     setIsMobileOpen(false);
                   }}
                   title={isCollapsed ? item.label : undefined}
-                  className={`flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition-all duration-200 ${
-                    isActive
-                      ? "bg-primary-gradient text-white shadow-lg shadow-red-200/50"
-                      : "text-slate-500 hover:bg-pink-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                  } ${isCollapsed ? "justify-center" : ""} `}
+                  className={`sidebar-nav-item ${isActive ? "active" : ""} ${isCollapsed ? "justify-center" : ""}`}
                 >
                   <Icon
                     size={20}
@@ -134,11 +130,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 setIsMobileOpen(false);
               }}
               title={isCollapsed ? "Settings" : undefined}
-              className={`flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition-colors ${
-                activeTab === "settings"
-                  ? "bg-primary-gradient text-white shadow-lg shadow-red-200/50"
-                  : "text-slate-500 hover:bg-pink-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-              } ${isCollapsed ? "justify-center" : ""} `}
+              className={`sidebar-nav-item ${
+                activeTab === "settings" ? "active" : ""
+              } ${isCollapsed ? "justify-center" : ""}`}
             >
               <Settings size={20} className="shrink-0" />
               <span
@@ -155,11 +149,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 setIsMobileOpen(false);
               }}
               title={isCollapsed ? "Help" : undefined}
-              className={`flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition-colors ${
-                activeTab === "help"
-                  ? "bg-primary-gradient text-white shadow-lg shadow-red-200/50"
-                  : "text-slate-500 hover:bg-pink-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-              } ${isCollapsed ? "justify-center" : ""} `}
+              className={`sidebar-nav-item ${
+                activeTab === "help" ? "active" : ""
+              } ${isCollapsed ? "justify-center" : ""}`}
             >
               <HelpCircle size={20} className="shrink-0" />
               <span

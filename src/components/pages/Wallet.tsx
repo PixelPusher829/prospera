@@ -1,286 +1,286 @@
 import {
-	ArrowUpRight,
-	Banknote,
-	CalendarClock,
-	Landmark,
-	Plus,
-	ShieldCheck,
-	TrendingUp,
-	Wallet as WalletIcon,
+  ArrowUpRight,
+  Banknote,
+  CalendarClock,
+  Landmark,
+  Plus,
+  ShieldCheck,
+  TrendingUp,
+  Wallet as WalletIcon,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { INVESTMENT_CATEGORIES, MOCK_ACCOUNTS } from "@/data/constants";
 import type { Account, AccountType } from "@/types/types";
-import AddEditAccountModal from "@/utils/AddEditAccountModal";
+import AddEditAccountModal from "@/components/utils/AddEditAccountModal";
 
 // Visual Component for Credit Cards (Physical look)
 const CreditCardVisual: React.FC<{
-	account: Account;
-	onEdit: (account: Account) => void;
+  account: Account;
+  onEdit: (account: Account) => void;
 }> = ({ account, onEdit }) => {
-	return (
-		<div
-			onClick={() => onEdit(account)}
-			className={`relative p-6 rounded-2xl shadow-lg bg-gradient-to-r ${
-				account.colorTheme || "from-slate-700 to-slate-900"
-			} text-white overflow-hidden aspect-[1.58/1] flex flex-col justify-between group transition-transform hover:-translate-y-1 cursor-pointer`}
-		>
-			{/* Background decoration */}
-			<div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
-			<div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-24 h-24 bg-black opacity-10 rounded-full blur-xl"></div>
+  return (
+    <div
+      onClick={() => onEdit(account)}
+      className={`relative rounded-2xl bg-gradient-to-r p-6 shadow-lg ${
+        account.colorTheme || "from-slate-700 to-slate-900"
+      } group flex aspect-[1.58/1] cursor-pointer flex-col justify-between overflow-hidden text-white transition-transform hover:-translate-y-1`}
+    >
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 -mt-8 -mr-8 h-32 w-32 rounded-full bg-white opacity-10 blur-2xl"></div>
+      <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-24 w-24 rounded-full bg-black opacity-10 blur-xl"></div>
 
-			<div className="flex justify-between items-start z-10">
-				<span className="text-xs font-medium tracking-wider uppercase opacity-80">
-					{account.institution}
-				</span>
-				{account.institution.toLowerCase().includes("visa") ? (
-					<span className="font-bold italic text-lg opacity-90">VISA</span>
-				) : (
-					<div className="flex -space-x-3">
-						<div className="w-6 h-6 rounded-full bg-red-500/80"></div>
-						<div className="w-6 h-6 rounded-full bg-yellow-500/80"></div>
-					</div>
-				)}
-			</div>
+      <div className="z-10 flex items-start justify-between">
+        <span className="text-xs font-medium tracking-wider uppercase opacity-80">
+          {account.institution}
+        </span>
+        {account.institution.toLowerCase().includes("visa") ? (
+          <span className="text-lg font-bold italic opacity-90">VISA</span>
+        ) : (
+          <div className="flex -space-x-3">
+            <div className="h-6 w-6 rounded-full bg-red-500/80"></div>
+            <div className="h-6 w-6 rounded-full bg-yellow-500/80"></div>
+          </div>
+        )}
+      </div>
 
-			<div className="z-10">
-				<div className="flex gap-4 items-center mb-2">
-					<div className="w-10 h-7 bg-yellow-200/20 rounded border border-white/20 backdrop-blur-sm"></div>
-					<div className="text-lg tracking-widest font-mono opacity-90">
-						{account.accountNumber || "**** **** **** 0000"}
-					</div>
-				</div>
-				<div className="flex justify-between items-end">
-					<div>
-						<p className="text-[10px] uppercase opacity-60 mb-0.5">
-							Card Holder
-						</p>
-						<p className="text-sm font-medium tracking-wide">James Barnes</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+      <div className="z-10">
+        <div className="mb-2 flex items-center gap-4">
+          <div className="h-7 w-10 rounded border border-white/20 bg-yellow-200/20 backdrop-blur-sm"></div>
+          <div className="font-mono text-lg tracking-widest opacity-90">
+            {account.accountNumber || "**** **** **** 0000"}
+          </div>
+        </div>
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="mb-0.5 text-[10px] uppercase opacity-60">
+              Card Holder
+            </p>
+            <p className="text-sm font-medium tracking-wide">James Barnes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // Loan Card Row
 const LoanRow: React.FC<{
-	account: Account;
-	onEdit: (account: Account) => void;
+  account: Account;
+  onEdit: (account: Account) => void;
 }> = ({ account, onEdit }) => {
-	return (
-		<div
-			onClick={() => onEdit(account)}
-			className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between hover:border-violet-200 transition-colors cursor-pointer"
-		>
-			<div className="flex items-start justify-between mb-4">
-				<div className="flex items-center gap-4">
-					<div className="p-3 bg-red-50 text-red-500 rounded-xl">
-						<ShieldCheck size={24} />
-					</div>
-					<div>
-						<h4 className="font-bold text-lg text-slate-700">{account.name}</h4>
-						<p className="text-sm text-slate-500">{account.institution}</p>
-					</div>
-				</div>
-				<div className="text-right">
-					<span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
-						Remaining
-					</span>
-					<span className="text-xl font-bold text-slate-700">
-						${Math.abs(account.balance).toLocaleString()}
-					</span>
-				</div>
-			</div>
+  return (
+    <div
+      onClick={() => onEdit(account)}
+      className="flex cursor-pointer flex-col justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-colors hover:border-violet-200"
+    >
+      <div className="mb-4 flex items-start justify-between">
+        <div className="flex items-center gap-4">
+          <div className="rounded-xl bg-slate-50 p-3 text-slate-500">
+            <ShieldCheck size={24} />
+          </div>
+          <div>
+            <h4 className="text-lg font-bold text-slate-00">{account.name}</h4>
+            <p className="text-sm text-slate-500">{account.institution}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <span className="mb-1 block text-xs font-semibold tracking-wider text-slate-400 uppercase">
+            Remaining
+          </span>
+          <span className="text-xl font-bold text-slate-700">
+            ${Math.abs(account.balance).toLocaleString()}
+          </span>
+        </div>
+      </div>
 
-			<div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mb-4">
-				{/* Mock progress for loan payoff */}
-				<div
-					className="h-full bg-slate-800 rounded-full"
-					style={{ width: "45%" }}
-				></div>
-			</div>
+      <div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+        {/* Mock progress for loan payoff */}
+        <div
+          className="h-full rounded-full bg-slate-500"
+          style={{ width: "45%" }}
+        ></div>
+      </div>
 
-			<div className="flex justify-between items-center text-sm pt-4 border-t border-slate-100">
-				<div className="flex items-center gap-2 text-slate-500">
-					<CalendarClock size={16} />
-					<span>Next payment: Oct 28</span>
-				</div>
-				<button className="text-violet-600 font-medium hover:text-violet-700">
-					View Details
-				</button>
-			</div>
-		</div>
-	);
+      <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-sm">
+        <div className="flex items-center gap-2 text-slate-500">
+          <CalendarClock size={16} />
+          <span>Next payment: Oct 28</span>
+        </div>
+        <button className="font-medium text-violet-600 hover:text-violet-700">
+          View Details
+        </button>
+      </div>
+    </div>
+  );
 };
 
 // Simple List Row for Liquid Accounts
 const BankAccountRow: React.FC<{
-	account: Account;
-	onEdit: (account: Account) => void;
+  account: Account;
+  onEdit: (account: Account) => void;
 }> = ({ account, onEdit }) => {
-	const Icon = account.type === "Cash" ? Banknote : Landmark;
+  const Icon = account.type === "Cash" ? Banknote : Landmark;
 
-	return (
-		<div
-			onClick={() => onEdit(account)}
-			className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:border-violet-200 transition-colors group cursor-pointer"
-		>
-			<div className="flex items-center gap-4">
-				<div className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center transition-all">
-					<Icon size={20} />
-				</div>
-				<div>
-					<h4 className="font-bold text-slate-700">{account.name}</h4>
-					<p className="text-xs text-slate-500">
-						{account.accountNumber} • {account.institution}
-					</p>
-				</div>
-			</div>
-			<div className="text-right">
-				<h4 className="font-bold text-slate-700 text-lg">
-					${account.balance.toLocaleString()}
-				</h4>
-				<p className="text-xs text-slate-400">Available</p>
-			</div>
-		</div>
-	);
+  return (
+    <div
+      onClick={() => onEdit(account)}
+      className="group flex cursor-pointer items-center justify-between rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-colors hover:border-violet-200"
+    >
+      <div className="flex items-center gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-all">
+          <Icon size={20} />
+        </div>
+        <div>
+          <h4 className="font-bold text-slate-700">{account.name}</h4>
+          <p className="text-xs text-slate-500">
+            {account.accountNumber} • {account.institution}
+          </p>
+        </div>
+      </div>
+      <div className="text-right">
+        <h4 className="text-lg font-bold text-slate-700">
+          ${account.balance.toLocaleString()}
+        </h4>
+        <p className="text-xs text-slate-400">Available</p>
+      </div>
+    </div>
+  );
 };
 
 // Investment Card Row
 const InvestmentRow: React.FC<{
-	account: Account;
-	onEdit: (account: Account) => void;
+  account: Account;
+  onEdit: (account: Account) => void;
 }> = ({ account, onEdit }) => {
-	console.log("InvestmentRow - account:", account);
-	const category = account.investmentCategory
-		? INVESTMENT_CATEGORIES.find(
-				(cat) => cat.value === account.investmentCategory,
-			)
-		: null;
-	console.log("InvestmentRow - category:", category);
+  console.log("InvestmentRow - account:", account);
+  const category = account.investmentCategory
+    ? INVESTMENT_CATEGORIES.find(
+        (cat) => cat.value === account.investmentCategory,
+      )
+    : null;
+  console.log("InvestmentRow - category:", category);
 
-	const IconComponent = category?.icon || TrendingUp; // Default to TrendingUp if no category or icon
-	console.log("InvestmentRow - IconComponent:", IconComponent);
+  const IconComponent = category?.icon || TrendingUp; // Default to TrendingUp if no category or icon
+  console.log("InvestmentRow - IconComponent:", IconComponent);
 
-	const iconBgClass = category?.iconBgClass || "bg-slate-100"; // Default light background
-	const iconTextColorClass = category?.iconTextColorClass || "text-slate-600"; // Default icon color
-	console.log(
-		"InvestmentRow - iconBgClass:",
-		iconBgClass,
-		"iconTextColorClass:",
-		iconTextColorClass,
-	);
+  const iconBgClass = category?.iconBgClass || "bg-slate-100"; // Default light background
+  const iconTextColorClass = category?.iconTextColorClass || "text-slate-600"; // Default icon color
+  console.log(
+    "InvestmentRow - iconBgClass:",
+    iconBgClass,
+    "iconTextColorClass:",
+    iconTextColorClass,
+  );
 
-	return (
-		<div
-			onClick={() => onEdit(account)}
-			className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-violet-200 transition-colors cursor-pointer"
-		>
-			<div className="flex justify-between items-start mb-4">
-				<div className={`p-3 rounded-2xl ${iconBgClass} ${iconTextColorClass}`}>
-					<IconComponent size={24} />
-				</div>
-				<span className="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded-lg">
-					+12.5%
-				</span>
-			</div>
-			<h4 className="font-bold text-lg text-slate-700">{account.name}</h4>
-			<p className="text-sm text-slate-500 mb-4">{account.institution}</p>
-			<div className="pt-4 border-t border-slate-100">
-				<p className="text-xs text-slate-400 mb-1">Total Value</p>
-				<p className="text-2xl font-bold text-slate-700">
-					{account.currency === "BTC" ? "₿" : "$"}
-					{account.balance.toLocaleString()}
-				</p>
-			</div>
-		</div>
-	);
+  return (
+    <div
+      onClick={() => onEdit(account)}
+      className="cursor-pointer rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-colors hover:border-violet-200"
+    >
+      <div className="mb-4 flex items-start justify-between">
+        <div className={`rounded-2xl p-3 ${iconBgClass} ${iconTextColorClass}`}>
+          <IconComponent size={24} />
+        </div>
+        <span className="rounded-lg bg-green-100 px-2 py-1 text-xs font-bold text-green-700">
+          +12.5%
+        </span>
+      </div>
+      <h4 className="text-lg font-bold text-slate-700">{account.name}</h4>
+      <p className="mb-4 text-sm text-slate-500">{account.institution}</p>
+      <div className="border-t border-slate-100 pt-4">
+        <p className="mb-1 text-xs text-slate-400">Total Value</p>
+        <p className="text-2xl font-bold text-slate-700">
+          {account.currency === "BTC" ? "₿" : "$"}
+          {account.balance.toLocaleString()}
+        </p>
+      </div>
+    </div>
+  );
 };
 const Wallet: React.FC = () => {
-	const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);
-	const [activeTab, setActiveTab] = useState<
-		"overview" | "accounts" | "cards" | "loans" | "investments"
-	>("overview");
-	const [isModalOpen, setIsModalOpen] = useState(false); // Controls both add/edit modal
-	const [selectedAccount, setSelectedAccount] = useState<Account | null>(null); // For editing
-	const [accountTypeToAdd, setAccountTypeToAdd] = useState<
-		AccountType | "Investment" | "Loan"
-	>("Cash");
-	const [isSyncingBank, setIsSyncingBank] = useState(false); // New state for fake bank sync
-	const [showGlobalSyncSuccessModal, setShowGlobalSyncSuccessModal] =
-		useState(false); // New state for global sync notification modal
+  const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "accounts" | "cards" | "loans" | "investments"
+  >("overview");
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controls both add/edit modal
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null); // For editing
+  const [accountTypeToAdd, setAccountTypeToAdd] = useState<
+    AccountType | "Investment" | "Loan"
+  >("Cash");
+  const [isSyncingBank, setIsSyncingBank] = useState(false); // New state for fake bank sync
+  const [showGlobalSyncSuccessModal, setShowGlobalSyncSuccessModal] =
+    useState(false); // New state for global sync notification modal
 
-	const handleDeleteAccount = (accountId: string) => {
-		setAccounts((prevAccounts) =>
-			prevAccounts.filter((acc) => acc.id !== accountId),
-		);
-		setIsModalOpen(false); // Close modal after deletion
-		setSelectedAccount(null); // Clear selected account
-	};
+  const handleDeleteAccount = (accountId: string) => {
+    setAccounts((prevAccounts) =>
+      prevAccounts.filter((acc) => acc.id !== accountId),
+    );
+    setIsModalOpen(false); // Close modal after deletion
+    setSelectedAccount(null); // Clear selected account
+  };
 
-	const handleFakeBankSync = () => {
-		setIsSyncingBank(true);
-		setTimeout(() => {
-			setIsSyncingBank(false);
-			setShowGlobalSyncSuccessModal(true); // Show modal instead of simple notification
-		}, 3000); // Simulate 3 seconds of syncing
-	};
+  const handleFakeBankSync = () => {
+    setIsSyncingBank(true);
+    setTimeout(() => {
+      setIsSyncingBank(false);
+      setShowGlobalSyncSuccessModal(true); // Show modal instead of simple notification
+    }, 3000); // Simulate 3 seconds of syncing
+  };
 
-	const handleSaveAccount = (savedAccount: Account) => {
-		if (savedAccount.id && accounts.some((a) => a.id === savedAccount.id)) {
-			// Update existing account
-			setAccounts((prev) =>
-				prev.map((a) => (a.id === savedAccount.id ? savedAccount : a)),
-			);
-		} else {
-			// Add new account
-			setAccounts((prev) => [savedAccount, ...prev]);
-		}
-		setIsModalOpen(false); // Close modal after save
-		setSelectedAccount(null); // Clear selected account
-	};
+  const handleSaveAccount = (savedAccount: Account) => {
+    if (savedAccount.id && accounts.some((a) => a.id === savedAccount.id)) {
+      // Update existing account
+      setAccounts((prev) =>
+        prev.map((a) => (a.id === savedAccount.id ? savedAccount : a)),
+      );
+    } else {
+      // Add new account
+      setAccounts((prev) => [savedAccount, ...prev]);
+    }
+    setIsModalOpen(false); // Close modal after save
+    setSelectedAccount(null); // Clear selected account
+  };
 
-	const openAddAccountModal = (type: AccountType | "Investment" | "Loan") => {
-		setAccountTypeToAdd(type);
-		setSelectedAccount(null); // Clear selected account for add mode
-		setIsModalOpen(true);
-	};
+  const openAddAccountModal = (type: AccountType | "Investment" | "Loan") => {
+    setAccountTypeToAdd(type);
+    setSelectedAccount(null); // Clear selected account for add mode
+    setIsModalOpen(true);
+  };
 
-	const openEditAccountModal = (account: Account) => {
-		setAccountTypeToAdd(
-			account.type === "Investment"
-				? "Investment"
-				: account.type === "Loan"
-					? "Loan"
-					: (account.type as AccountType),
-		);
-		setSelectedAccount(account);
-		setIsModalOpen(true);
-	};
+  const openEditAccountModal = (account: Account) => {
+    setAccountTypeToAdd(
+      account.type === "Investment"
+        ? "Investment"
+        : account.type === "Loan"
+          ? "Loan"
+          : (account.type as AccountType),
+    );
+    setSelectedAccount(account);
+    setIsModalOpen(true);
+  };
 
-	// Group accounts logically
-	const liquidAccounts = accounts.filter((a) =>
-		["Cash", "Debit", "Savings"].includes(a.type),
-	);
-	const creditCards = accounts.filter((a) => a.type === "Credit");
-	const loanAccounts = accounts.filter((a) => a.type === "Loan");
-	const investAccounts = accounts.filter((a) =>
-		["Investment"].includes(a.type),
-	);
+  // Group accounts logically
+  const liquidAccounts = accounts.filter((a) =>
+    ["Cash", "Debit", "Savings"].includes(a.type),
+  );
+  const creditCards = accounts.filter((a) => a.type === "Credit");
+  const loanAccounts = accounts.filter((a) => a.type === "Loan");
+  const investAccounts = accounts.filter((a) =>
+    ["Investment"].includes(a.type),
+  );
 
-	const totalAssets = accounts.reduce(
-		(sum, acc) => (acc.balance > 0 ? sum + acc.balance : sum),
-		0,
-	);
-	const totalLiabilities = accounts.reduce(
-		(sum, acc) => (acc.balance < 0 ? sum + Math.abs(acc.balance) : sum),
-		0,
-	);
-	const netWorth = totalAssets - totalLiabilities;
+  const totalAssets = accounts.reduce(
+    (sum, acc) => (acc.balance > 0 ? sum + acc.balance : sum),
+    0,
+  );
+  const totalLiabilities = accounts.reduce(
+    (sum, acc) => (acc.balance < 0 ? sum + Math.abs(acc.balance) : sum),
+    0,
+  );
+  const netWorth = totalAssets - totalLiabilities;
 
-	return (
+  return (
     <div className="mx-auto min-h-full max-w-[1600px] space-y-8 p-6 lg:p-10">
       {/* Header */}
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
@@ -303,7 +303,7 @@ const Wallet: React.FC = () => {
           <button
             onClick={handleFakeBankSync}
             disabled={isSyncingBank}
-            className="bg-primary-gradient flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-violet-400"
+            className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-violet-400"
           >
             {isSyncingBank ? (
               <>

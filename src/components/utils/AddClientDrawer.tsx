@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { type Client, ClientStatus } from "../types/types";
+import { type Client, ClientStatus } from "@/types/types";
 
 interface AddClientDrawerProps {
 	isOpen: boolean;

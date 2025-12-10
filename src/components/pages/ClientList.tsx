@@ -1,206 +1,206 @@
 import {
-	ArrowDownUp,
-	Building,
-	Calendar,
-	Check,
-	ChevronLeft,
-	ChevronRight,
-	DollarSign,
-	Filter,
-	Mail,
-	MoreVertical,
-	Plus,
-	Save,
-	Search,
-	Trash2,
-	User,
-	X,
+  ArrowDownUp,
+  Building,
+  Calendar,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  DollarSign,
+  Filter,
+  Mail,
+  MoreVertical,
+  Plus,
+  Save,
+  Search,
+  Trash2,
+  User,
+  X,
 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
 import { CLIENTS_DATA } from "@/data/constants";
 import { type Client, ClientStatus } from "@/types/types";
-import AddClientDrawer from "@/utils/AddClientDrawer";
+import AddClientDrawer from "@/components/utils/AddClientDrawer";
 
 // Component for Inline Editing
 const InlineEditCell: React.FC<{
-	value: string | number;
-	type?: "text" | "number";
-	onSave: (val: string) => void;
-	className?: string;
-	prefix?: string;
+  value: string | number;
+  type?: "text" | "number";
+  onSave: (val: string) => void;
+  className?: string;
+  prefix?: string;
 }> = ({ value, onSave, type = "text", className = "", prefix = "" }) => {
-	const [isEditing, setIsEditing] = useState(false);
-	const [tempValue, setTempValue] = useState(value);
+  const [isEditing, setIsEditing] = useState(false);
+  const [tempValue, setTempValue] = useState(value);
 
-	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === "Enter") {
-			onSave(tempValue.toString());
-			setIsEditing(false);
-		} else if (e.key === "Escape") {
-			setTempValue(value);
-			setIsEditing(false);
-		}
-	};
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      onSave(tempValue.toString());
+      setIsEditing(false);
+    } else if (e.key === "Escape") {
+      setTempValue(value);
+      setIsEditing(false);
+    }
+  };
 
-	if (isEditing) {
-		return (
-			<input
-				autoFocus
-				type={type}
-				value={tempValue}
-				onChange={(e) => setTempValue(e.target.value)}
-				onBlur={() => {
-					onSave(tempValue.toString());
-					setIsEditing(false);
-				}}
-				onKeyDown={handleKeyDown}
-				className="w-full px-2 py-1 border-2 border-violet-500 rounded-md focus:outline-none text-sm bg-white"
-				onClick={(e) => e.stopPropagation()}
-			/>
-		);
-	}
+  if (isEditing) {
+    return (
+      <input
+        autoFocus
+        type={type}
+        value={tempValue}
+        onChange={(e) => setTempValue(e.target.value)}
+        onBlur={() => {
+          onSave(tempValue.toString());
+          setIsEditing(false);
+        }}
+        onKeyDown={handleKeyDown}
+        className="w-full rounded-md border-2 border-pink-500 bg-white px-2 py-1 text-sm focus:outline-none"
+        onClick={(e) => e.stopPropagation()}
+      />
+    );
+  }
 
-	return (
-		<div
-			onClick={(e) => {
-				e.stopPropagation();
-				setIsEditing(true);
-			}}
-			className={`cursor-pointer hover:bg-slate-100 hover:text-violet-700 px-2 py-1 -mx-2 rounded transition-colors border border-transparent hover:border-slate-200 group ${className}`}
-			title="Click to edit"
-		>
-			{prefix}
-			{value}
-		</div>
-	);
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsEditing(true);
+      }}
+      className={`group -mx-2 cursor-pointer rounded border border-transparent px-2 py-1 transition-colors hover:border-slate-200 hover:bg-slate-100 hover:text-pink-700 ${className}`}
+      title="Click to edit"
+    >
+      {prefix}
+      {value}
+    </div>
+  );
 };
 
 const ClientList: React.FC = () => {
-	const [clients, setClients] = useState<Client[]>(CLIENTS_DATA);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [statusFilter, setStatusFilter] = useState<string>("All");
-	const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [clients, setClients] = useState<Client[]>(CLIENTS_DATA);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
-	// Drawer State
-	const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
-	const [isStatusFilterOpen, setIsStatusFilterOpen] = useState(false);
-	const [drawerForm, setDrawerForm] = useState<Partial<Client>>({});
+  // Drawer State
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
+  const [isStatusFilterOpen, setIsStatusFilterOpen] = useState(false);
+  const [drawerForm, setDrawerForm] = useState<Partial<Client>>({});
 
-	// Sorting States
-	const [sortField, setSortField] = useState<keyof Client | null>("name");
-	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  // Sorting States
+  const [sortField, setSortField] = useState<keyof Client | null>("name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-	// Filtering, Sorting, Pagination Logic
-	const sortedClients = useMemo(() => {
-		const currentClients = clients.filter((client) => {
-			const matchesSearch =
-				client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				client.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				client.email.toLowerCase().includes(searchQuery.toLowerCase());
+  // Filtering, Sorting, Pagination Logic
+  const sortedClients = useMemo(() => {
+    const currentClients = clients.filter((client) => {
+      const matchesSearch =
+        client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.email.toLowerCase().includes(searchQuery.toLowerCase());
 
-			const matchesStatus =
-				statusFilter === "All" || client.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "All" || client.status === statusFilter;
 
-			return matchesSearch && matchesStatus;
-		});
+      return matchesSearch && matchesStatus;
+    });
 
-		if (sortField) {
-			currentClients.sort((a, b) => {
-				const aValue = a[sortField];
-				const bValue = b[sortField];
+    if (sortField) {
+      currentClients.sort((a, b) => {
+        const aValue = a[sortField];
+        const bValue = b[sortField];
 
-				if (typeof aValue === "string" && typeof bValue === "string") {
-					return sortDirection === "asc"
-						? aValue.localeCompare(bValue)
-						: bValue.localeCompare(aValue);
-				}
-				if (typeof aValue === "number" && typeof bValue === "number") {
-					return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
-				}
-				return 0;
-			});
-		}
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return sortDirection === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+        }
+        return 0;
+      });
+    }
 
-		return currentClients;
-	}, [clients, searchQuery, statusFilter, sortField, sortDirection]);
+    return currentClients;
+  }, [clients, searchQuery, statusFilter, sortField, sortDirection]);
 
-	const handleSort = (field: keyof Client) => {
-		if (sortField === field) {
-			setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-		} else {
-			setSortField(field);
-			setSortDirection("asc"); // Default to ascending for new sort field
-		}
-	};
+  const handleSort = (field: keyof Client) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDirection("asc"); // Default to ascending for new sort field
+    }
+  };
 
-	// Selection Logic
-	const toggleSelection = (id: string) => {
-		const newSelected = new Set(selectedIds);
-		if (newSelected.has(id)) {
-			newSelected.delete(id);
-		} else {
-			newSelected.add(id);
-		}
-		setSelectedIds(newSelected);
-	};
+  // Selection Logic
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
 
-	const toggleSelectAll = () => {
-		if (selectedIds.size === sortedClients.length && sortedClients.length > 0) {
-			setSelectedIds(new Set());
-		} else {
-			setSelectedIds(new Set(sortedClients.map((c) => c.id)));
-		}
-	};
+  const toggleSelectAll = () => {
+    if (selectedIds.size === sortedClients.length && sortedClients.length > 0) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(sortedClients.map((c) => c.id)));
+    }
+  };
 
-	// CRUD Operations
-	const updateClient = (id: string, updates: Partial<Client>) => {
-		setClients((prev) =>
-			prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
-		);
-	};
+  // CRUD Operations
+  const updateClient = (id: string, updates: Partial<Client>) => {
+    setClients((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+    );
+  };
 
-	const handleAddClient = (newClient: Client) => {
-		setClients((prev) => [newClient, ...prev]);
-	};
+  const handleAddClient = (newClient: Client) => {
+    setClients((prev) => [newClient, ...prev]);
+  };
 
-	const handleBulkStatusChange = (newStatus: ClientStatus) => {
-		setClients((prev) =>
-			prev.map((c) =>
-				selectedIds.has(c.id) ? { ...c, status: newStatus } : c,
-			),
-		);
-		setSelectedIds(new Set());
-	};
+  const handleBulkStatusChange = (newStatus: ClientStatus) => {
+    setClients((prev) =>
+      prev.map((c) =>
+        selectedIds.has(c.id) ? { ...c, status: newStatus } : c,
+      ),
+    );
+    setSelectedIds(new Set());
+  };
 
-	const handleBulkDelete = () => {
-		if (
-			window.confirm(
-				`Are you sure you want to delete ${selectedIds.size} clients?`,
-			)
-		) {
-			setClients((prev) => prev.filter((c) => !selectedIds.has(c.id)));
-			setSelectedIds(new Set());
-		}
-	};
+  const handleBulkDelete = () => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete ${selectedIds.size} clients?`,
+      )
+    ) {
+      setClients((prev) => prev.filter((c) => !selectedIds.has(c.id)));
+      setSelectedIds(new Set());
+    }
+  };
 
-	// Drawer Handlers
-	const openDrawer = (client: Client) => {
-		setSelectedClient(client);
-		setDrawerForm({ ...client });
-		setIsDrawerOpen(true);
-	};
+  // Drawer Handlers
+  const openDrawer = (client: Client) => {
+    setSelectedClient(client);
+    setDrawerForm({ ...client });
+    setIsDrawerOpen(true);
+  };
 
-	const saveDrawerChanges = () => {
-		if (selectedClient && drawerForm) {
-			updateClient(selectedClient.id, drawerForm);
-			setIsDrawerOpen(false);
-		}
-	};
+  const saveDrawerChanges = () => {
+    if (selectedClient && drawerForm) {
+      updateClient(selectedClient.id, drawerForm);
+      setIsDrawerOpen(false);
+    }
+  };
 
-	return (
+  return (
     <div className="relative mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
       {/* Header & Controls */}
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
@@ -218,7 +218,7 @@ const ClientList: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setIsStatusFilterOpen(!isStatusFilterOpen)}
-              className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-600 focus:ring-2 focus:ring-violet-500/20 focus:outline-none md:w-48 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+              className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-600 focus:ring-2 focus:ring-pink-500/20 focus:outline-none md:w-48 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
             >
               <span>
                 {statusFilter === "All" ? "All Statuses" : statusFilter}
@@ -281,7 +281,7 @@ const ClientList: React.FC = () => {
               placeholder="Search clients..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm text-slate-700 transition-all focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm text-slate-700 transition-all focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
             />
           </div>
           <button className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
@@ -289,7 +289,7 @@ const ClientList: React.FC = () => {
           </button>
           <button
             onClick={() => setIsAddDrawerOpen(true)}
-            className="bg-primary-gradient flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+            className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
           >
             <Plus size={18} />
             Add Client
@@ -344,7 +344,7 @@ const ClientList: React.FC = () => {
                       sortedClients.length > 0
                     }
                     onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500 dark:border-slate-600"
+                    className="h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
                   />
                 </th>
                 <th
@@ -424,7 +424,7 @@ const ClientList: React.FC = () => {
               {sortedClients.map((client) => (
                 <tr
                   key={client.id}
-                  className={`group cursor-pointer border-b border-slate-100 transition-colors focus:outline-none dark:border-slate-700 ${selectedIds.has(client.id) ? "bg-violet-50/50 dark:bg-violet-900/20" : "hover:bg-slate-50/50 dark:hover:bg-slate-700/50"} `}
+                  className={`group cursor-pointer border-b border-slate-100 transition-colors focus:outline-none dark:border-slate-700 ${selectedIds.has(client.id) ? "bg-pink-50/50 dark:bg-pink-900/20" : "hover:bg-slate-50/50 dark:hover:bg-slate-700/50"} `}
                   onClick={() => openDrawer(client)}
                 >
                   <td
@@ -435,12 +435,12 @@ const ClientList: React.FC = () => {
                       type="checkbox"
                       checked={selectedIds.has(client.id)}
                       onChange={() => toggleSelection(client.id)}
-                      className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500 dark:border-slate-600"
+                      className="h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
                     />
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 font-bold text-violet-600 dark:bg-violet-900/30 dark:text-violet-400">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 font-bold text-pink-600 dark:bg-pink-900/30 dark:text-pink-400">
                         {client.name.charAt(0)}
                       </div>
                       <div>
@@ -483,7 +483,7 @@ const ClientList: React.FC = () => {
                           status: e.target.value as ClientStatus,
                         })
                       }
-                      className={`cursor-pointer appearance-none rounded-full border-0 px-4 py-1 text-center text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500/20 ${client.status === ClientStatus.Active ? "bg-green-100 text-green-800" : ""} ${client.status === ClientStatus.Pending ? "bg-amber-100 text-amber-800" : ""} ${client.status === ClientStatus.Inactive ? "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200" : ""} `}
+                      className={`cursor-pointer appearance-none rounded-full border-0 px-4 py-1 text-center text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500/20 ${client.status === ClientStatus.Active ? "bg-green-100 text-green-800" : ""} ${client.status === ClientStatus.Pending ? "bg-amber-100 text-amber-800" : ""} ${client.status === ClientStatus.Inactive ? "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200" : ""} `}
                       style={{ backgroundImage: "none" }}
                     >
                       <option value={ClientStatus.Active}>Active</option>
@@ -570,7 +570,7 @@ const ClientList: React.FC = () => {
             <div className="flex-1 space-y-6 overflow-y-auto p-6">
               {/* Identity Card */}
               <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-900">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-600 text-2xl font-bold text-white">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-pink-600 text-2xl font-bold text-white">
                   {drawerForm.name?.charAt(0)}
                 </div>
                 <div>
@@ -591,7 +591,7 @@ const ClientList: React.FC = () => {
                   <label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
                     Full Name
                   </label>
-                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20">
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
                     <User size={18} className="text-slate-400" />
                     <input
                       type="text"
@@ -608,7 +608,7 @@ const ClientList: React.FC = () => {
                   <label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
                     Email Address
                   </label>
-                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20">
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
                     <Mail size={18} className="text-slate-400" />
                     <input
                       type="email"
@@ -625,7 +625,7 @@ const ClientList: React.FC = () => {
                   <label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
                     Company
                   </label>
-                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20">
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
                     <Building size={18} className="text-slate-400" />
                     <input
                       type="text"
@@ -646,7 +646,7 @@ const ClientList: React.FC = () => {
                     <label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
                       Revenue
                     </label>
-                    <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20">
+                    <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
                       <DollarSign size={18} className="text-slate-400" />
                       <input
                         type="number"
@@ -698,7 +698,7 @@ const ClientList: React.FC = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex gap-3">
-                    <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-violet-400"></div>
+                    <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-pink-400"></div>
                     <div>
                       <p className="text-sm text-slate-800">
                         Invoice #4023 sent
@@ -738,7 +738,7 @@ const ClientList: React.FC = () => {
               </button>
               <button
                 onClick={saveDrawerChanges}
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+                className="flex items-center gap-2 rounded-xl bg-pink-600 px-6 py-3 font-medium text-white shadow-lg shadow-pink-200 transition-all hover:bg-pink-700"
               >
                 <Save size={18} />
                 Save Changes

@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "../data/constants";
-import type { Account, AccountType } from "../types/types";
+import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "@/data/constants";
+import type { Account, AccountType } from "@/types/types";
 
 interface AddEditAccountModalProps {
 	isOpen: boolean;
@@ -259,7 +259,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 							<button
 								onClick={handleSyncIndividualAccount}
 								disabled={isAccountSyncing}
-								className="w-full px-3 py-2 flex items-center justify-center gap-2 bg-violet-600 text-white rounded-lg font-medium transition-all disabled:bg-violet-400 disabled:cursor-not-allowed"
+								className="w-full px-3 py-2 flex items-center justify-center gap-2 bg-pink-500 text-white rounded-lg font-medium transition-all disabled:bg-pink-400 disabled:cursor-not-allowed"
 							>
 								{isAccountSyncing ? (
 									<>
@@ -548,7 +548,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 						className="flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl font-medium transition-all disabled:bg-violet-400 disabled:cursor-not-allowed"
 					>
 						<Save size={18} />
-						Save
+						Save Account
 					</button>
 				</div>
 			</div>

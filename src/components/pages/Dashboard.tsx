@@ -1,26 +1,26 @@
 import {
-	ArrowDownRight,
-	ArrowUpRight,
-	Bell,
-	CheckCircle,
-	CreditCard,
-	DollarSign,
-	Plus,
-	Target,
-	Wallet,
+  ArrowDownRight,
+  ArrowUpRight,
+  Bell,
+  CheckCircle,
+  CreditCard,
+  DollarSign,
+  Plus,
+  Target,
+  Wallet,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { MOCK_GOALS, MOCK_SUMMARY, MOCK_TRANSACTIONS } from "@/data/constants";
-import AddEditTransactionModal from "@/utils/AddEditTransactionModal";
+import AddEditTransactionModal from "@/components/utils/AddEditTransactionModal";
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
-	setActiveTab,
+  setActiveTab,
 }) => {
-	const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
-		useState(false);
+  const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
+    useState(false);
 
-	return (
+  return (
     <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
       {/* Welcome Section */}
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
@@ -34,7 +34,7 @@ const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
         </div>
         <button
           onClick={() => setIsAddTransactionModalOpen(true)}
-          className="bg-primary-gradient flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 dark:shadow-none"
+          className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 dark:shadow-none"
         >
           <Plus size={18} />
           Quick Add Transaction

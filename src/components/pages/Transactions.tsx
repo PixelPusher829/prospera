@@ -1,207 +1,207 @@
 import {
-	ArrowDownRight,
-	ArrowDownUp,
-	ArrowUpRight,
-	Calendar,
-	ChevronLeft,
-	ChevronRight,
-	Filter,
-	MoreHorizontal,
-	Plus,
-	Search,
-	X,
+  ArrowDownRight,
+  ArrowDownUp,
+  ArrowUpRight,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  MoreHorizontal,
+  Plus,
+  Search,
+  X,
 } from "lucide-react"; // Import X for bulk actions
 import type React from "react";
 import { useMemo, useState } from "react";
 import { MOCK_ACCOUNTS, MOCK_TRANSACTIONS } from "@/data/constants";
 import type { Transaction } from "@/types/types";
-import AddEditTransactionModal from "@/utils/AddEditTransactionModal";
+import AddEditTransactionModal from "@/components/utils/AddEditTransactionModal";
 
 const Transactions: React.FC = () => {
-	const [transactions, setTransactions] =
-		useState<Transaction[]>(MOCK_TRANSACTIONS);
-	const [searchTerm, setSearchTerm] = useState("");
-	const [transactionTypeFilter, setTransactionTypeFilter] = useState<
-		"all" | "income" | "expense"
-	>("all");
-	const [selectedAccountTypeFilter, setSelectedAccountTypeFilter] = useState<
-		AccountType | "all"
-	>("all");
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [selectedTransaction, setSelectedTransaction] =
-		useState<Transaction | null>(null);
-	const [sortField, setSortField] = useState<keyof Transaction | null>("date");
-	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
-	const [startDate, setStartDate] = useState<string | null>(null);
-	const [endDate, setEndDate] = useState<string | null>(null);
-	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-	const [minAmount, setMinAmount] = useState("");
-	const [maxAmount, setMaxAmount] = useState("");
-	const [statusFilter, setStatusFilter] = useState<
-		"all" | "cleared" | "pending"
-	>("all");
-	const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false);
-	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [transactions, setTransactions] =
+    useState<Transaction[]>(MOCK_TRANSACTIONS);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [transactionTypeFilter, setTransactionTypeFilter] = useState<
+    "all" | "income" | "expense"
+  >("all");
+  const [selectedAccountTypeFilter, setSelectedAccountTypeFilter] = useState<
+    AccountType | "all"
+  >("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const [sortField, setSortField] = useState<keyof Transaction | null>("date");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "cleared" | "pending"
+  >("all");
+  const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-	const allCategories = useMemo(() => {
-		const categories = new Set(MOCK_TRANSACTIONS.map((t) => t.category));
-		return Array.from(categories);
-	}, [transactions]);
+  const allCategories = useMemo(() => {
+    const categories = new Set(MOCK_TRANSACTIONS.map((t) => t.category));
+    return Array.from(categories);
+  }, [transactions]);
 
-	const [selectedTransactionIds, setSelectedTransactionIds] = useState<
-		Set<string>
-	>(new Set()); // New state for bulk actions
+  const [selectedTransactionIds, setSelectedTransactionIds] = useState<
+    Set<string>
+  >(new Set()); // New state for bulk actions
 
-	const handleSaveTransaction = (savedTransaction: Transaction) => {
-		if (
-			savedTransaction.id &&
-			transactions.some((t) => t.id === savedTransaction.id)
-		) {
-			setTransactions((prev) =>
-				prev.map((t) => (t.id === savedTransaction.id ? savedTransaction : t)),
-			);
-		} else {
-			setTransactions((prev) => [savedTransaction, ...prev]);
-		}
-		setIsModalOpen(false);
-		setSelectedTransaction(null);
-	};
+  const handleSaveTransaction = (savedTransaction: Transaction) => {
+    if (
+      savedTransaction.id &&
+      transactions.some((t) => t.id === savedTransaction.id)
+    ) {
+      setTransactions((prev) =>
+        prev.map((t) => (t.id === savedTransaction.id ? savedTransaction : t)),
+      );
+    } else {
+      setTransactions((prev) => [savedTransaction, ...prev]);
+    }
+    setIsModalOpen(false);
+    setSelectedTransaction(null);
+  };
 
-	const openAddModal = () => {
-		setSelectedTransaction(null);
-		setIsModalOpen(true);
-	};
+  const openAddModal = () => {
+    setSelectedTransaction(null);
+    setIsModalOpen(true);
+  };
 
-	const openEditModal = (transaction: Transaction) => {
-		setSelectedTransaction(transaction);
-		setIsModalOpen(true);
-	};
+  const openEditModal = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setIsModalOpen(true);
+  };
 
-	const handleSort = (field: keyof Transaction) => {
-		if (sortField === field) {
-			setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-		} else {
-			setSortField(field);
-			setSortDirection("desc");
-		}
-	};
+  const handleSort = (field: keyof Transaction) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDirection("desc");
+    }
+  };
 
-	const sortedAndFilteredTransactions = useMemo(() => {
-		const currentTransactions = transactions.filter((t) => {
-			const matchesSearch =
-				t.payee.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				t.category.toLowerCase().includes(searchTerm.toLowerCase());
-			const matchesType =
-				transactionTypeFilter === "all" || t.type === transactionTypeFilter;
-			const account = MOCK_ACCOUNTS.find((a) => a.id === t.accountId);
-			const matchesAccountType =
-				selectedAccountTypeFilter === "all" ||
-				account?.type === selectedAccountTypeFilter;
-			const matchesDate =
-				(!startDate || new Date(t.date) >= new Date(startDate)) &&
-				(!endDate || new Date(t.date) <= new Date(endDate));
-			const matchesAmount =
-				(!minAmount || t.amount >= parseFloat(minAmount)) &&
-				(!maxAmount || t.amount <= parseFloat(maxAmount));
-			const matchesStatus = statusFilter === "all" || t.status === statusFilter;
-			const matchesCategory =
-				selectedCategories.length === 0 ||
-				selectedCategories.includes(t.category);
-			return (
-				matchesSearch &&
-				matchesType &&
-				matchesAccountType &&
-				matchesDate &&
-				matchesAmount &&
-				matchesStatus &&
-				matchesCategory
-			);
-		});
+  const sortedAndFilteredTransactions = useMemo(() => {
+    const currentTransactions = transactions.filter((t) => {
+      const matchesSearch =
+        t.payee.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.category.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType =
+        transactionTypeFilter === "all" || t.type === transactionTypeFilter;
+      const account = MOCK_ACCOUNTS.find((a) => a.id === t.accountId);
+      const matchesAccountType =
+        selectedAccountTypeFilter === "all" ||
+        account?.type === selectedAccountTypeFilter;
+      const matchesDate =
+        (!startDate || new Date(t.date) >= new Date(startDate)) &&
+        (!endDate || new Date(t.date) <= new Date(endDate));
+      const matchesAmount =
+        (!minAmount || t.amount >= parseFloat(minAmount)) &&
+        (!maxAmount || t.amount <= parseFloat(maxAmount));
+      const matchesStatus = statusFilter === "all" || t.status === statusFilter;
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(t.category);
+      return (
+        matchesSearch &&
+        matchesType &&
+        matchesAccountType &&
+        matchesDate &&
+        matchesAmount &&
+        matchesStatus &&
+        matchesCategory
+      );
+    });
 
-		if (sortField) {
-			currentTransactions.sort((a, b) => {
-				let aValue: any = a[sortField];
-				let bValue: any = b[sortField];
+    if (sortField) {
+      currentTransactions.sort((a, b) => {
+        let aValue: any = a[sortField];
+        let bValue: any = b[sortField];
 
-				if (typeof aValue === "string" && typeof bValue === "string") {
-					// Special handling for date strings to ensure correct sorting
-					if (sortField === "date") {
-						const dateA = new Date(aValue);
-						const dateB = new Date(bValue);
-						return sortDirection === "asc"
-							? dateA.getTime() - dateB.getTime()
-							: dateB.getTime() - dateA.getTime();
-					}
-					return sortDirection === "asc"
-						? aValue.localeCompare(bValue)
-						: bValue.localeCompare(aValue);
-				}
-				if (typeof aValue === "number" && typeof bValue === "number") {
-					return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
-				}
-				if (sortField === "accountType") {
-					aValue =
-						MOCK_ACCOUNTS.find((acc) => acc.id === a.accountId)?.type || "";
-					bValue =
-						MOCK_ACCOUNTS.find((acc) => acc.id === b.accountId)?.type || "";
-					return sortDirection === "asc"
-						? String(aValue).localeCompare(String(bValue))
-						: String(bValue).localeCompare(String(aValue));
-				}
-				return 0;
-			});
-		}
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          // Special handling for date strings to ensure correct sorting
+          if (sortField === "date") {
+            const dateA = new Date(aValue);
+            const dateB = new Date(bValue);
+            return sortDirection === "asc"
+              ? dateA.getTime() - dateB.getTime()
+              : dateB.getTime() - dateA.getTime();
+          }
+          return sortDirection === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+        }
+        if (sortField === "accountType") {
+          aValue =
+            MOCK_ACCOUNTS.find((acc) => acc.id === a.accountId)?.type || "";
+          bValue =
+            MOCK_ACCOUNTS.find((acc) => acc.id === b.accountId)?.type || "";
+          return sortDirection === "asc"
+            ? String(aValue).localeCompare(String(bValue))
+            : String(bValue).localeCompare(String(aValue));
+        }
+        return 0;
+      });
+    }
 
-		return currentTransactions;
-	}, [
-		transactions,
-		searchTerm,
-		transactionTypeFilter,
-		selectedAccountTypeFilter,
-		sortField,
-		sortDirection,
-		startDate,
-		endDate,
-		minAmount,
-		maxAmount,
-		statusFilter,
-		selectedCategories,
-	]);
+    return currentTransactions;
+  }, [
+    transactions,
+    searchTerm,
+    transactionTypeFilter,
+    selectedAccountTypeFilter,
+    sortField,
+    sortDirection,
+    startDate,
+    endDate,
+    minAmount,
+    maxAmount,
+    statusFilter,
+    selectedCategories,
+  ]);
 
-	// Bulk actions logic
-	const toggleSelection = (id: string) => {
-		const newSelected = new Set(selectedTransactionIds);
-		if (newSelected.has(id)) {
-			newSelected.delete(id);
-		} else {
-			newSelected.add(id);
-		}
-		setSelectedTransactionIds(newSelected);
-	};
+  // Bulk actions logic
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedTransactionIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedTransactionIds(newSelected);
+  };
 
-	const toggleSelectAll = () => {
-		if (
-			selectedTransactionIds.size === sortedAndFilteredTransactions.length &&
-			sortedAndFilteredTransactions.length > 0
-		) {
-			setSelectedTransactionIds(new Set());
-		} else {
-			setSelectedTransactionIds(
-				new Set(sortedAndFilteredTransactions.map((t) => t.id)),
-			);
-		}
-	};
+  const toggleSelectAll = () => {
+    if (
+      selectedTransactionIds.size === sortedAndFilteredTransactions.length &&
+      sortedAndFilteredTransactions.length > 0
+    ) {
+      setSelectedTransactionIds(new Set());
+    } else {
+      setSelectedTransactionIds(
+        new Set(sortedAndFilteredTransactions.map((t) => t.id)),
+      );
+    }
+  };
 
-	const handleBulkCategoryAssign = (newCategory: string) => {
-		setTransactions((prev) =>
-			prev.map((t) =>
-				selectedTransactionIds.has(t.id) ? { ...t, category: newCategory } : t,
-			),
-		);
-		setSelectedTransactionIds(new Set()); // Clear selection after action
-	};
+  const handleBulkCategoryAssign = (newCategory: string) => {
+    setTransactions((prev) =>
+      prev.map((t) =>
+        selectedTransactionIds.has(t.id) ? { ...t, category: newCategory } : t,
+      ),
+    );
+    setSelectedTransactionIds(new Set()); // Clear selection after action
+  };
 
-	return (
+  return (
     <div className="mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
@@ -216,7 +216,7 @@ const Transactions: React.FC = () => {
         <div className="flex w-full items-center gap-3 md:w-auto">
           <button
             onClick={openAddModal}
-            className="bg-primary-gradient flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+            className="bg-violet-600 flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
           >
             <Plus size={18} />
             Add Transaction
@@ -390,7 +390,7 @@ const Transactions: React.FC = () => {
                                 );
                               }
                             }}
-                            className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-500"
+                            className="h-4 w-4 rounded border-gray-200 text-pink-600 focus:ring-pink-500"
                           />
                           <label
                             htmlFor={`category-${category}`}
@@ -456,7 +456,7 @@ const Transactions: React.FC = () => {
       )}
 
       {/* Table */}
-      <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
@@ -470,7 +470,7 @@ const Transactions: React.FC = () => {
                       sortedAndFilteredTransactions.length > 0
                     }
                     onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500 dark:border-slate-600"
+                    className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
                   />
                 </th>
                 <th
@@ -572,7 +572,7 @@ const Transactions: React.FC = () => {
                       checked={selectedTransactionIds.has(t.id)}
                       onChange={() => toggleSelection(t.id)}
                       onClick={(e) => e.stopPropagation()} // Prevent row click from opening edit modal
-                      className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500 dark:border-slate-600"
+                      className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
                     />
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-slate-500 tabular-nums dark:text-slate-400">
