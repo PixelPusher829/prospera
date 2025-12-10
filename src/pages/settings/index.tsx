@@ -49,7 +49,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto min-h-full max-w-[1200px] p-6 lg:p-10">
+    <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
       <Header
         heading="Settings"
         subheading="Manage your account preferences"

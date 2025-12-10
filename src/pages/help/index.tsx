@@ -39,7 +39,7 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({
 
 const Help: React.FC = () => {
   return (
-    <div className="mx-auto min-h-full max-w-[1200px] p-6 lg:p-10">
+    <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
       <div className="mb-12 text-center">
         <h1 className="mb-4 text-4xl font-bold text-slate-700 dark:text-white">
           How can we help you?

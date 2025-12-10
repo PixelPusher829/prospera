@@ -48,7 +48,7 @@ const Analytics: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
+    <div className="container">
       {/* Header Section */}
       <Header
         heading="Analytics"

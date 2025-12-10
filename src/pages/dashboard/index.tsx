@@ -26,7 +26,7 @@ const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
     useState(false);
 
   return (
-    <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
+    <div className="container">
       {/* Welcome Section */}
       <Header
         heading="Good Morning, James!"

@@ -129,7 +129,7 @@ const Goals: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
+    <div className="container">
       <Header
         heading="Financial Goals"
         subheading="Track your savings targets"

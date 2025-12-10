@@ -18,8 +18,12 @@ const Budget: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto min-h-full max-w-[1600px] p-6 lg:p-10">
-      <Header heading="Monthly Budget" subheading="Keep your spending in check" className="mb-10">
+    <div className="container">
+      <Header
+        heading="Monthly Budget"
+        subheading="Keep your spending in check"
+        className="mb-10"
+      >
         <button
           onClick={() => setIsEditModalOpen(true)}
           className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
@@ -29,7 +33,6 @@ const Budget: React.FC = () => {
           Edit Budget
         </button>
       </Header>
-
 
       {/* Summary Header */}
       <div className="mb-10 flex flex-col items-center justify-between gap-8 rounded-3xl bg-slate-900 p-8 text-white md:flex-row dark:bg-slate-800">

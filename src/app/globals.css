@@ -14,44 +14,48 @@
   .bg-primary-gradient {
     @apply bg-gradient-to-b from-[var(--primary-red)] to-[var(--primary-pink)];
   }
+
+  .container{
+	@apply mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10;
+  }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
+        width: 6px;
+        height: 6px;
 }
 ::-webkit-scrollbar-track {
-	background: transparent;
+        background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-	background: #cbd5e1;
-	border-radius: 3px;
+        background: #cbd5e1;
+        border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-	background: #94a3b8;
+        background: #94a3b8;
 }
 .dark ::-webkit-scrollbar-thumb {
-	background: #475569;
+        background: #475569;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-	background: #64748b;
+        background: #64748b;
 }
 
 @layer components {
-	.sidebar-nav-item {
-		@apply relative flex w-full items-center gap-4 rounded-2xl px-3 py-3 text-slate-500 transition-all duration-300 hover:bg-pink-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white;
-	}
-	.sidebar-nav-item::before {
-		@apply bg-gradient-to-b from-[var(--primary-red)] to-[var(--primary-pink)] content-[''] absolute inset-0 rounded-2xl opacity-0 transition-all duration-300;
-	}
-	.sidebar-nav-item.active {
-		@apply text-white shadow-lg shadow-red-200/50;
-	}
-	.sidebar-nav-item.active::before {
-		@apply opacity-100;
-	}
-	.sidebar-nav-item > * {
-		@apply relative; /* to ensure content is above pseudo-element */
-	}
+        .sidebar-nav-item {
+                @apply relative flex w-full items-center gap-4 rounded-2xl px-3 py-3 text-slate-500 transition-all duration-300 hover:bg-pink-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white;
+        }
+        .sidebar-nav-item::before {
+                @apply bg-gradient-to-b from-[var(--primary-red)] to-[var(--primary-pink)] content-[''] absolute inset-0 rounded-2xl opacity-0 transition-all duration-300;
+        }
+        .sidebar-nav-item.active {
+                @apply text-white shadow-lg shadow-red-200/50;
+        }
+        .sidebar-nav-item.active::before {
+                @apply opacity-100;
+        }
+        .sidebar-nav-item > * {
+                @apply relative; /* to ensure content is above pseudo-element */
+        }
 }

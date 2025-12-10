@@ -282,7 +282,7 @@ const Wallet: React.FC = () => {
   const netWorth = totalAssets - totalLiabilities;
 
   return (
-    <div className="mx-auto min-h-full max-w-[1600px] space-y-8 p-6 lg:p-10">
+    <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
       <Header
         heading="My Wallet"
         subheading="Centralized overview of all your assets and debts"
