@@ -1,6 +1,7 @@
 import { CalendarClock, ShieldCheck } from "lucide-react";
 import type React from "react";
 import type { Account } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface LoanRowProps {
 	account: Account;

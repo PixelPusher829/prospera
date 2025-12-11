@@ -3,6 +3,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { COLOR_PALETTE } from "@/shared/data/constants";
 import type { BudgetCategory } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface EditBudgetModalProps {
 	isOpen: boolean;
@@ -190,16 +191,16 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 					</button>
 				</div>
 				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6">
-					<button
+					<Button
+						variant="primary"
 						onClick={handleSave}
 						disabled={Object.values(errors).some(
 							(fieldErrors) => Object.keys(fieldErrors).length > 0,
 						)}
-						className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-violet-400"
+						icon={<Save size={18} />}
 					>
-						<Save size={18} />
 						Save Budget
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

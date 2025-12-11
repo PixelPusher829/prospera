@@ -2,6 +2,7 @@ import { Save, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { Transaction } from "../types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface AddEditTransactionModalProps {
 	isOpen: boolean;
@@ -209,14 +210,14 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 					</div>
 				</div>
 				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6">
-					<button
+					<Button
+						variant="primary"
 						onClick={handleSaveTransaction}
 						disabled={Object.keys(validate()).length > 0}
-						className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-violet-400"
+						icon={<Save size={18} />}
 					>
-						<Save size={18} />
 						Save Transaction
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

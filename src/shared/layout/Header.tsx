@@ -10,7 +10,7 @@ export default function Header({
 	heading: string;
 	subheading: string;
 	className?: string;
-}): React.FC {
+}): React.ReactElement {
 	return (
 		<div
 			className={`${className} flex flex-col items-start justify-between gap-4 md:flex-row md:items-center`}

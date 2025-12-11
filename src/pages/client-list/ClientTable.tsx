@@ -2,6 +2,7 @@ import { ArrowDownUp, Building, ChevronRight, Mail } from "lucide-react";
 import type React from "react";
 import { type Client, ClientStatus } from "@/shared/types/types";
 import InlineEditCell from "./InlineEditCell";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface ClientTableProps {
 	sortedClients: Client[];

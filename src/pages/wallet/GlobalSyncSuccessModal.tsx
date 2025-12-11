@@ -1,4 +1,5 @@
 import type React from "react";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface GlobalSyncSuccessModalProps {
 	onClose: () => void;
@@ -9,19 +10,20 @@ const GlobalSyncSuccessModal: React.FC<GlobalSyncSuccessModalProps> = ({
 }) => {
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-			<div className="m-4 w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-xl">
+			<div className="m-4 w-full max-w-lg rounded-2xl bg-white p-6 text-center shadow-xl">
 				<h3 className="mb-4 text-xl font-bold text-slate-700">
 					Bank Sync Complete!
 				</h3>
-				<p className="mb-6 text-slate-600">
+				<p className="mb-6 text-lg text-slate-600">
 					Your financial data has been successfully updated.
 				</p>
-				<button
+				<Button
+					variant="primary"
 					onClick={onClose}
-					className="rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition-all hover:bg-violet-700"
+					className="px-10"
 				>
 					Close
-				</button>
+				</Button>
 			</div>
 		</div>
 	);

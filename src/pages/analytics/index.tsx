@@ -13,6 +13,7 @@ import BalanceOverview from "./BalanceOverview";
 import BudgetComparison from "./BudgetComparison";
 import ExpenseStatistics from "./ExpenseStatistics";
 import StatCard from "./StatCard";
+import Button from "@/shared/components/Button"; // Import Button component
 
 const Analytics: React.FC = () => {
   const [insight, setInsight] = useState<string>("");
@@ -37,13 +38,13 @@ const Analytics: React.FC = () => {
         subheading="Deep dive into financial trends and AI insights"
       >
         {" "}
-        <button
+        <Button
+          variant="secondary"
           className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
-          type="button"
+          icon={<LayoutGrid size={18} />}
         >
-          <LayoutGrid size={18} />
           Export Report
-        </button>
+        </Button>
       </Header>
 
       {/* Stats Row */}

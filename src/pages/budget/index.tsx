@@ -7,6 +7,7 @@ import { MOCK_BUDGET } from "@/shared/data/constants";
 import type { BudgetCategory } from "@/shared/types/types";
 import BudgetCategoryList from "./BudgetCategoryList";
 import BudgetSummary from "./BudgetSummary";
+import Button from "@/shared/components/Button";
 
 const Budget: React.FC = () => {
   const [budget, setBudget] = useState<BudgetCategory[]>(MOCK_BUDGET);
@@ -26,14 +27,13 @@ const Budget: React.FC = () => {
         subheading="Keep your spending in check"
         className="mb-10"
       >
-        <button
+        <Button
+          variant="primary"
           onClick={() => setIsEditModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
-          type="button"
+          icon={<Plus size={18} />}
         >
-          <Plus size={18} />
           Edit Budget
-        </button>
+        </Button>
       </Header>
 
       <BudgetSummary totalSpent={totalSpent} totalBudget={totalBudget} />

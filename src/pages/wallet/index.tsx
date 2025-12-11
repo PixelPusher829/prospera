@@ -6,12 +6,13 @@ import Header from "@/shared/layout/Header";
 import { MOCK_ACCOUNTS } from "@/shared/data/constants";
 import type { Account, AccountType } from "@/shared/types/types";
 import GlobalSyncSuccessModal from "./GlobalSyncSuccessModal";
-import WalletAccountsTab from "./WalletAccountsTab";
-import WalletCardsTab from "./WalletCardsTab";
-import WalletInvestmentsTab from "./WalletInvestmentsTab";
-import WalletLoansTab from "./WalletLoansTab";
+import WalletAccountsTab from "./tabs/WalletAccountsTab";
+import WalletCardsTab from "./tabs/WalletCardsTab";
+import WalletInvestmentsTab from "./tabs/WalletInvestmentsTab";
+import WalletLoansTab from "./tabs/WalletLoansTab";
 import WalletOverview from "./WalletOverview";
 import WalletSummaryCards from "./WalletSummaryCards";
+import Button from "@/shared/components/Button"; // Import Button component
 
 const Wallet: React.FC = () => {
 	const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);
@@ -102,49 +103,22 @@ const Wallet: React.FC = () => {
 				subheading="Centralized overview of all your assets and debts"
 			>
 				<div className="flex items-center gap-4">
-					<button
+					<Button
+						variant="secondary"
 						onClick={() => openAddAccountModal("Cash")}
-						className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 shadow-lg shadow-slate-100 transition-all hover:bg-slate-100"
+						icon={<Plus size={18} />}
 					>
-						<Plus size={18} />
 						Link Account
-					</button>
-					<button
+					</Button>
+					<Button
+						variant="primary"
 						onClick={handleFakeBankSync}
 						disabled={isSyncingBank}
-						className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-violet-400"
+						isLoading={isSyncingBank}
+						icon={<WalletIcon size={18} />}
 					>
-						{isSyncingBank ? (
-							<>
-								<svg
-									className="h-5 w-5 animate-spin text-white"
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-								>
-									<circle
-										className="opacity-25"
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="currentColor"
-										strokeWidth="4"
-									></circle>
-									<path
-										className="opacity-75"
-										fill="currentColor"
-										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-									></path>
-								</svg>
-								Syncing...
-							</>
-						) : (
-							<>
-								<WalletIcon size={18} />
-								Sync All Banks
-							</>
-						)}
-					</button>
+						Sync All Banks
+					</Button>
 				</div>
 			</Header>
 
@@ -174,6 +148,7 @@ const Wallet: React.FC = () => {
 					(tab) => (
 						<button
 							key={tab}
+							variant="secondary"
 							onClick={() => setActiveTab(tab as any)}
 							className={`rounded-xl px-6 py-2.5 text-sm font-medium capitalize transition-all ${
 								activeTab === tab

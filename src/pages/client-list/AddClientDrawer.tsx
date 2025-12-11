@@ -10,6 +10,7 @@ import {
 import type React from "react";
 import { useState } from "react";
 import { type Client, ClientStatus } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface AddClientDrawerProps {
 	isOpen: boolean;
@@ -226,16 +227,16 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 
 					{/* Drawer Footer */}
 					<div className="flex justify-end border-t border-slate-100 bg-slate-50 p-6">
-						<button
+						<Button
+							variant="primary"
 							onClick={handleAddClient}
 							disabled={
 								!newClient.name || !newClient.email || !newClient.company
 							}
-							className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all disabled:cursor-not-allowed disabled:bg-violet-400"
+							icon={<Save size={18} />}
 						>
-							<Save size={18} />
 							Add Client
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>

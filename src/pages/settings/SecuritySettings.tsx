@@ -1,5 +1,6 @@
 import { Lock, Shield } from "lucide-react";
 import type React from "react";
+import Button from "@/shared/components/Button"; // Import Button component
 
 const SecuritySettings: React.FC = () => {
 	return (

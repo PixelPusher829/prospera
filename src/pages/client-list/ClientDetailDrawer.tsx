@@ -11,6 +11,7 @@ import {
 import type React from "react";
 import type { Client } from "@/shared/types/types";
 import { ClientStatus } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface ClientDetailDrawerProps {
 	isDrawerOpen: boolean;
@@ -249,13 +250,12 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 							>
 								<Trash2 size={20} />
 							</button>
-							<button
+							<Button
 								onClick={saveDrawerChanges}
-								className="flex items-center gap-2 rounded-xl bg-pink-600 px-6 py-3 font-medium text-white shadow-lg shadow-pink-200 transition-all hover:bg-pink-700"
+								icon={<Save size={18} />}
 							>
-								<Save size={18} />
 								Save Changes
-							</button>
+							</Button>
 						</div>
 					</div>
 				)}

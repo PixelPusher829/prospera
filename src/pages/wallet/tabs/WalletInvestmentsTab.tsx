@@ -1,7 +1,8 @@
 import { Plus } from "lucide-react";
 import type React from "react";
 import type { Account, AccountType } from "@/shared/types/types";
-import InvestmentRow from "./InvestmentRow";
+import InvestmentRow from "../InvestmentRow";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface WalletInvestmentsTabProps {
 	investAccounts: Account[];
@@ -23,13 +24,14 @@ const WalletInvestmentsTab: React.FC<WalletInvestmentsTabProps> = ({
 					onEdit={openEditAccountModal}
 				/>
 			))}
-			<button
+			<Button
+				variant="secondary"
 				onClick={() => openAddAccountModal("Investment")}
+				icon={<Plus size={24} />}
 				className="flex h-auto min-h-[180px] w-full flex-col items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-slate-200 font-medium text-slate-400 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-600 dark:border-slate-700 dark:text-slate-500 dark:hover:bg-violet-900/10"
 			>
-				<Plus size={24} />
 				Add Investment
-			</button>
+			</Button>
 		</div>
 	);
 };

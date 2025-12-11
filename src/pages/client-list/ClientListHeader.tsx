@@ -1,6 +1,7 @@
 import { ChevronRight, Filter, Plus, Search } from "lucide-react";
 import type React from "react";
 import { ClientStatus } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface ClientListHeaderProps {
 	searchQuery: string;
@@ -123,13 +124,12 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 			<button className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
 				<Filter size={18} />
 			</button>
-			<button
+			<Button
 				onClick={() => setIsAddDrawerOpen(true)}
-				className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+				icon={<Plus size={18} />}
 			>
-				<Plus size={18} />
 				Add Client
-			</button>
+			</Button>
 		</div>
 	);
 };

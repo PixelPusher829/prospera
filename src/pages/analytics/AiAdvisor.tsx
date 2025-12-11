@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import type React from "react";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface AiAdvisorProps {
 	insight: string;
@@ -33,20 +34,14 @@ const AiAdvisor: React.FC<AiAdvisorProps> = ({
 				)}
 			</div>
 
-			<button
+			<Button
+				variant="primary"
 				onClick={generateInsight}
-				disabled={loadingInsight}
-				className="flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 font-bold text-violet-700 transition-colors hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-70"
+				isLoading={loadingInsight}
+				className="w-full bg-white text-violet-700! hover:bg-violet-100! disabled:cursor-not-allowed disabled:opacity-70" // Override with custom styling
 			>
-				{loadingInsight ? (
-					<>
-						<span className="h-4 w-4 animate-spin rounded-full border-2 border-violet-600 border-t-transparent"></span>
-						Analyzing...
-					</>
-				) : (
-					"Generate Insights"
-				)}
-			</button>
+				Generate Insights
+			</Button>
 		</div>
 	);
 };

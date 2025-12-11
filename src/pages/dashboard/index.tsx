@@ -8,6 +8,7 @@ import CashFlow from "./CashFlow";
 import HeroCard from "./HeroCard";
 import Notifications from "./Notifications";
 import RecentTransactions from "./RecentTransactions";
+import Button from "@/shared/components/Button"; // Import Button component
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
   setActiveTab,
@@ -22,13 +23,13 @@ const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
         heading="Good Morning, James!"
         subheading="Here is your financial health check for today."
       >
-        <button
+        <Button
+          variant="primary"
           onClick={() => setIsAddTransactionModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+          icon={<Plus size={18} />}
         >
-          <Plus size={18} />
           Quick Add Transaction
-        </button>
+        </Button>
       </Header>
 
       {/* Hero Cards */}

@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Account } from "@/shared/types/types";
-import CreditCardVisual from "./CreditCardVisual";
+import CreditCardVisual from "../CreditCardVisual";
 
 interface WalletCardsTabProps {
 	creditCards: Account[];

@@ -7,6 +7,7 @@ import { MOCK_GOALS } from "@/shared/data/constants";
 import type { Goal } from "@/shared/types/types";
 import AddGoalPlaceholderCard from "./AddGoalPlaceholderCard";
 import GoalCard from "./GoalCard";
+import Button from "@/shared/components/Button"; // Import Button component
 
 const Goals: React.FC = () => {
   const [goals, setGoals] = useState<Goal[]>(MOCK_GOALS);
@@ -42,13 +43,13 @@ const Goals: React.FC = () => {
         subheading="Track your savings targets"
         className="mb-10"
       >
-        <button
+        <Button
+          variant="primary"
           onClick={openAddModal}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white shadow-lg shadow-violet-200 transition-all hover:bg-violet-700"
+          icon={<Plus size={18} />}
         >
-          <Plus size={18} />
           Create New Goal
-        </button>
+        </Button>
       </Header>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

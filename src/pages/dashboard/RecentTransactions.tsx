@@ -1,6 +1,7 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import type React from "react";
 import { MOCK_TRANSACTIONS } from "@/shared/data/constants";
+import Button from "@/shared/components/Button"; // Import Button component
 
 const RecentTransactions: React.FC<{
 	setActiveTab: (tab: string) => void;

@@ -33,7 +33,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onEdit }) => {
 			case "travel": // Assuming 'travel' also uses a plane icon
 				return <Plane size={24} />;
 			case "laptop":
-				return <Laptop size={24} />;
+			return <Laptop size={24} />;
 			default:
 				return <Target size={24} />;
 		}

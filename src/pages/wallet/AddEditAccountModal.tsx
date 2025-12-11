@@ -3,6 +3,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "@/shared/data/constants";
 import type { Account, AccountType } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface AddEditAccountModalProps {
   isOpen: boolean;
@@ -250,40 +251,15 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
         {(!selectedAccountType || selectedAccountType !== "Cash") &&
           account && ( // Render Sync Account button only if non-Cash and editing
             <div>
-              <button
+              <Button
+                variant="sync"
                 onClick={handleSyncIndividualAccount}
-                disabled={isAccountSyncing}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-pink-400"
-				type="button"
+                isLoading={isAccountSyncing}
+                type="button"
+                fullWidth={true}
               >
-                {isAccountSyncing ? (
-                  <>
-                    <svg
-                      className="h-5 w-5 animate-spin text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Syncing...
-                  </>
-                ) : (
-                  "Sync Account"
-                )}
-              </button>
+                Sync Account
+              </Button>
               {errors.balance && (
                 <p className="mt-1 text-xs text-red-500">{errors.balance}</p>
               )}
@@ -382,40 +358,14 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
           </div>
           {account && (
             <div>
-              <button
+              <Button
+                variant="sync"
                 onClick={handleSyncIndividualAccount}
-                disabled={isAccountSyncing}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-3 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-violet-400"
+                isLoading={isAccountSyncing}
                 type="button"
               >
-                {isAccountSyncing ? (
-                  <>
-                    <svg
-                      className="h-5 w-5 animate-spin text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Syncing...
-                  </>
-                ) : (
-                  "Sync Account"
-                )}
-              </button>
+                Sync Account
+              </Button>
               {errors.balance && (
                 <p className="mt-1 text-xs text-red-500">{errors.balance}</p>
               )}
@@ -537,7 +487,8 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
         </div>
         <div className="flex items-center justify-between gap-4 rounded-b-2xl bg-slate-50 p-6">
           {account && onDeleteAccount && (
-            <button
+            <Button
+              variant="danger"
               onClick={() => {
                 if (
                   window.confirm(
@@ -548,20 +499,19 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
                   onClose(); // Close modal after deletion
                 }
               }}
-              className="flex items-center gap-2 rounded-xl border border-red-200 px-4 py-2 font-medium text-red-600 transition-all hover:bg-red-50"
+              icon={<Trash2 size={18} />}
             >
-              <Trash2 size={18} />
               Delete
-            </button>
+            </Button>
           )}
-          <button
+          <Button
+            variant="primary"
             onClick={handleSaveAccount}
             disabled={Object.keys(validate()).length > 0}
-            className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-violet-400"
+            icon={<Save size={18} />}
           >
-            <Save size={18} />
             Save Account
-          </button>
+          </Button>
         </div>
       </div>
     </div>

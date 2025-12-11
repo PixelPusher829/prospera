@@ -4,6 +4,7 @@ import BankAccountRow from "./BankAccountRow";
 import CreditCardVisual from "./CreditCardVisual";
 import InvestmentRow from "./InvestmentRow";
 import LoanRow from "./LoanRow";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface WalletOverviewProps {
 	liquidAccounts: Account[];

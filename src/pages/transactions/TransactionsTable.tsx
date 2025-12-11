@@ -7,6 +7,7 @@ import {
 import type React from "react";
 import { MOCK_ACCOUNTS } from "@/shared/data/constants";
 import type { Transaction } from "@/shared/types/types";
+import Button from "@/shared/components/Button"; // Import Button component
 
 interface TransactionsTableProps {
 	sortedAndFilteredTransactions: Transaction[];
@@ -211,6 +212,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 								<td className="px-6 py-4 text-center">
 									<button
 										onClick={() => openEditModal(t)}
+										icon={<MoreHorizontal size={18} />}
 										className="text-slate-300 opacity-0 transition-opacity group-hover:opacity-100 hover:text-slate-600 dark:text-slate-500 dark:hover:text-white"
 									>
 										<MoreHorizontal size={18} />

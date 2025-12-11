@@ -1,6 +1,7 @@
 import { Globe } from "lucide-react";
 import type React from "react";
 import profile from "@/shared/assets/profile.jpg";
+import Button from "@/shared/components/Button"; // Import Button component
 
 
 interface ProfileSettingsProps {
@@ -25,9 +26,12 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 					className="h-20 w-20 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
 				/>
 				<div>
-					<button className="rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600">
+					<Button
+						variant="secondary"
+						className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+					>
 						Change Photo
-					</button>
+					</Button>
 					<p className="mt-2 text-xs text-slate-400">
 						JPG, GIF or PNG. Max size 800K
 					</p>
