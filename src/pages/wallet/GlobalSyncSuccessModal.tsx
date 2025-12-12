@@ -17,11 +17,7 @@ const GlobalSyncSuccessModal: React.FC<GlobalSyncSuccessModalProps> = ({
 				<p className="mb-6 text-lg text-slate-600">
 					Your financial data has been successfully updated.
 				</p>
-				<Button
-					variant="primary"
-					onClick={onClose}
-					className="px-10"
-				>
+				<Button variant="primary" onClick={onClose} className="px-10">
 					Close
 				</Button>
 			</div>

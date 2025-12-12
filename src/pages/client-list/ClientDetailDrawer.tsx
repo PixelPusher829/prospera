@@ -11,7 +11,8 @@ import {
 import type React from "react";
 import type { Client } from "@/shared/types/types";
 import { ClientStatus } from "@/shared/types/types";
-import Button from "@/shared/components/Button"; // Import Button component
+import Button from "@/shared/components/Button";
+import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
 
 interface ClientDetailDrawerProps {
 	isDrawerOpen: boolean;
@@ -32,6 +33,17 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 	saveDrawerChanges,
 	setClients,
 }) => {
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+	) => {
+		const { name, value } = e.target;
+		setDrawerForm({ ...drawerForm, [name]: value });
+	};
+
+	const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setDrawerForm({ ...drawerForm, status: e.target.value as ClientStatus });
+	};
+
 	return (
 		<>
 			{/* Slide-out Drawer Overlay */}
@@ -101,107 +113,54 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 
 							{/* Form Fields */}
 							<div className="space-y-4">
-								<div>
-									<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-										Full Name
-									</label>
-									<div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
-										<User size={18} className="text-slate-400" />
-										<input
-											type="text"
-											value={drawerForm.name}
-											onChange={(e) =>
-												setDrawerForm({ ...drawerForm, name: e.target.value })
-											}
-											className="flex-1 text-sm text-slate-700 outline-none"
-										/>
-									</div>
-								</div>
+								<InputField
+									label="Full Name"
+									name="name"
+									value={drawerForm.name}
+									onChange={handleInputChange}
+								/>
 
-								<div>
-									<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-										Email Address
-									</label>
-									<div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
-										<Mail size={18} className="text-slate-400" />
-										<input
-											type="email"
-											value={drawerForm.email}
-											onChange={(e) =>
-												setDrawerForm({ ...drawerForm, email: e.target.value })
-											}
-											className="flex-1 text-sm text-slate-700 outline-none"
-										/>
-									</div>
-								</div>
+								<InputField
+									label="Email Address"
+									name="email"
+									type="email"
+									value={drawerForm.email}
+									onChange={handleInputChange}
+								/>
 
-								<div>
-									<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-										Company
-									</label>
-									<div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
-										<Building size={18} className="text-slate-400" />
-										<input
-											type="text"
-											value={drawerForm.company}
-											onChange={(e) =>
-												setDrawerForm({
-													...drawerForm,
-													company: e.target.value,
-												})
-											}
-											className="flex-1 text-sm text-slate-700 outline-none"
-										/>
-									</div>
-								</div>
+								<InputField
+									label="Company"
+									name="company"
+									value={drawerForm.company}
+									onChange={handleInputChange}
+								/>
 
 								<div className="grid grid-cols-2 gap-4">
-									<div>
-										<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-											Revenue
-										</label>
-										<div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20">
-											<DollarSign size={18} className="text-slate-400" />
-											<input
-												type="number"
-												value={drawerForm.revenue}
-												onChange={(e) =>
-													setDrawerForm({
-														...drawerForm,
-														revenue: Number(e.target.value),
-													})
-												}
-												className="flex-1 text-sm text-slate-700 outline-none"
-											/>
-										</div>
-									</div>
-									<div>
-										<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-											Status
-										</label>
-										<div className="relative">
-											<select
-												value={drawerForm.status}
-												onChange={(e) =>
-													setDrawerForm({
-														...drawerForm,
-														status: e.target.value as ClientStatus,
-													})
-												}
-												className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none"
-											>
-												<option value={ClientStatus.Active}>Active</option>
-												<option value={ClientStatus.Pending}>Pending</option>
-												<option value={ClientStatus.Inactive}>Inactive</option>
-											</select>
-											<div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
-												<ChevronRight
-													size={14}
-													className="rotate-90 text-slate-400"
-												/>
-											</div>
-										</div>
-									</div>
+									<InputField
+										label="Revenue"
+										name="revenue"
+										type="number"
+										value={drawerForm.revenue}
+										onChange={handleInputChange}
+									/>
+									<SelectField
+										label="Status"
+										name="status"
+										value={drawerForm.status}
+										onValueChange={(value) =>
+											handleStatusChange({
+												target: { name: "status", value },
+											} as React.ChangeEvent<HTMLSelectElement>)
+										}
+									>
+										<SelectItem value={ClientStatus.Active}>Active</SelectItem>
+										<SelectItem value={ClientStatus.Pending}>
+											Pending
+										</SelectItem>
+										<SelectItem value={ClientStatus.Inactive}>
+											Inactive
+										</SelectItem>
+									</SelectField>
 								</div>
 							</div>
 
@@ -250,10 +209,7 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 							>
 								<Trash2 size={20} />
 							</button>
-							<Button
-								onClick={saveDrawerChanges}
-								icon={<Save size={18} />}
-							>
+							<Button onClick={saveDrawerChanges} icon={<Save size={18} />}>
 								Save Changes
 							</Button>
 						</div>

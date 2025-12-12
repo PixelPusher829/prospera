@@ -4,10 +4,12 @@ import {
 	ArrowUpRight,
 	MoreHorizontal,
 } from "lucide-react";
-import type React from "react";
+import React, { useMemo } from "react";
 import { MOCK_ACCOUNTS } from "@/shared/data/constants";
 import type { Transaction } from "@/shared/types/types";
-import Button from "@/shared/components/Button"; // Import Button component
+import Button from "@/shared/components/Button";
+import { Checkbox } from "@/shared/components/forms";
+import StatusBadge from "@/shared/components/StatusBadge";
 
 interface TransactionsTableProps {
 	sortedAndFilteredTransactions: Transaction[];
@@ -18,6 +20,7 @@ interface TransactionsTableProps {
 	sortField: keyof Transaction | null;
 	sortDirection: "asc" | "desc";
 	openEditModal: (transaction: Transaction) => void;
+	onCategoryChange: (transactionId: string, newCategory: string) => void;
 }
 
 const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -29,7 +32,15 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 	sortField,
 	sortDirection,
 	openEditModal,
+	onCategoryChange,
 }) => {
+	const allCategories = useMemo(() => {
+		const categories = new Set(
+			sortedAndFilteredTransactions.map((t) => t.category),
+		);
+		return Array.from(categories);
+	}, [sortedAndFilteredTransactions]);
+
 	return (
 		<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
 			<div className="overflow-x-auto">
@@ -37,8 +48,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 					<thead>
 						<tr className="border-b border-slate-100 bg-slate-50 dark:border-slate-700 dark:bg-slate-900">
 							<th className="w-12 px-6 py-4">
-								<input
-									type="checkbox"
+								<Checkbox
 									checked={
 										selectedTransactionIds.size ===
 											sortedAndFilteredTransactions.length &&
@@ -142,15 +152,14 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 								className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50 focus:outline-none dark:border-slate-700 dark:hover:bg-slate-700/50"
 							>
 								<td className="px-6 py-4">
-									<input
-										type="checkbox"
+									<Checkbox
 										checked={selectedTransactionIds.has(t.id)}
 										onChange={() => toggleSelection(t.id)}
 										onClick={(e) => e.stopPropagation()} // Prevent row click from opening edit modal
 										className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
 									/>
 								</td>
-								<td className="px-6 py-4 text-sm font-medium text-slate-500 tabular-nums dark:text-slate-400">
+								<td className=" px-6 py-4 text-sm font-medium text-slate-500 tabular-nums dark:text-slate-400">
 									{t.date}
 								</td>
 								<td className="px-6 py-4">
@@ -174,10 +183,28 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 									</div>
 								</td>
 								<td className="px-6 py-4">
-									<span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
-										{t.category}
-									</span>
-								</td>
+									<div className="relative inline-block">
+										<span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
+											{t.category}
+										</span>
+										<select
+											value={t.category}
+											onChange={(e) => onCategoryChange(t.id, e.target.value)}
+											className="absolute inset-0 w-full h-full opacity-0 top-1 cursor-pointer  text-sm"
+										>
+											{allCategories.map((category) => (
+												<option key={category} value={category}>
+													{category}
+												</option>
+											))}
+											{!allCategories.includes(t.category) && (
+												<option key={t.category} value={t.category}>
+													{t.category}
+												</option>
+											)}
+										</select>
+									</div>
+								</td>{" "}
 								<td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
 									{MOCK_ACCOUNTS.find((a) => a.id === t.accountId)?.type}
 								</td>
@@ -191,23 +218,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 									{t.type === "income" ? "+" : "-"}${t.amount.toFixed(2)}
 								</td>
 								<td className="px-6 py-4 text-center">
-									{t.status === "cleared" ? (
-										<span
-											className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800"
-											title="Cleared"
-										>
-											<span className="inline-block h-2 w-2 rounded-full bg-green-500"></span>{" "}
-											Cleared
-										</span>
-									) : (
-										<span
-											className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-800"
-											title="Pending"
-										>
-											<span className="inline-block h-2 w-2 rounded-full bg-amber-400"></span>{" "}
-											Pending
-										</span>
-									)}
+									<StatusBadge status={t.status} />
 								</td>
 								<td className="px-6 py-4 text-center">
 									<button

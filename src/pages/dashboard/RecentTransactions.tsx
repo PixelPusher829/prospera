@@ -14,7 +14,7 @@ const RecentTransactions: React.FC<{
 				</h3>
 				<button
 					onClick={() => setActiveTab("transactions")}
-					className="text-sm font-medium text-pink-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
+					className="text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
 				>
 					View All
 				</button>

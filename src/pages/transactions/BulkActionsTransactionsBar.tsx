@@ -22,7 +22,7 @@ const BulkActionsTransactionsBar: React.FC<BulkActionsTransactionsBarProps> = ({
 	}
 
 	return (
-		<div className="animate-in fade-in slide-in-from-bottom-4 fixed bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-6 rounded-2xl bg-slate-900 px-6 py-3 text-white shadow-xl dark:bg-slate-700">
+		<div className="animate-in fade-in slide-in-from-bottom-4 fixed bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-6 rounded-2xl bg-slate-600 px-6 py-3 text-white shadow-xl dark:bg-slate-700">
 			<span className="text-sm font-medium">
 				{selectedTransactionIds.size} selected
 			</span>
@@ -31,7 +31,7 @@ const BulkActionsTransactionsBar: React.FC<BulkActionsTransactionsBarProps> = ({
 				<select
 					onChange={(e) => handleBulkCategoryAssign(e.target.value)}
 					value="" // Controlled component, reset after selection
-					className="cursor-pointer rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-white focus:outline-none"
+					className="cursor-pointer rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-800 focus:outline-none"
 				>
 					<option value="" disabled>
 						Bulk Assign Category
@@ -50,7 +50,7 @@ const BulkActionsTransactionsBar: React.FC<BulkActionsTransactionsBarProps> = ({
 				onClick={() => setSelectedTransactionIds(new Set())}
 				className="ml-2"
 			>
-				<X size={16} />
+				<X size={20} />
 			</button>
 		</div>
 	);

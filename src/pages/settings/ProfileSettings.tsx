@@ -1,8 +1,8 @@
 import { Globe } from "lucide-react";
 import type React from "react";
 import profile from "@/shared/assets/profile.jpg";
-import Button from "@/shared/components/Button"; // Import Button component
-
+import Button from "@/shared/components/Button";
+import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
 
 interface ProfileSettingsProps {
 	formData: any;
@@ -17,6 +17,17 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 	errors,
 	setErrors,
 }) => {
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setFormData({ ...formData, [name]: value });
+		setErrors((prev: any) => ({ ...prev, [name]: "" }));
+	};
+
+	const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const { name, value } = e.target;
+		setFormData({ ...formData, [name]: value });
+	};
+
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-6 border-b border-slate-100 pb-6 dark:border-slate-700">
@@ -39,98 +50,56 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-				<div>
-					<label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-						Full Name
-					</label>
-					<input
-						type="text"
-						value={formData.name}
-						onChange={(e) => {
-							setFormData({
-								...formData,
-								name: e.target.value,
-							});
-							setErrors((prev: any) => ({ ...prev, name: "" }));
-						}}
-						className={`w-full rounded-xl border px-4 py-2.5 ${
-							errors.name
-								? "border-red-500"
-								: "border-slate-200 dark:border-slate-600"
-						} bg-slate-50 text-slate-700 transition-all outline-none focus:ring-2 focus:ring-violet-500 dark:bg-slate-900 dark:text-white`}
+				<InputField
+					label="Full Name"
+					name="name"
+					value={formData.name}
+					onChange={handleInputChange}
+					error={errors.name}
+				/>
+				<InputField
+					label="Email Address"
+					name="email"
+					type="email"
+					value={formData.email}
+					onChange={handleInputChange}
+					error={errors.email}
+				/>
+				<div className="relative">
+					<Globe
+						size={18}
+						className="absolute bottom-1 left-3 -translate-y-1/2 text-slate-400"
 					/>
-					{errors.name && (
-						<p className="mt-1 text-xs text-red-500">{errors.name}</p>
-					)}
-				</div>
-				<div>
-					<label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-						Email Address
-					</label>
-					<input
-						type="email"
-						value={formData.email}
-						onChange={(e) => {
-							setFormData({
-								...formData,
-								email: e.target.value,
-							});
-							setErrors((prev: any) => ({ ...prev, email: "" }));
-						}}
-						className={`w-full rounded-xl border px-4 py-2.5 ${
-							errors.email
-								? "border-red-500"
-								: "border-slate-200 dark:border-slate-600"
-						} bg-slate-50 text-slate-700 transition-all outline-none focus:ring-2 focus:ring-violet-500 dark:bg-slate-900 dark:text-white`}
-					/>
-					{errors.email && (
-						<p className="mt-1 text-xs text-red-500">{errors.email}</p>
-					)}
-				</div>
-				<div>
-					<label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-						Language
-					</label>
-					<div className="relative">
-						<Globe
-							size={18}
-							className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400"
-						/>
-						<select
-							value={formData.language}
-							onChange={(e) =>
-								setFormData({
-									...formData,
-									language: e.target.value,
-								})
-							}
-							className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-4 pl-10 text-slate-700 transition-all outline-none focus:ring-2 focus:ring-violet-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-						>
-							<option>English</option>
-							<option>Spanish</option>
-							<option>French</option>
-						</select>
-					</div>
-				</div>
-				<div>
-					<label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-						Currency
-					</label>
-					<select
-						value={formData.currency}
-						onChange={(e) =>
-							setFormData({
-								...formData,
-								currency: e.target.value,
-							})
+					<SelectField
+						label="Language"
+						name="language"
+						value={formData.language}
+						onValueChange={(value) =>
+							handleSelectChange({
+								target: { name: "language", value },
+							} as React.ChangeEvent<HTMLSelectElement>)
 						}
-						className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-700 transition-all outline-none focus:ring-2 focus:ring-violet-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
+						className="pl-10"
 					>
-						<option>USD ($)</option>
-						<option>EUR (€)</option>
-						<option>GBP (£)</option>
-					</select>
+						<SelectItem value="English">English</SelectItem>
+						<SelectItem value="Spanish">Spanish</SelectItem>
+						<SelectItem value="French">French</SelectItem>
+					</SelectField>
 				</div>
+				<SelectField
+					label="Currency"
+					name="currency"
+					value={formData.currency}
+					onValueChange={(value) =>
+						handleSelectChange({
+							target: { name: "currency", value },
+						} as React.ChangeEvent<HTMLSelectElement>)
+					}
+				>
+					<SelectItem value="USD ($)">USD ($)</SelectItem>
+					<SelectItem value="EUR (€)">EUR (€)</SelectItem>
+					<SelectItem value="GBP (£)">GBP (£)</SelectItem>
+				</SelectField>
 			</div>
 		</div>
 	);

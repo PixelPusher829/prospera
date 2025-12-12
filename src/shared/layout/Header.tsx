@@ -13,7 +13,7 @@ export default function Header({
 }): React.ReactElement {
 	return (
 		<div
-			className={`${className} flex flex-col items-start justify-between gap-4 md:flex-row md:items-center`}
+			className={`${className} flex flex-col items-start justify-between gap-4 md:flex-row md:items-end`}
 		>
 			<div>
 				<h1 className="$ text-3xl font-bold text-slate-700">{heading}</h1>

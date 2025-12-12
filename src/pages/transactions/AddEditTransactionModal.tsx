@@ -2,13 +2,19 @@ import { Save, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { Transaction } from "../types/types";
-import Button from "@/shared/components/Button"; // Import Button component
+import Button from "@/shared/components/Button";
+import {
+	InputField,
+	SelectField,
+	SelectItem,
+	DatePicker,
+} from "@/shared/components/forms";
 
 interface AddEditTransactionModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onSaveTransaction: (transaction: Transaction) => void;
-	transaction: Transaction | null; // Optional: transaction to be edited
+	transaction: Transaction | null;
 }
 
 const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
@@ -23,18 +29,17 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 		date: new Date().toISOString().split("T")[0],
 		category: "Uncategorized",
 		type: "expense",
-		status: "pending", // Default status for new transactions
-		accountId: "1", // Mock accountId
+		status: "pending",
+		accountId: "1",
 	});
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
 	useEffect(() => {
 		if (isOpen) {
 			if (transaction) {
-				// Populate form with existing transaction data for editing
 				setCurrentTransaction({
 					payee: transaction.payee,
-					amount: String(transaction.amount), // Convert number to string for input
+					amount: String(transaction.amount),
 					date: transaction.date,
 					category: transaction.category,
 					type: transaction.type,
@@ -42,7 +47,6 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 					accountId: transaction.accountId,
 				});
 			} else {
-				// Reset form for adding a new transaction
 				setCurrentTransaction({
 					payee: "",
 					amount: "",
@@ -50,10 +54,10 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 					category: "Uncategorized",
 					type: "expense",
 					status: "pending",
-					accountId: "1", // Mock accountId
+					accountId: "1",
 				});
 			}
-			setErrors({}); // Clear errors when modal opens
+			setErrors({});
 		}
 	}, [isOpen, transaction]);
 
@@ -85,13 +89,13 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 		}
 
 		const transactionToSave: Transaction = {
-			id: transaction ? transaction.id : new Date().toISOString(), // Use existing ID if editing, new ID if adding
+			id: transaction ? transaction.id : new Date().toISOString(),
 			payee: currentTransaction.payee,
 			amount: parseFloat(currentTransaction.amount),
 			date: currentTransaction.date,
 			category: currentTransaction.category,
 			type: currentTransaction.type as "income" | "expense",
-			accountId: currentTransaction.accountId, // Mock accountId
+			accountId: currentTransaction.accountId,
 			status: currentTransaction.status as "cleared" | "pending",
 		};
 
@@ -117,97 +121,65 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 					</button>
 				</div>
 				<div className="space-y-4 p-6">
-					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
-							Payee
-						</label>
-						<input
-							type="text"
-							name="payee"
-							value={currentTransaction.payee}
-							onChange={handleInputChange}
-							className={`w-full rounded-lg border px-3 py-2 transition-colors dark:bg-slate-900 dark:text-white ${errors.payee ? "border-red-500" : "border-slate-200 dark:border-slate-600"}`}
-							placeholder="e.g., Amazon, Salary"
-						/>
-						{errors.payee && (
-							<p className="mt-1 text-xs text-red-500">{errors.payee}</p>
-						)}
-					</div>
+					<InputField
+						label="Payee"
+						name="payee"
+						value={currentTransaction.payee}
+						onChange={handleInputChange}
+						placeholder="e.g., Amazon, Salary"
+						error={errors.payee}
+					/>
 					<div className="grid grid-cols-2 gap-4">
-						<div>
-							<label className="mb-1 block text-sm font-medium text-slate-600">
-								Amount
-							</label>
-							<div className="relative">
-								<span className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
-									$
-								</span>
-								<input
-									type="number"
-									name="amount"
-									value={currentTransaction.amount}
-									onChange={handleInputChange}
-									className={`w-full rounded-lg border py-2 pr-3 pl-7 transition-colors dark:bg-slate-900 dark:text-white ${errors.amount ? "border-red-500" : "border-slate-200 dark:border-slate-600"}`}
-									placeholder="0.00"
-								/>
-							</div>
-							{errors.amount && (
-								<p className="mt-1 text-xs text-red-500">{errors.amount}</p>
-							)}
-						</div>
-						<div>
-							<label className="mb-1 block text-sm font-medium text-slate-600">
-								Type
-							</label>
-							<select
-								name="type"
-								value={currentTransaction.type}
-								onChange={handleInputChange}
-								className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-							>
-								<option value="expense">Expense</option>
-								<option value="income">Income</option>
-							</select>
-						</div>
-					</div>
-					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
-							Category
-						</label>
-						<input
-							type="text"
-							name="category"
-							value={currentTransaction.category}
+						<InputField
+							label="Amount"
+							name="amount"
+							type="number"
+							value={currentTransaction.amount}
 							onChange={handleInputChange}
-							className="w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
+							placeholder="0.00"
+							error={errors.amount}
 						/>
-					</div>
-					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
-							Date
-						</label>
-						<input
-							type="date"
-							name="date"
-							value={currentTransaction.date}
-							onChange={handleInputChange}
-							className="w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-						/>
-					</div>
-					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
-							Status
-						</label>
-						<select
-							name="status"
-							value={currentTransaction.status}
-							onChange={handleInputChange}
-							className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
+						<SelectField
+							label="Type"
+							name="type"
+							value={currentTransaction.type}
+							onValueChange={(value) =>
+								handleInputChange({
+									target: { name: "type", value },
+								} as React.ChangeEvent<HTMLSelectElement>)
+							}
 						>
-							<option value="pending">Pending</option>
-							<option value="cleared">Cleared</option>
-						</select>
+							<SelectItem value="expense">Expense</SelectItem>
+							<SelectItem value="income">Income</SelectItem>
+						</SelectField>
 					</div>
+					<InputField
+						label="Category"
+						name="category"
+						value={currentTransaction.category}
+						onChange={handleInputChange}
+					/>
+					<DatePicker
+						label="Date"
+						name="date"
+						value={currentTransaction.date}
+						onChange={(e) =>
+							handleInputChange(e as React.ChangeEvent<HTMLInputElement>)
+						}
+					/>
+					<SelectField
+						label="Status"
+						name="status"
+						value={currentTransaction.status}
+						onValueChange={(value) =>
+							handleInputChange({
+								target: { name: "status", value },
+							} as React.ChangeEvent<HTMLSelectElement>)
+						}
+					>
+						<SelectItem value="pending">Pending</SelectItem>
+						<SelectItem value="cleared">Cleared</SelectItem>
+					</SelectField>
 				</div>
 				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6">
 					<Button

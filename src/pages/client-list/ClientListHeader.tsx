@@ -2,6 +2,7 @@ import { ChevronRight, Filter, Plus, Search } from "lucide-react";
 import type React from "react";
 import { ClientStatus } from "@/shared/types/types";
 import Button from "@/shared/components/Button"; // Import Button component
+import { InputField } from "@/shared/components/forms";
 
 interface ClientListHeaderProps {
 	searchQuery: string;
@@ -45,7 +46,6 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 							onClick={() => {
 								setStatusFilter("All");
 								setIsStatusFilterOpen(false);
-								
 							}}
 							onKeyDown={(e) => {
 								if (e.key === "Enter" || e.key === " ") {
@@ -113,7 +113,7 @@ const ClientListHeader: React.FC<ClientListHeaderProps> = ({
 					className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400"
 					size={18}
 				/>
-				<input
+				<InputField
 					type="text"
 					placeholder="Search clients..."
 					value={searchQuery}

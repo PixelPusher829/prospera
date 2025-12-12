@@ -47,8 +47,12 @@ const BulkActionsBar: React.FC<BulkActionsBarProps> = ({
 					Delete
 				</button>
 			</div>
-			<button onClick={() => setSelectedIds(new Set())} className="ml-2" aria-label="close"
-				type="button">
+			<button
+				onClick={() => setSelectedIds(new Set())}
+				className="ml-2"
+				aria-label="close"
+				type="button"
+			>
 				<X size={16} />
 			</button>
 		</div>

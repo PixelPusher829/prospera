@@ -1,4 +1,5 @@
 import type React from "react";
+import { Switch } from "@/shared/components/forms";
 
 interface NotificationsSettingsProps {
 	formData: any;

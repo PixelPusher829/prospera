@@ -15,9 +15,7 @@ const BillingSettings: React.FC = () => {
 			<p className="mb-6 text-slate-500 dark:text-slate-400">
 				Manage your subscription and billing details
 			</p>
-			<Button variant="primary">
-				Add Payment Method
-			</Button>
+			<Button variant="primary">Add Payment Method</Button>
 		</div>
 	);
 };

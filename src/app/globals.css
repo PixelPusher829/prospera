@@ -6,7 +6,7 @@
 		--primary-pink: #ec1b69;
 	}
 	input[type="checkbox"] {
-		accent-color: var(--primary-pink);
+		accent-color: var(--color-violet-700);
 	}
 }
 

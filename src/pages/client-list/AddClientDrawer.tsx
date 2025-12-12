@@ -10,7 +10,8 @@ import {
 import type React from "react";
 import { useState } from "react";
 import { type Client, ClientStatus } from "@/shared/types/types";
-import Button from "@/shared/components/Button"; // Import Button component
+import Button from "@/shared/components/Button";
+import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
 
 interface AddClientDrawerProps {
 	isOpen: boolean;
@@ -86,7 +87,9 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 				/>
 			)}
 			<div
-				className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-out md:w-[480px] ${isOpen ? "translate-x-0" : "translate-x-full"} `}
+				className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-out md:w-[480px] ${
+					isOpen ? "translate-x-0" : "translate-x-full"
+				} `}
 			>
 				<div className="flex h-full flex-col">
 					{/* Drawer Header */}
@@ -110,117 +113,58 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 					{/* Drawer Content */}
 					<div className="flex-1 space-y-6 overflow-y-auto p-6">
 						<div className="space-y-4">
-							<div>
-								<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-									Full Name
-								</label>
-								<div
-									className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition-all ${errors.name ? "border-red-500" : "border-slate-200 focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20"}`}
-								>
-									<User size={18} className="text-slate-400" />
-									<input
-										type="text"
-										name="name"
-										value={newClient.name}
-										onChange={handleInputChange}
-										className="flex-1 bg-transparent text-sm text-slate-700 outline-none"
-										placeholder="e.g., John Doe"
-									/>
-								</div>
-								{errors.name && (
-									<p className="mt-1 ml-1 text-xs text-red-500">
-										{errors.name}
-									</p>
-								)}
-							</div>
+							<InputField
+								label="Full Name"
+								name="name"
+								value={newClient.name}
+								onChange={handleInputChange}
+								placeholder="e.g., John Doe"
+								error={errors.name}
+							/>
 
-							<div>
-								<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-									Email Address
-								</label>
-								<div
-									className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition-all ${errors.email ? "border-red-500" : "border-slate-200 focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20"}`}
-								>
-									<Mail size={18} className="text-slate-400" />
-									<input
-										type="email"
-										name="email"
-										value={newClient.email}
-										onChange={handleInputChange}
-										className="flex-1 bg-transparent text-sm text-slate-700 outline-none"
-										placeholder="e.g., john.doe@example.com"
-									/>
-								</div>
-								{errors.email && (
-									<p className="mt-1 ml-1 text-xs text-red-500">
-										{errors.email}
-									</p>
-								)}
-							</div>
+							<InputField
+								label="Email Address"
+								name="email"
+								type="email"
+								value={newClient.email}
+								onChange={handleInputChange}
+								placeholder="e.g., john.doe@example.com"
+								error={errors.email}
+							/>
 
-							<div>
-								<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-									Company
-								</label>
-								<div
-									className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition-all ${errors.company ? "border-red-500" : "border-slate-200 focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20"}`}
-								>
-									<Building size={18} className="text-slate-400" />
-									<input
-										type="text"
-										name="company"
-										value={newClient.company}
-										onChange={handleInputChange}
-										className="flex-1 bg-transparent text-sm text-slate-700 outline-none"
-										placeholder="e.g., Acme Inc."
-									/>
-								</div>
-								{errors.company && (
-									<p className="mt-1 ml-1 text-xs text-red-500">
-										{errors.company}
-									</p>
-								)}
-							</div>
+							<InputField
+								label="Company"
+								name="company"
+								value={newClient.company}
+								onChange={handleInputChange}
+								placeholder="e.g., Acme Inc."
+								error={errors.company}
+							/>
 
 							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-										Revenue
-									</label>
-									<div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20">
-										<DollarSign size={18} className="text-slate-400" />
-										<input
-											type="number"
-											name="revenue"
-											value={newClient.revenue}
-											onChange={handleInputChange}
-											className="flex-1 text-sm text-slate-700 outline-none"
-										/>
-									</div>
-								</div>
-								<div>
-									<label className="mb-1.5 ml-1 block text-xs font-semibold text-slate-500 uppercase">
-										Status
-									</label>
-									<div className="relative">
-										<select
-											name="status"
-											value={newClient.status}
-											onChange={handleInputChange}
-											className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none"
-										>
-											<option value={ClientStatus.Pending}>Pending</option>
-											<option value={ClientStatus.Active}>Active</option>
-											<option value={ClientStatus.Inactive}>Inactive</option>
-										</select>
-										<div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
-											<ChevronRight
-												size={14}
-												className="rotate-90 text-slate-400"
-											/>
-										</div>
-									</div>
-								</div>
+								<InputField
+									label="Revenue"
+									name="revenue"
+									type="number"
+									value={newClient.revenue}
+									onChange={handleInputChange}
+								/>
+								<SelectField
+									label="Status"
+									name="status"
+									value={newClient.status}
+									onValueChange={(value) =>
+										handleInputChange({
+											target: { name: "status", value },
+										} as React.ChangeEvent<HTMLSelectElement>)
+									}
+								>
+									<SelectItem value={ClientStatus.Pending}>Pending</SelectItem>
+									<SelectItem value={ClientStatus.Active}>Active</SelectItem>
+									<SelectItem value={ClientStatus.Inactive}>
+										Inactive
+									</SelectItem>
+								</SelectField>
 							</div>
 						</div>
 					</div>

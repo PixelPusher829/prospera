@@ -2,7 +2,14 @@ import { Calendar, Filter, Search } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
 import type { AccountType, Transaction } from "@/shared/types/types";
-import Button from "@/shared/components/Button"; // Import Button component
+import Button from "@/shared/components/Button";
+import {
+	InputField,
+	SelectField,
+	SelectItem,
+	Checkbox,
+} from "@/shared/components/forms";
+import DateRangeFilter from "./DateRangeFilter";
 
 interface TransactionFiltersProps {
 	searchTerm: string;
@@ -47,7 +54,6 @@ const TransactionFilters: React.FC<TransactionFiltersProps> = ({
 	setSelectedCategories,
 	transactions,
 }) => {
-	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 	const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false);
 
 	const allCategories = useMemo(() => {
@@ -62,7 +68,7 @@ const TransactionFilters: React.FC<TransactionFiltersProps> = ({
 					className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400"
 					size={18}
 				/>
-				<input
+				<InputField
 					type="text"
 					placeholder="Search payee or category..."
 					value={searchTerm}
@@ -70,164 +76,99 @@ const TransactionFilters: React.FC<TransactionFiltersProps> = ({
 					className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pr-4 pl-10 text-sm text-slate-700 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
 				/>
 			</div>
-			<div className="flex gap-2">
-				<select
+			<div className="flex gap-3">
+				<SelectField
 					value={transactionTypeFilter}
-					onChange={(e) => setTransactionTypeFilter(e.target.value as any)}
-					className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+					onValueChange={(value) => setTransactionTypeFilter(value as any)}
+					className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 min-w-max flex-shrink-0"
 				>
-					<option value="all">All Transaction Types</option>
-					<option value="income">Income</option>
-					<option value="expense">Expense</option>
-				</select>
+					<SelectItem value="all">All Transaction Types</SelectItem>
+					<SelectItem value="income">Income</SelectItem>
+					<SelectItem value="expense">Expense</SelectItem>
+				</SelectField>
 				{/* Account Type Filter */}
-				<select
+				<SelectField
 					value={selectedAccountTypeFilter}
-					onChange={(e) =>
-						setSelectedAccountTypeFilter(e.target.value as AccountType | "all")
+					onValueChange={(value) =>
+						setSelectedAccountTypeFilter(value as AccountType | "all")
 					}
 					className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
 				>
-					<option value="all">All Account Types</option>
-					<option value="Cash">Cash</option>
-					<option value="Debit">Debit</option>
-					<option value="Credit">Credit</option>
-					<option value="Savings">Savings</option>
-					<option value="Loan">Loan</option>
-					<option value="Investment">Investment</option>
-				</select>
-				<div className="relative">
-					<button
-						onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-						className="rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-500 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white"
-					>
-						<Calendar size={18} />
-					</button>
-					{isDatePickerOpen && (
-						<div className="absolute top-full right-0 z-10 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-4 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-							<div className="flex flex-col gap-4">
-								<div>
-									<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
-										Start Date
-									</label>
-									<input
-										type="date"
-										value={startDate || ""}
-										onChange={(e) => setStartDate(e.target.value)}
-										className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-									/>
-								</div>
-								<div>
-									<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
-										End Date
-									</label>
-									<input
-										type="date"
-										value={endDate || ""}
-										onChange={(e) => setEndDate(e.target.value)}
-										className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-									/>
-								</div>
-								<Button
-									variant="secondary"
-									onClick={() => {
-										setStartDate(null);
-										setEndDate(null);
-									}}
-								>
-									Clear
-								</Button>
-							</div>
-						</div>
-					)}
-				</div>
+					<SelectItem value="all">All Account Types</SelectItem>
+					<SelectItem value="Cash">Cash</SelectItem>
+					<SelectItem value="Debit">Debit</SelectItem>
+					<SelectItem value="Credit">Credit</SelectItem>
+					<SelectItem value="Savings">Savings</SelectItem>
+					<SelectItem value="Loan">Loan</SelectItem>
+					<SelectItem value="Investment">Investment</SelectItem>
+				</SelectField>
+				<DateRangeFilter
+					startDate={startDate}
+					setStartDate={setStartDate}
+					endDate={endDate}
+					setEndDate={setEndDate}
+				/>
 				<div className="relative">
 					<button
 						onClick={() => setIsCustomFilterOpen(!isCustomFilterOpen)}
-						className="rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-500 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white"
+						className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-500 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white"
 					>
 						<Filter size={18} />
 					</button>
 					{isCustomFilterOpen && (
 						<div className="absolute top-full right-0 z-10 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-4 shadow-lg dark:border-slate-700 dark:bg-slate-800">
 							<div className="flex flex-col gap-4">
-								<div>
-									<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
-										Min Amount
-									</label>
-									<input
-										type="number"
-										value={minAmount}
-										onChange={(e) => setMinAmount(e.target.value)}
-										className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-										placeholder="e.g., 10"
-									/>
-								</div>
-								<div>
-									<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
-										Max Amount
-									</label>
-									<input
-										type="number"
-										value={maxAmount}
-										onChange={(e) => setMaxAmount(e.target.value)}
-										className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-										placeholder="e.g., 500"
-									/>
-								</div>
-								<div>
-									<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
-										Status
-									</label>
-									<select
-										value={statusFilter}
-										onChange={(e) =>
-											setStatusFilter(
-												e.target.value as "all" | "cleared" | "pending",
-											)
-										}
-										className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-white"
-									>
-										<option value="all">All Statuses</option>
-										<option value="cleared">Cleared</option>
-										<option value="pending">Pending</option>
-									</select>
-								</div>
+								<InputField
+									label="Min Amount"
+									type="number"
+									value={minAmount}
+									onChange={(e) => setMinAmount(e.target.value)}
+									placeholder="e.g., 10"
+								/>
+								<InputField
+									label="Max Amount"
+									type="number"
+									value={maxAmount}
+									onChange={(e) => setMaxAmount(e.target.value)}
+									placeholder="e.g., 500"
+								/>
+								<SelectField
+									label="Status"
+									value={statusFilter}
+									onValueChange={(value) =>
+										setStatusFilter(value as "all" | "cleared" | "pending")
+									}
+								>
+									<SelectItem value="all">All Statuses</SelectItem>
+									<SelectItem value="cleared">Cleared</SelectItem>
+									<SelectItem value="pending">Pending</SelectItem>
+								</SelectField>
 								<div>
 									<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
 										Categories
 									</label>
 									<div className="max-h-32 overflow-y-auto rounded-lg border border-slate-200 p-2 dark:border-slate-600">
 										{allCategories.map((category) => (
-											<div key={category} className="flex items-center gap-2">
-												<input
-													type="checkbox"
-													id={`category-${category}`}
-													value={category}
-													checked={selectedCategories.includes(category)}
-													onChange={(e) => {
-														if (e.target.checked) {
-															setSelectedCategories([
-																...selectedCategories,
-																category,
-															]);
-														} else {
-															setSelectedCategories(
-																selectedCategories.filter(
-																	(c) => c !== category,
-																),
-															);
-														}
-													}}
-													className="h-4 w-4 rounded border-gray-200 text-pink-600 focus:ring-pink-500"
-												/>
-												<label
-													htmlFor={`category-${category}`}
-													className="text-sm text-slate-600 dark:text-slate-300"
-												>
-													{category}
-												</label>
-											</div>
+											<Checkbox
+												key={category}
+												id={`category-${category}`}
+												label={category}
+												value={category}
+												className="py-4"
+												checked={selectedCategories.includes(category)}
+												onChange={(e) => {
+													if (e.target.checked) {
+														setSelectedCategories([
+															...selectedCategories,
+															category,
+														]);
+													} else {
+														setSelectedCategories(
+															selectedCategories.filter((c) => c !== category),
+														);
+													}
+												}}
+											/>
 										))}
 									</div>
 								</div>

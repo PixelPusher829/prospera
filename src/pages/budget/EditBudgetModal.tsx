@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { COLOR_PALETTE } from "@/shared/data/constants";
 import type { BudgetCategory } from "@/shared/types/types";
 import Button from "@/shared/components/Button"; // Import Button component
+import { InputField } from "@/shared/components/forms";
 
 interface EditBudgetModalProps {
 	isOpen: boolean;
@@ -106,45 +107,30 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 								className="grid grid-cols-14 items-start gap-4"
 							>
 								<div className="col-span-6">
-									<input
+									<InputField
 										type="text"
 										value={category.name}
 										onChange={(e) =>
 											handleCategoryChange(category.id, "name", e.target.value)
 										}
 										placeholder="Category Name"
-										className={`w-full rounded-lg border px-3 py-2 transition-colors ${categoryErrors.name ? "border-red-500" : "border-slate-200"}`}
+										error={categoryErrors.name}
 									/>
-									{categoryErrors.name && (
-										<p className="mt-1 text-xs text-red-500">
-											{categoryErrors.name}
-										</p>
-									)}
 								</div>
 								<div className="col-span-5">
-									<div className="relative">
-										<span className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
-											$
-										</span>
-										<input
-											type="number"
-											value={category.limit}
-											onChange={(e) =>
-												handleCategoryChange(
-													category.id,
-													"limit",
-													parseFloat(e.target.value) || 0,
-												)
-											}
-											placeholder="Limit"
-											className={`w-full rounded-lg border py-2 pr-3 pl-7 transition-colors ${categoryErrors.limit ? "border-red-500" : "border-slate-200"}`}
-										/>
-									</div>
-									{categoryErrors.limit && (
-										<p className="mt-1 text-xs text-red-500">
-											{categoryErrors.limit}
-										</p>
-									)}
+									<InputField
+										type="number"
+										value={category.limit}
+										onChange={(e) =>
+											handleCategoryChange(
+												category.id,
+												"limit",
+												parseFloat(e.target.value) || 0,
+											)
+										}
+										placeholder="Limit"
+										error={categoryErrors.limit}
+									/>
 								</div>
 								<div className="items-top relative col-span-1 mt-2 flex h-full justify-center">
 									<div
@@ -165,7 +151,11 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({
 														handleCategoryChange(category.id, "color", color);
 														setOpenColorPickerId(null);
 													}}
-													className={`h-6 w-6 cursor-pointer rounded-full border-2 ${category.color === color ? "border-violet-500" : "border-transparent"}`}
+													className={`h-6 w-6 cursor-pointer rounded-full border-2 ${
+														category.color === color
+															? "border-violet-500"
+															: "border-transparent"
+													}`}
 													style={{ backgroundColor: color }}
 												></div>
 											))}

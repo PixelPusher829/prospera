@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { COLOR_PALETTE } from "@/shared/data/constants";
 import type { Goal } from "@/shared/types/types";
 import Button from "@/shared/components/Button"; // Import Button component
+import { InputField, DatePicker } from "@/shared/components/forms";
 
 interface AddEditGoalModalProps {
 	isOpen: boolean;
@@ -115,88 +116,42 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 					</button>
 				</div>
 				<div className="space-y-4 p-6">
-					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
-							Goal Name
-						</label>
-						<div
-							className={`flex items-center gap-2 rounded-lg border px-3 py-2 transition-all ${errors.name ? "border-red-500" : "border-slate-200 focus-within:ring-2 focus-within:ring-violet-500"}`}
-						>
-							<Target size={18} className="text-slate-400" />
-							<input
-								type="text"
-								name="name"
-								value={currentGoal.name}
-								onChange={handleInputChange}
-								className="w-full bg-transparent outline-none"
-								placeholder="e.g., New Car Fund"
-							/>
-						</div>
-						{errors.name && (
-							<p className="mt-1 text-xs text-red-500">{errors.name}</p>
-						)}
-					</div>
+					<InputField
+						label="Goal Name"
+						name="name"
+						value={currentGoal.name}
+						onChange={handleInputChange}
+						placeholder="e.g., New Car Fund"
+						error={errors.name}
+					/>
 					<div className="grid grid-cols-2 gap-4">
-						<div>
-							<label className="mb-1 block text-sm font-medium text-slate-600">
-								Target Amount
-							</label>
-							<div
-								className={`flex items-center gap-2 rounded-lg border px-3 py-2 transition-all ${errors.targetAmount ? "border-red-500" : "border-slate-200 focus-within:ring-2 focus-within:ring-violet-500"}`}
-							>
-								<DollarSign size={18} className="text-slate-400" />
-								<input
-									type="number"
-									name="targetAmount"
-									value={currentGoal.targetAmount}
-									onChange={handleInputChange}
-									className="w-full bg-transparent outline-none"
-									placeholder="20000"
-								/>
-							</div>
-							{errors.targetAmount && (
-								<p className="mt-1 text-xs text-red-500">
-									{errors.targetAmount}
-								</p>
-							)}
-						</div>
-						<div>
-							<label className="mb-1 block text-sm font-medium text-slate-600">
-								Current Amount
-							</label>
-							<div className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 focus-within:ring-2 focus-within:ring-violet-500">
-								<DollarSign size={18} className="text-slate-400" />
-								<input
-									type="number"
-									name="currentAmount"
-									value={currentGoal.currentAmount}
-									onChange={handleInputChange}
-									className="w-full bg-transparent outline-none"
-									placeholder="5000"
-								/>
-							</div>
-						</div>
+						<InputField
+							label="Target Amount"
+							name="targetAmount"
+							type="number"
+							value={currentGoal.targetAmount}
+							onChange={handleInputChange}
+							placeholder="20000"
+							error={errors.targetAmount}
+						/>
+						<InputField
+							label="Current Amount"
+							name="currentAmount"
+							type="number"
+							value={currentGoal.currentAmount}
+							onChange={handleInputChange}
+							placeholder="5000"
+						/>
 					</div>
-					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
-							Deadline
-						</label>
-						<div
-							className={`flex items-center gap-2 rounded-lg border px-3 py-2 transition-all ${errors.deadline ? "border-red-500" : "border-slate-200 focus-within:ring-2 focus-within:ring-violet-500"}`}
-						>
-							<Calendar size={18} className="text-slate-400" />
-							<input
-								type="date"
-								name="deadline"
-								value={currentGoal.deadline}
-								onChange={handleInputChange}
-								className="w-full bg-transparent outline-none"
-							/>
-						</div>
-						{errors.deadline && (
-							<p className="mt-1 text-xs text-red-500">{errors.deadline}</p>
-						)}
-					</div>
+					<DatePicker
+						label="Deadline"
+						name="deadline"
+						value={currentGoal.deadline}
+						onChange={(e) =>
+							handleInputChange(e as React.ChangeEvent<HTMLInputElement>)
+						}
+						error={errors.deadline}
+					/>
 					<div>
 						<label className="mb-1 block text-sm font-medium text-slate-600">
 							Color
@@ -208,7 +163,11 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 									onClick={() =>
 										setCurrentGoal((prev) => ({ ...prev, color: color }))
 									}
-									className={`h-8 w-8 cursor-pointer rounded-full border-2 ${currentGoal.color === color ? "border-violet-500" : "border-transparent"}`}
+									className={`h-8 w-8 cursor-pointer rounded-full border-2 ${
+										currentGoal.color === color
+											? "border-violet-500"
+											: "border-transparent"
+									}`}
 									style={{ backgroundColor: color }}
 								></div>
 							))}

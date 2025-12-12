@@ -1,5 +1,6 @@
+import { Content } from "@radix-ui/react-select";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface InlineEditCellProps {
 	value: string | number;
@@ -11,52 +12,98 @@ interface InlineEditCellProps {
 
 const InlineEditCell: React.FC<InlineEditCellProps> = ({
 	value,
+
 	onSave,
+
 	type = "text",
+
 	className = "",
+
 	prefix = "",
 }) => {
 	const [isEditing, setIsEditing] = useState(false);
+
 	const [tempValue, setTempValue] = useState(value);
 
-	const handleKeyDown = (e: React.KeyboardEvent) => {
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (isEditing && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [isEditing]);
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			onSave(tempValue.toString());
+
 			setIsEditing(false);
 		} else if (e.key === "Escape") {
 			setTempValue(value);
+
 			setIsEditing(false);
 		}
 	};
 
-	if (isEditing) {
-		return (
-			<input
-				type={type}
-				value={tempValue}
-				onChange={(e) => setTempValue(e.target.value)}
-				onBlur={() => {
-					onSave(tempValue.toString());
-					setIsEditing(false);
-				}}
-				onKeyDown={handleKeyDown}
-				className="w-full rounded-md border-2 border-pink-500 bg-white px-2 py-1 text-sm focus:outline-none"
-				onClick={(e) => e.stopPropagation()}
-			/>
-		);
-	}
+	const handleBlur = () => {
+		onSave(tempValue.toString());
+
+		setIsEditing(false);
+	};
+
+	const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+		e.stopPropagation();
+
+		if (!isEditing) {
+			setIsEditing(true);
+		}
+	};
 
 	return (
-		<div
-			onClick={(e) => {
-				e.stopPropagation();
-				setIsEditing(true);
-			}}
-			className={`group -mx-2 cursor-pointer rounded border border-transparent px-2 py-1 transition-colors hover:border-slate-200 hover:bg-slate-100 hover:text-pink-700 ${className}`}
-			title="Click to edit"
-		>
-			{prefix}
-			{value}
+		<div className={`inline-flex items-center ${className}`}>
+			{prefix && <span className="mr-1">{prefix}</span>}
+
+						<input
+
+							ref={inputRef}
+
+							type={type}
+
+							value={tempValue}
+
+							onChange={(e) => setTempValue(e.target.value)}
+
+							onBlur={handleBlur}
+
+							onKeyDown={handleKeyDown}
+
+							readOnly={!isEditing}
+
+							onClick={handleClick}
+
+							style={{
+
+								width: `${
+
+									String(tempValue).length + (type === "number" ? 4 : 2)
+
+								}ch`,
+
+								minWidth: "8ch",
+
+							}}
+
+							className={`cursor-pointer rounded-sm px-2 py-1 outline transition-all duration-400 ease-in-out ${
+
+								isEditing
+
+									? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none"
+
+									: "border-transparent outline-transparent outline-offset-5"
+
+							} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent"} `}
+
+						/>
 		</div>
 	);
 };

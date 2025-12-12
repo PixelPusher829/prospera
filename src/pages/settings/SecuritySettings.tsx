@@ -1,6 +1,7 @@
 import { Lock, Shield } from "lucide-react";
 import type React from "react";
-import Button from "@/shared/components/Button"; // Import Button component
+import Button from "@/shared/components/Button";
+import { InputField } from "@/shared/components/forms";
 
 const SecuritySettings: React.FC = () => {
 	return (
@@ -35,22 +36,17 @@ const SecuritySettings: React.FC = () => {
 			</div>
 
 			<div className="pt-4">
-				<label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-					Current Password
-				</label>
-				<input
+				<InputField
+					label="Current Password"
 					type="password"
 					placeholder="••••••••"
-					className="mb-4 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-700 outline-none dark:border-slate-600 dark:bg-slate-900 dark:text-white"
+					className="mb-4"
 				/>
 
-				<label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-					New Password
-				</label>
-				<input
+				<InputField
+					label="New Password"
 					type="password"
 					placeholder="••••••••"
-					className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-700 outline-none dark:border-slate-600 dark:bg-slate-900 dark:text-white"
 				/>
 			</div>
 		</div>

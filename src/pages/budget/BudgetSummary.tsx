@@ -33,7 +33,7 @@ const BudgetSummary: React.FC<BudgetSummaryProps> = ({
 				{/* Master Progress */}
 				<div className="h-4 w-full overflow-hidden rounded-full bg-white/10 dark:bg-white/20">
 					<div
-						className="h-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600"
+						className="h-full rounded-full bg-gradient-to-r from-violet-700 to-purple-500"
 						style={{
 							width: `${Math.min(100, (totalSpent / totalBudget) * 100)}%`,
 						}}
