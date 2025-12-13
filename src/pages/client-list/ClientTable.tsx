@@ -1,10 +1,10 @@
-import { ArrowDownUp, Building, ChevronRight, Mail } from "lucide-react";
+// src/pages/client-list/ClientTable.tsx
 import React from "react";
+import { Building, ChevronRight, Mail } from "lucide-react";
 import { type Client, ClientStatus } from "@/shared/types/types";
 import InlineEditCell from "./InlineEditCell";
-import Button from "@/shared/components/Button";
-import { Checkbox } from "@/shared/components/forms";
 import StatusBadge from "@/shared/components/StatusBadge";
+import Table, { type Column } from "@/shared/components/Table";
 
 interface ClientTableProps {
   sortedClients: Client[];
@@ -29,210 +29,115 @@ const ClientTable: React.FC<ClientTableProps> = ({
   updateClient,
   openDrawer,
 }) => {
-  return (
-    <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
-      <div className="min-h-[400px] overflow-x-auto">
-        <table className="w-full border-collapse text-left">
-          <thead>
-            <tr className="border-b border-slate-100 bg-slate-50 dark:border-slate-700 dark:bg-slate-900">
-              <th className="w-12 px-6 py-4">
-                <Checkbox
-                  checked={
-                    selectedIds.size === sortedClients.length &&
-                    sortedClients.length > 0
-                  }
-                  onChange={toggleSelectAll}
-                  className="h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
-                />
-              </th>
-              <th
-                className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 focus:outline-none dark:text-slate-400"
-                onClick={() => handleSort("name")}
-              >
-                <div className="flex items-center gap-1">
-                  Name{" "}
-                  {sortField === "name" && (
-                    <ArrowDownUp
-                      size={14}
-                      className={sortDirection === "desc" ? "rotate-180" : ""}
-                    />
-                  )}
-                </div>
-              </th>
-              <th
-                className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 focus:outline-none dark:text-slate-400"
-                onClick={() => handleSort("company")}
-              >
-                <div className="flex items-center gap-1">
-                  Company{" "}
-                  {sortField === "company" && (
-                    <ArrowDownUp
-                      size={14}
-                      className={sortDirection === "desc" ? "rotate-180" : ""}
-                    />
-                  )}
-                </div>
-              </th>
-              <th
-                className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 focus:outline-none dark:text-slate-400"
-                onClick={() => handleSort("status")}
-              >
-                <div className="flex items-center gap-1">
-                  Status{" "}
-                  {sortField === "status" && (
-                    <ArrowDownUp
-                      size={14}
-                      className={sortDirection === "desc" ? "rotate-180" : ""}
-                    />
-                  )}
-                </div>
-              </th>
-              <th
-                className="cursor-pointer px-6 py-4 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 focus:outline-none dark:text-slate-400"
-                onClick={() => handleSort("revenue")}
-              >
-                <div className="flex items-center justify-start gap-1">
-                  Revenue{" "}
-                  {sortField === "revenue" && (
-                    <ArrowDownUp
-                      size={14}
-                      className={sortDirection === "desc" ? "rotate-180" : ""}
-                    />
-                  )}
-                </div>
-              </th>
-              <th
-                className="cursor-pointer px-6 py-4 text-right text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 focus:outline-none dark:text-slate-400"
-                onClick={() => handleSort("lastContact")}
-              >
-                <div className="flex items-center justify-end gap-1">
-                  Last Contact{" "}
-                  {sortField === "lastContact" && (
-                    <ArrowDownUp
-                      size={14}
-                      className={sortDirection === "desc" ? "rotate-180" : ""}
-                    />
-                  )}
-                </div>
-              </th>
-              <th className="w-16 px-6 py-4"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedClients.map((client) => (
-              <tr
-                key={client.id}
-                className={`group cursor-pointer border-b border-slate-100 transition-colors focus:outline-none dark:border-slate-700 ${
-                  selectedIds.has(client.id)
-                    ? "bg-pink-50/50 dark:bg-pink-900/20"
-                    : "hover:bg-slate-50/50 dark:hover:bg-slate-700/50"
-                } `}
-              >
-                <td
-                  className="px-6 py-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Checkbox
-                    checked={selectedIds.has(client.id)}
-                    onChange={() => toggleSelection(client.id)}
-                    className="h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
-                  />
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 font-bold text-pink-600 dark:bg-pink-900/30 dark:text-pink-400">
-                      {client.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-slate-700 dark:text-white">
-                        <InlineEditCell
-                          value={client.name}
-                          onSave={(val) =>
-                            updateClient(client.id, { name: val })
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
-                        <Mail size={10} /> {client.email}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                    <Building
-                      size={14}
-                      className="text-slate-400 dark:text-slate-500"
-                    />
-                    <InlineEditCell
-                      value={client.company}
-                      onSave={(val) =>
-                        updateClient(client.id, { company: val })
-                      }
-                    />
-                  </div>
-                </td>
-                <td
-                  className="px-6 py-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="relative">
-                    <StatusBadge status={client.status} />
-                    <select
-                      value={client.status}
-                      onChange={(e) =>
-                        updateClient(client.id, {
-                          status: e.target.value as ClientStatus,
-                        })
-                      }
-                      className="absolute inset-0 h-full w-full text-md top-1 cursor-pointer opacity-0"
-                    >
-                      {Object.values(ClientStatus).map((statusOption) => (
-                        <option key={statusOption} value={statusOption}>
-                          {statusOption}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </td>
-                <td className="px-6 py-4 font-medium text-slate-700 dark:text-white">
-                  <InlineEditCell
-                    value={client.revenue}
-                    type="number"
-                    prefix="$"
-                    onSave={(val) =>
-                      updateClient(client.id, { revenue: Number(val) })
-                    }
-                  />
-                </td>
-                <td className="px-6 py-4 text-right text-sm text-slate-500 dark:text-slate-400">
-                  {client.lastContact}
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <button
-                    onClick={() => openDrawer(client)}
-                    className="rounded-full p-2 text-slate-300 opacity-0 transition-colors group-hover:opacity-100 hover:text-slate-600"
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </td>
-              </tr>
+  const columns: Column<Client>[] = [
+    {
+      header: "Name",
+      accessor: "name",
+      cell: (client) => (
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 font-bold text-pink-600 dark:bg-pink-900/30 dark:text-pink-400">
+            {client.name.charAt(0)}
+          </div>
+          <div>
+            <div className="font-semibold text-slate-700 dark:text-white">
+              <InlineEditCell
+                value={client.name}
+                onSave={(val) => updateClient(client.id, { name: val })}
+              />
+            </div>
+            <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+              <Mail size={10} /> {client.email}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      header: "Company",
+      accessor: "company",
+      cell: (client) => (
+        <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+          <Building size={14} className="text-slate-400 dark:text-slate-500" />
+          <InlineEditCell
+            value={client.company}
+            onSave={(val) => updateClient(client.id, { company: val })}
+          />
+        </div>
+      ),
+    },
+    {
+      header: "Status",
+      accessor: "status",
+      cell: (client) => (
+        <div className="relative" onClick={(e) => e.stopPropagation()}>
+          <StatusBadge status={client.status} />
+          <select
+            value={client.status}
+            onChange={(e) =>
+              updateClient(client.id, {
+                status: e.target.value as ClientStatus,
+              })
+            }
+            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+          >
+            {Object.values(ClientStatus).map((statusOption) => (
+              <option key={statusOption} value={statusOption}>
+                {statusOption}
+              </option>
             ))}
-            {sortedClients.length === 0 && (
-              <tr>
-                <td
-                  colSpan={8}
-                  className="py-12 text-center text-slate-500 dark:text-slate-400"
-                >
-                  No clients found matching your filters.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      {/* Pagination Controls */}
-    </div>
+          </select>
+        </div>
+      ),
+    },
+    {
+      header: "Revenue",
+      accessor: "revenue",
+      headerClassName: "justify-start",
+      className: "font-medium text-slate-700 dark:text-white",
+      cell: (client) => (
+        <InlineEditCell
+          value={client.revenue}
+          type="number"
+          prefix="$"
+          onSave={(val) => updateClient(client.id, { revenue: Number(val) })}
+        />
+      ),
+    },
+    {
+      header: "Last Contact",
+      accessor: "lastContact",
+      headerClassName: "justify-end",
+      className: "text-right text-sm text-slate-500 dark:text-slate-400",
+      cell: (client) => client.lastContact,
+    },
+  ];
+
+  return (
+    <Table
+      data={sortedClients}
+      columns={columns}
+      selectedIds={selectedIds}
+      toggleSelection={toggleSelection}
+      toggleSelectAll={toggleSelectAll}
+      handleSort={handleSort}
+      sortField={sortField}
+      sortDirection={sortDirection}
+      getRowId={(client) => client.id}
+      onRowClick={openDrawer}
+      renderRowActions={(client) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            openDrawer(client);
+          }}
+          className="rounded-full p-2 text-slate-300 opacity-0 transition-colors group-hover:opacity-100 hover:text-slate-600"
+        >
+          <ChevronRight size={18} />
+        </button>
+      )}
+      actionsColumnClassName="w-16"
+      noItemsMessage="No clients found matching your filters."
+    />
   );
 };
 

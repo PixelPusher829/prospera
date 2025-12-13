@@ -1,242 +1,157 @@
-import {
-	ArrowDownRight,
-	ArrowDownUp,
-	ArrowUpRight,
-	MoreHorizontal,
-} from "lucide-react";
+// src/pages/transactions/TransactionsTable.tsx
 import React, { useMemo } from "react";
+import { ArrowDownRight, ArrowUpRight, MoreHorizontal } from "lucide-react";
 import { MOCK_ACCOUNTS } from "@/shared/data/constants";
 import type { Transaction } from "@/shared/types/types";
-import Button from "@/shared/components/Button";
-import { Checkbox } from "@/shared/components/forms";
 import StatusBadge from "@/shared/components/StatusBadge";
+import Table, { type Column } from "@/shared/components/Table";
 
 interface TransactionsTableProps {
-	sortedAndFilteredTransactions: Transaction[];
-	selectedTransactionIds: Set<string>;
-	toggleSelectAll: () => void;
-	toggleSelection: (id: string) => void;
-	handleSort: (field: keyof Transaction) => void;
-	sortField: keyof Transaction | null;
-	sortDirection: "asc" | "desc";
-	openEditModal: (transaction: Transaction) => void;
-	onCategoryChange: (transactionId: string, newCategory: string) => void;
+  sortedAndFilteredTransactions: Transaction[];
+  selectedTransactionIds: Set<string>;
+  toggleSelectAll: () => void;
+  toggleSelection: (id: string) => void;
+  handleSort: (field: keyof Transaction) => void;
+  sortField: keyof Transaction | null;
+  sortDirection: "asc" | "desc";
+  openEditModal: (transaction: Transaction) => void;
+  onCategoryChange: (transactionId: string, newCategory: string) => void;
 }
 
 const TransactionsTable: React.FC<TransactionsTableProps> = ({
-	sortedAndFilteredTransactions,
-	selectedTransactionIds,
-	toggleSelectAll,
-	toggleSelection,
-	handleSort,
-	sortField,
-	sortDirection,
-	openEditModal,
-	onCategoryChange,
+  sortedAndFilteredTransactions,
+  selectedTransactionIds,
+  toggleSelectAll,
+  toggleSelection,
+  handleSort,
+  sortField,
+  sortDirection,
+  openEditModal,
+  onCategoryChange,
 }) => {
-	const allCategories = useMemo(() => {
-		const categories = new Set(
-			sortedAndFilteredTransactions.map((t) => t.category),
-		);
-		return Array.from(categories);
-	}, [sortedAndFilteredTransactions]);
+  const allCategories = useMemo(() => {
+    const categories = new Set(
+      sortedAndFilteredTransactions.map((t) => t.category)
+    );
+    return Array.from(categories);
+  }, [sortedAndFilteredTransactions]);
 
-	return (
-		<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
-			<div className="overflow-x-auto">
-				<table className="w-full border-collapse text-left">
-					<thead>
-						<tr className="border-b border-slate-100 bg-slate-50 dark:border-slate-700 dark:bg-slate-900">
-							<th className="w-12 px-6 py-4">
-								<Checkbox
-									checked={
-										selectedTransactionIds.size ===
-											sortedAndFilteredTransactions.length &&
-										sortedAndFilteredTransactions.length > 0
-									}
-									onChange={toggleSelectAll}
-									className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
-								/>
-							</th>
-							<th
-								className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400"
-								onClick={() => handleSort("date")}
-							>
-								<div className="flex items-center gap-1">
-									Date{" "}
-									{sortField === "date" && (
-										<ArrowDownUp
-											size={14}
-											className={sortDirection === "desc" ? "rotate-180" : ""}
-										/>
-									)}
-								</div>
-							</th>
-							<th
-								className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400"
-								onClick={() => handleSort("payee")}
-							>
-								<div className="flex items-center gap-1">
-									Payee{" "}
-									{sortField === "payee" && (
-										<ArrowDownUp
-											size={14}
-											className={sortDirection === "desc" ? "rotate-180" : ""}
-										/>
-									)}
-								</div>
-							</th>
-							<th
-								className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400"
-								onClick={() => handleSort("category")}
-							>
-								<div className="flex items-center gap-1">
-									Category{" "}
-									{sortField === "category" && (
-										<ArrowDownUp
-											size={14}
-											className={sortDirection === "desc" ? "rotate-180" : ""}
-										/>
-									)}
-								</div>
-							</th>
-							<th
-								className="cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400"
-								onClick={() => handleSort("accountType")}
-							>
-								<div className="flex items-center gap-1">
-									Account Type{" "}
-									{sortField === "accountType" && (
-										<ArrowDownUp
-											size={14}
-											className={sortDirection === "desc" ? "rotate-180" : ""}
-										/>
-									)}
-								</div>
-							</th>
-							<th
-								className="cursor-pointer px-6 py-4 text-right text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400"
-								onClick={() => handleSort("amount")}
-							>
-								<div className="flex items-center justify-end gap-1">
-									Amount{" "}
-									{sortField === "amount" && (
-										<ArrowDownUp
-											size={14}
-											className={sortDirection === "desc" ? "rotate-180" : ""}
-										/>
-									)}
-								</div>
-							</th>
-							<th
-								className="cursor-pointer px-6 py-4 text-center text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400"
-								onClick={() => handleSort("status")}
-							>
-								<div className="flex items-center justify-center gap-1">
-									Status{" "}
-									{sortField === "status" && (
-										<ArrowDownUp
-											size={14}
-											className={sortDirection === "desc" ? "rotate-180" : ""}
-										/>
-									)}
-								</div>
-							</th>
-							<th className="w-10 px-6 py-4"></th>
-						</tr>
-					</thead>
-					<tbody className="">
-						{sortedAndFilteredTransactions.map((t) => (
-							<tr
-								key={t.id}
-								className="group border-b border-slate-100 transition-colors hover:bg-slate-50/50 focus:outline-none dark:border-slate-700 dark:hover:bg-slate-700/50"
-							>
-								<td className="px-6 py-4">
-									<Checkbox
-										checked={selectedTransactionIds.has(t.id)}
-										onChange={() => toggleSelection(t.id)}
-										onClick={(e) => e.stopPropagation()} // Prevent row click from opening edit modal
-										className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
-									/>
-								</td>
-								<td className=" px-6 py-4 text-sm font-medium text-slate-500 tabular-nums dark:text-slate-400">
-									{t.date}
-								</td>
-								<td className="px-6 py-4">
-									<div className="flex items-center gap-3">
-										<div
-											className={`rounded-full p-2 ${
-												t.type === "income"
-													? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
-													: "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
-											}`}
-										>
-											{t.type === "income" ? (
-												<ArrowDownRight size={14} />
-											) : (
-												<ArrowUpRight size={14} />
-											)}
-										</div>
-										<span className="text-sm font-medium text-slate-700 dark:text-white">
-											{t.payee}
-										</span>
-									</div>
-								</td>
-								<td className="px-6 py-4">
-									<div className="relative inline-block">
-										<span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
-											{t.category}
-										</span>
-										<select
-											value={t.category}
-											onChange={(e) => onCategoryChange(t.id, e.target.value)}
-											className="absolute inset-0 w-full h-full opacity-0 top-1 cursor-pointer  text-sm"
-										>
-											{allCategories.map((category) => (
-												<option key={category} value={category}>
-													{category}
-												</option>
-											))}
-											{!allCategories.includes(t.category) && (
-												<option key={t.category} value={t.category}>
-													{t.category}
-												</option>
-											)}
-										</select>
-									</div>
-								</td>{" "}
-								<td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
-									{MOCK_ACCOUNTS.find((a) => a.id === t.accountId)?.type}
-								</td>
-								<td
-									className={`px-6 py-4 text-right text-sm font-bold ${
-										t.type === "income"
-											? "text-green-600 dark:text-green-400"
-											: "text-slate-700 dark:text-white"
-									}`}
-								>
-									{t.type === "income" ? "+" : "-"}${t.amount.toFixed(2)}
-								</td>
-								<td className="px-6 py-4 text-center">
-									<StatusBadge status={t.status} />
-								</td>
-								<td className="px-6 py-4 text-center">
-									<button
-										onClick={() => openEditModal(t)}
-										icon={<MoreHorizontal size={18} />}
-										className="text-slate-300 opacity-0 transition-opacity group-hover:opacity-100 hover:text-slate-600 dark:text-slate-500 dark:hover:text-white"
-									>
-										<MoreHorizontal size={18} />
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-			{/* Pagination Controls */}
-		</div>
-	);
+  const columns: Column<Transaction>[] = [
+    {
+      header: "Date",
+      accessor: "date",
+      className: "text-sm font-medium text-slate-500 tabular-nums dark:text-slate-400",
+      cell: (transaction) => transaction.date,
+    },
+    {
+      header: "Payee",
+      accessor: "payee",
+      cell: (transaction) => (
+        <div className="flex items-center gap-3">
+          <div
+            className={`rounded-full p-2 ${
+              transaction.type === "income"
+                ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
+            }`}
+          >
+            {transaction.type === "income" ? (
+              <ArrowDownRight size={14} />
+            ) : (
+              <ArrowUpRight size={14} />
+            )}
+          </div>
+          <span className="text-sm font-medium text-slate-700 dark:text-white">
+            {transaction.payee}
+          </span>
+        </div>
+      ),
+    },
+    {
+      header: "Category",
+      accessor: "category",
+      cell: (transaction) => (
+        <div className="relative inline-block">
+          <span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
+            {transaction.category}
+          </span>
+          <select
+            value={transaction.category}
+            onChange={(e) => onCategoryChange(transaction.id, e.target.value)}
+            className="absolute inset-0 w-full h-full opacity-0 top-1 cursor-pointer text-sm"
+          >
+            {allCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+            {!allCategories.includes(transaction.category) && (
+              <option key={transaction.category} value={transaction.category}>
+                {transaction.category}
+              </option>
+            )}
+          </select>
+        </div>
+      ),
+    },
+    {
+      header: "Account",
+      accessor: "accountId",
+      className: "text-sm text-slate-500 dark:text-slate-400",
+      cell: (transaction) =>
+        MOCK_ACCOUNTS.find((a) => a.id === transaction.accountId)?.name,
+    },
+    {
+      header: "Amount",
+      accessor: "amount",
+      cell: (transaction) => (
+        <span
+          className={`text-sm font-bold ${
+            transaction.type === "income"
+              ? "text-green-600 dark:text-green-400"
+              : "text-slate-700 dark:text-white"
+          }`}
+        >
+          {transaction.type === "income" ? "+" : "-"}$
+          {transaction.amount.toFixed(2)}
+        </span>
+      ),
+    },
+    {
+      header: "Status",
+      accessor: "status",
+      headerClassName: "justify-center",
+      className: "text-center",
+      cell: (transaction) => <StatusBadge status={transaction.status} />,
+    },
+  ];
+
+  return (
+    <Table
+      data={sortedAndFilteredTransactions}
+      columns={columns}
+      selectedIds={selectedTransactionIds}
+      toggleSelection={toggleSelection}
+      toggleSelectAll={toggleSelectAll}
+      handleSort={handleSort}
+      sortField={sortField}
+      sortDirection={sortDirection}
+      getRowId={(transaction) => transaction.id}
+      renderRowActions={(transaction) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            openEditModal(transaction);
+          }}
+          className="text-slate-300 opacity-0 transition-opacity group-hover:opacity-100 hover:text-slate-600 dark:text-slate-500 dark:hover:text-white"
+        >
+          <MoreHorizontal size={18} />
+        </button>
+      )}
+      actionsColumnClassName="w-10"
+      noItemsMessage="No transactions found matching your filters."
+    />
+  );
 };
 
 export default TransactionsTable;
