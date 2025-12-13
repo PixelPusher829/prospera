@@ -106,8 +106,7 @@ const ClientTable: React.FC<ClientTableProps> = ({
     {
       header: "Last Contact",
       accessor: "lastContact",
-      headerClassName: "justify-end",
-      className: "text-right text-sm text-slate-500 dark:text-slate-400",
+      className: "text-sm text-slate-500 dark:text-slate-400",
       cell: (client) => client.lastContact,
     },
   ];

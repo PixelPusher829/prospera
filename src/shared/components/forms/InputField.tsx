@@ -26,7 +26,8 @@ export interface InputProps
 	error?: string;
 	icon?: React.ReactNode;
 	hideCalendarIcon?: boolean;
-	onIconClick?: () => void; // New prop for icon click
+	onIconClick?: () => void;
+	iconPosition?: 'left' | 'right';
 }
 
 const InputField: React.FC<InputProps> = ({
@@ -37,12 +38,12 @@ const InputField: React.FC<InputProps> = ({
 	icon,
 	hideCalendarIcon,
 	type,
-	onIconClick, // Destructure new prop
+	onIconClick,
+	iconPosition = 'right',
 	...props
 }) => {
 	const inputVariant = error ? "error" : variant;
-	const iconClasses =
-		"absolute right-3 top-1/2 -translate-y-1/2 text-slate-400";
+	const iconClasses = `absolute ${iconPosition === 'left' ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-slate-400`;
 
 	const hideCalendarIconClass =
 		hideCalendarIcon && type === "date"
@@ -64,7 +65,7 @@ const InputField: React.FC<InputProps> = ({
 					type={type}
 					className={inputVariants({
 						variant: inputVariant,
-						className: `${icon ? "pr-10" : ""} ${className} ${hideCalendarIconClass}`,
+						className: `${icon ? (iconPosition === 'left' ? 'pl-10' : 'pr-10') : ''} ${className} ${hideCalendarIconClass}`,
 					})}
 					{...props}
 				/>

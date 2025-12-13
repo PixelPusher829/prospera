@@ -112,10 +112,12 @@ const Table = <T extends {}>({
                     {columns.map((col, index) => (
                       <div
                         key={index}
-                        className={`flex-1 px-6 py-4 ${col.className || ''}`}
+                        className={`flex-1 ${col.className || ''}`}
                         role="cell"
                       >
-                        {col.cell(row)}
+                        <div className="px-6 py-4">
+                          {col.cell(row)}
+                        </div>
                       </div>
                     ))}
                     {renderRowActions && (

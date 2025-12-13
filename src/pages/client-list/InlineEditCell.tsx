@@ -97,11 +97,11 @@ const InlineEditCell: React.FC<InlineEditCellProps> = ({
 
 								isEditing
 
-									? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none"
+															? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none"
 
-									: "border-transparent outline-transparent outline-offset-5"
+															: "bg-white border-transparent outline-transparent outline-offset-5"
 
-							} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent"} `}
+													} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent"} `}
 
 						/>
 		</div>

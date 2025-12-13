@@ -23,7 +23,7 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
 		<div className="relative">
 			<button
 				onClick={() => setIsOpen(!isOpen)}
-				className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-500 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white"
+				className="rounded-xl border border-slate-200 bg-white p-3 text-slate-500 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white"
 			>
 				<Calendar size={18} />
 			</button>

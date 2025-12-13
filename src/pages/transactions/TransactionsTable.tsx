@@ -120,8 +120,6 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
     {
       header: "Status",
       accessor: "status",
-      headerClassName: "justify-center",
-      className: "text-center",
       cell: (transaction) => <StatusBadge status={transaction.status} />,
     },
   ];
@@ -148,7 +146,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
           <MoreHorizontal size={18} />
         </button>
       )}
-      actionsColumnClassName="w-10"
+      actionsColumnClassName="w-16"
       noItemsMessage="No transactions found matching your filters."
     />
   );
