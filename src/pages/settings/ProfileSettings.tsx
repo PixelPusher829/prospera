@@ -49,7 +49,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+			<div className="space-y-4">
 				<InputField
 					label="Full Name"
 					name="name"
