@@ -2,12 +2,12 @@ import { Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import EditBudgetModal from "@/pages/budget/EditBudgetModal";
-import Header from "@/shared/layout/Header";
+import Button from "@/shared/components/Button";
 import { MOCK_BUDGET } from "@/shared/data/constants";
+import Header from "@/shared/layout/Header";
 import type { BudgetCategory } from "@/shared/types/types";
 import BudgetCategoryList from "./BudgetCategoryList";
 import BudgetSummary from "./BudgetSummary";
-import Button from "@/shared/components/Button";
 
 const Budget: React.FC = () => {
 	const [budget, setBudget] = useState<BudgetCategory[]>(MOCK_BUDGET);

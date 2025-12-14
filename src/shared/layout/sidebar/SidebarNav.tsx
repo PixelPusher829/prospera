@@ -1,4 +1,3 @@
-import type React from "react";
 import {
 	ArrowRightLeft,
 	BarChart2,
@@ -8,6 +7,7 @@ import {
 	Users,
 	Wallet,
 } from "lucide-react";
+import type React from "react";
 import NavContainer from "@/shared/components/navigation/NavContainer";
 import NavLink from "@/shared/components/navigation/NavLink";
 

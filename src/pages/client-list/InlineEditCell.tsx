@@ -63,47 +63,26 @@ const InlineEditCell: React.FC<InlineEditCellProps> = ({
 		<div className={`inline-flex items-center ${className}`}>
 			{prefix && <span className="mr-1">{prefix}</span>}
 
-						<input
+			<input
+				ref={inputRef}
+				type={type}
+				value={tempValue}
+				onChange={(e) => setTempValue(e.target.value)}
+				onBlur={handleBlur}
+				onKeyDown={handleKeyDown}
+				readOnly={!isEditing}
+				onClick={handleClick}
+				style={{
+					width: `${String(tempValue).length + (type === "number" ? 4 : 2)}ch`,
 
-							ref={inputRef}
-
-							type={type}
-
-							value={tempValue}
-
-							onChange={(e) => setTempValue(e.target.value)}
-
-							onBlur={handleBlur}
-
-							onKeyDown={handleKeyDown}
-
-							readOnly={!isEditing}
-
-							onClick={handleClick}
-
-							style={{
-
-								width: `${
-
-									String(tempValue).length + (type === "number" ? 4 : 2)
-
-								}ch`,
-
-								minWidth: "8ch",
-
-							}}
-
-							className={`cursor-pointer rounded-sm px-2 py-1 outline transition-all duration-400 ease-in-out ${
-
-								isEditing
-
-															? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none"
-
-															: "bg-white border-transparent outline-transparent outline-offset-5"
-
-													} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent"} `}
-
-						/>
+					minWidth: "8ch",
+				}}
+				className={`cursor-pointer rounded-sm px-2 py-1 outline transition-all duration-400 ease-in-out ${
+					isEditing
+						? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none"
+						: "bg-white border-transparent outline-transparent outline-offset-5"
+				} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent"} `}
+			/>
 		</div>
 	);
 };

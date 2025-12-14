@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { type Client, ClientStatus } from "@/shared/types/types";
 import Button from "@/shared/components/Button";
 import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
+import { type Client, ClientStatus } from "@/shared/types/types";
 
 interface AddClientDrawerProps {
 	isOpen: boolean;
@@ -118,7 +118,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 								name="name"
 								value={newClient.name}
 								onChange={handleInputChange}
-								placeholder="e.g., John Doe"
+								placeholder="e.g. John Doe"
 								error={errors.name}
 							/>
 
@@ -128,7 +128,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 								type="email"
 								value={newClient.email}
 								onChange={handleInputChange}
-								placeholder="e.g., john.doe@example.com"
+								placeholder="e.g. john.doe@example.com"
 								error={errors.email}
 							/>
 
@@ -137,7 +137,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 								name="company"
 								value={newClient.company}
 								onChange={handleInputChange}
-								placeholder="e.g., Acme Inc."
+								placeholder="e.g. Acme Inc."
 								error={errors.company}
 							/>
 

@@ -2,13 +2,13 @@ import { Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import AddEditTransactionModal from "@/pages/transactions/AddEditTransactionModal";
-import Header from "@/shared/layout/Header";
+import Button from "@/shared/components/Button"; // Import Button component
 import { MOCK_GOALS } from "@/shared/data/constants";
+import Header from "@/shared/layout/Header";
 import CashFlow from "./CashFlow";
 import HeroCard from "./HeroCard";
 import Notifications from "./Notifications";
 import RecentTransactions from "./RecentTransactions";
-import Button from "@/shared/components/Button"; // Import Button component
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({
 	setActiveTab,

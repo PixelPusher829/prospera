@@ -1,10 +1,10 @@
 import { DollarSign, Plus, Save, Trash2, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { COLOR_PALETTE } from "@/shared/data/constants";
-import type { BudgetCategory } from "@/shared/types/types";
 import Button from "@/shared/components/Button"; // Import Button component
 import { InputField } from "@/shared/components/forms";
+import { COLOR_PALETTE } from "@/shared/data/constants";
+import type { BudgetCategory } from "@/shared/types/types";
 
 interface EditBudgetModalProps {
 	isOpen: boolean;

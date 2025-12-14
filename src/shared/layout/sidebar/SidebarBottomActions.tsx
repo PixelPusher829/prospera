@@ -1,5 +1,5 @@
-import type React from "react";
 import { HelpCircle, LogOut, Settings } from "lucide-react";
+import type React from "react";
 import NavLink from "@/shared/components/navigation/NavLink";
 import ThemeToggleButton from "./ThemeToggleButton";
 

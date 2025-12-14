@@ -1,13 +1,13 @@
 import { Save } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import Button from "@/shared/components/Button";
 import Header from "@/shared/layout/Header";
 import BillingSettings from "./BillingSettings";
 import NotificationsSettings from "./NotificationsSettings";
 import ProfileSettings from "./ProfileSettings";
 import SecuritySettings from "./SecuritySettings";
 import SettingsNav from "./SettingsNav";
-import Button from "@/shared/components/Button";
 
 const Settings: React.FC = () => {
 	const [activeSection, setActiveSection] = useState("profile");
@@ -73,39 +73,39 @@ const Settings: React.FC = () => {
 	};
 
 	return (
-    <div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
-      <Header
-        heading="Settings"
-        subheading="Manage your account preferences"
-        className="mb-8"
-      ></Header>
+		<div className="mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10">
+			<Header
+				heading="Settings"
+				subheading="Manage your account preferences"
+				className="mb-8"
+			></Header>
 
-      <div className="flex flex-col gap-20 lg:flex-row">
-        <SettingsNav
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-        />
+			<div className="flex flex-col gap-20 lg:flex-row">
+				<SettingsNav
+					activeSection={activeSection}
+					setActiveSection={setActiveSection}
+				/>
 
-        <div className="max-w-2xl flex-1 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-          {renderSection()}
-          <div className="mt-8 flex justify-end border-t border-slate-100 pt-6 dark:border-slate-700">
-            <Button
-              variant="primary"
-              onClick={handleSave}
-              disabled={
-                Object.keys(errors).some((key) => errors[key]) ||
-                !formData.name.trim() ||
-                !formData.email.trim()
-              }
-              icon={<Save size={18} />}
-            >
-              Save Changes
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+				<div className="max-w-2xl flex-1 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+					{renderSection()}
+					<div className="mt-8 flex justify-end border-t border-slate-100 pt-6 dark:border-slate-700">
+						<Button
+							variant="primary"
+							onClick={handleSave}
+							disabled={
+								Object.keys(errors).some((key) => errors[key]) ||
+								!formData.name.trim() ||
+								!formData.email.trim()
+							}
+							icon={<Save size={18} />}
+						>
+							Save Changes
+						</Button>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Settings;

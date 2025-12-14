@@ -2,12 +2,12 @@ import { Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import AddEditGoalModal from "@/pages/goals/AddEditGoalModal";
-import Header from "@/shared/layout/Header";
+import Button from "@/shared/components/Button"; // Import Button component
 import { MOCK_GOALS } from "@/shared/data/constants";
+import Header from "@/shared/layout/Header";
 import type { Goal } from "@/shared/types/types";
 import AddGoalPlaceholderCard from "./AddGoalPlaceholderCard";
 import GoalCard from "./GoalCard";
-import Button from "@/shared/components/Button"; // Import Button component
 
 const Goals: React.FC = () => {
 	const [goals, setGoals] = useState<Goal[]>(MOCK_GOALS);

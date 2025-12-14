@@ -1,5 +1,5 @@
-import type React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import type React from "react";
 
 const inputVariants = cva(
 	"flex h-11 w-full rounded-md border border-slate-200 bg-transparent px-3 py-2 text-md ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:ring-offset-slate-900 dark:placeholder:text-slate-400 dark:focus-visible:ring-violet-600",
@@ -27,7 +27,7 @@ export interface InputProps
 	icon?: React.ReactNode;
 	hideCalendarIcon?: boolean;
 	onIconClick?: () => void;
-	iconPosition?: 'left' | 'right';
+	iconPosition?: "left" | "right";
 }
 
 const InputField: React.FC<InputProps> = ({
@@ -39,11 +39,11 @@ const InputField: React.FC<InputProps> = ({
 	hideCalendarIcon,
 	type,
 	onIconClick,
-	iconPosition = 'right',
+	iconPosition = "right",
 	...props
 }) => {
 	const inputVariant = error ? "error" : variant;
-	const iconClasses = `absolute ${iconPosition === 'left' ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-slate-400`;
+	const iconClasses = `absolute ${iconPosition === "left" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-slate-400`;
 
 	const hideCalendarIconClass =
 		hideCalendarIcon && type === "date"
@@ -65,7 +65,7 @@ const InputField: React.FC<InputProps> = ({
 					type={type}
 					className={inputVariants({
 						variant: inputVariant,
-						className: `${icon ? (iconPosition === 'left' ? 'pl-10' : 'pr-10') : ''} ${className} ${hideCalendarIconClass}`,
+						className: `${icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : ""} ${className} ${hideCalendarIconClass}`,
 					})}
 					{...props}
 				/>

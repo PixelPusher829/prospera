@@ -1,14 +1,14 @@
 import { Save, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import type { Transaction } from "../types/types";
 import Button from "@/shared/components/Button";
 import {
+	DatePicker,
 	InputField,
 	SelectField,
 	SelectItem,
-	DatePicker,
 } from "@/shared/components/forms";
+import type { Transaction } from "../types/types";
 
 interface AddEditTransactionModalProps {
 	isOpen: boolean;
@@ -126,7 +126,7 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 						name="payee"
 						value={currentTransaction.payee}
 						onChange={handleInputChange}
-						placeholder="e.g., Amazon, Salary"
+						placeholder="e.g. Amazon, Salary"
 						error={errors.payee}
 					/>
 					<div className="grid grid-cols-2 gap-4">

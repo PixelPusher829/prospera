@@ -1,5 +1,5 @@
-import type React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import type React from "react";
 
 // const checkboxContainerVariants = cva("flex items-center space-x-2", {
 //   variants: {},

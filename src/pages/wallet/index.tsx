@@ -2,17 +2,17 @@ import { Plus, Wallet as WalletIcon } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import AddEditAccountModal from "@/pages/wallet/AddEditAccountModal";
-import Header from "@/shared/layout/Header";
-import { MOCK_ACCOUNTS } from "@/shared/data/constants";
-import type { Account, AccountType } from "@/shared/types/types";
-import GlobalSyncSuccessModal from "./GlobalSyncSuccessModal";
-import WalletAccountsTab from "./tabs/WalletAccountsTab";
-import WalletCardsTab from "./tabs/WalletCardsTab";
-import WalletInvestmentsTab from "./tabs/WalletInvestmentsTab";
-import WalletLoansTab from "./tabs/WalletLoansTab";
-import WalletOverview from "./WalletOverview";
-import WalletSummaryCards from "./WalletSummaryCards";
 import Button from "@/shared/components/Button"; // Import Button component
+import { MOCK_ACCOUNTS } from "@/shared/data/constants";
+import Header from "@/shared/layout/Header";
+import type { Account, AccountType } from "@/shared/types/types";
+import WalletAccountsTab from "./accounts/WalletAccountsTab";
+import WalletCardsTab from "./cards/WalletCardsTab";
+import GlobalSyncSuccessModal from "./GlobalSyncSuccessModal";
+import WalletInvestmentsTab from "./investments/WalletInvestmentsTab";
+import WalletLoansTab from "./loans/WalletLoansTab";
+import WalletOverview from "./overview/WalletOverview";
+import WalletSummaryCards from "./overview/WalletSummaryCards";
 
 const Wallet: React.FC = () => {
 	const [accounts, setAccounts] = useState<Account[]>(MOCK_ACCOUNTS);
@@ -145,11 +145,11 @@ const Wallet: React.FC = () => {
 			{/* Tab Navigation */}
 			<div className="flex w-fit flex-wrap gap-2 rounded-2xl bg-slate-100 p-1 dark:bg-slate-800">
 				{["overview", "accounts", "cards", "loans", "investments"].map(
-					(tab) => (
+					(tab: typeof activeTab) => (
 						<button
 							key={tab}
-							variant="secondary"
-							onClick={() => setActiveTab(tab as any)}
+							type="button"
+							onClick={() => setActiveTab(tab)}
 							className={`rounded-xl px-6 py-2.5 text-sm font-medium capitalize transition-all ${
 								activeTab === tab
 									? "bg-white text-slate-700 shadow-sm dark:bg-slate-900 dark:text-white"
@@ -187,6 +187,7 @@ const Wallet: React.FC = () => {
 					<WalletCardsTab
 						creditCards={creditCards}
 						openEditAccountModal={openEditAccountModal}
+						openAddAccountModal={openAddAccountModal}
 					/>
 				)}
 

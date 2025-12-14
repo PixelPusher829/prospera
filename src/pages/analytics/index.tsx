@@ -1,19 +1,19 @@
 import { LayoutGrid } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import Header from "@/shared/layout/Header";
+import Button from "@/shared/components/Button"; // Import Button component
 import {
 	BALANCE_HISTORY,
 	EXPENSE_STATS,
 	MOCK_SUMMARY,
 } from "@/shared/data/constants";
+import Header from "@/shared/layout/Header";
 import { getFinancialAdvice } from "@/shared/services/geminiService";
 import AiAdvisor from "./AiAdvisor";
 import BalanceOverview from "./BalanceOverview";
 import BudgetComparison from "./BudgetComparison";
 import ExpenseStatistics from "./ExpenseStatistics";
 import StatCard from "./StatCard";
-import Button from "@/shared/components/Button"; // Import Button component
 
 const Analytics: React.FC = () => {
 	const [insight, setInsight] = useState<string>("");

@@ -9,10 +9,10 @@ import {
 	X,
 } from "lucide-react";
 import type React from "react";
-import type { Client } from "@/shared/types/types";
-import { ClientStatus } from "@/shared/types/types";
 import Button from "@/shared/components/Button";
 import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
+import type { Client } from "@/shared/types/types";
+import { ClientStatus } from "@/shared/types/types";
 
 interface ClientDetailDrawerProps {
 	isDrawerOpen: boolean;

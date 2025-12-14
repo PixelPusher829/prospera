@@ -1,5 +1,5 @@
-import type React from "react";
 import { Moon, Sun } from "lucide-react";
+import type React from "react";
 
 interface ThemeToggleButtonProps {
 	isDarkMode: boolean;

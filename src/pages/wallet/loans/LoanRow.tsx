@@ -1,7 +1,7 @@
 import { CalendarClock, ShieldCheck } from "lucide-react";
 import type React from "react";
-import type { Account } from "@/shared/types/types";
 import Button from "@/shared/components/Button"; // Import Button component
+import type { Account } from "@/shared/types/types";
 
 interface LoanRowProps {
 	account: Account;
@@ -16,7 +16,7 @@ const LoanRow: React.FC<LoanRowProps> = ({ account, onEdit }) => {
 		>
 			<div className="mb-4 flex items-start justify-between">
 				<div className="flex items-center gap-4">
-					<div className="rounded-xl bg-slate-50 p-3 text-slate-500">
+					<div className="rounded-xl bg-violet-50 p-3 text-violet-500">
 						<ShieldCheck size={24} />
 					</div>
 					<div>
@@ -34,10 +34,10 @@ const LoanRow: React.FC<LoanRowProps> = ({ account, onEdit }) => {
 				</div>
 			</div>
 
-			<div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+			<div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-violet-100">
 				{/* Mock progress for loan payoff */}
 				<div
-					className="h-full rounded-full bg-slate-500"
+					className="h-full rounded-full bg-violet-500"
 					style={{ width: "45%" }}
 				></div>
 			</div>

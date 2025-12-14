@@ -9,7 +9,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "Chase",
 		lastUpdated: "Now",
-		accountNumber: "**** 4521",
+		accountNumber: "1234567890124521",
 	},
 	{
 		id: "2",
@@ -19,7 +19,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "American Express",
 		lastUpdated: "1h ago",
-		accountNumber: "**** 7001",
+		accountNumber: "9876543210987001",
 		expiry: "09/26",
 		colorTheme: "from-yellow-600 to-yellow-800",
 	},
@@ -31,7 +31,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "Ally",
 		lastUpdated: "1d ago",
-		accountNumber: "**** 9922",
+		accountNumber: "5678901234569922",
 	},
 	{
 		id: "4",
@@ -41,7 +41,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "Vanguard",
 		lastUpdated: "4h ago",
-		accountNumber: "**** 3321",
+		accountNumber: "2345678901233321",
 		investmentCategory: "stocks",
 	},
 	{
@@ -52,6 +52,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "Cash",
 		lastUpdated: "Now",
+		accountNumber: "0000000000000001",
 	},
 	{
 		id: "6",
@@ -61,7 +62,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "Toyota Financial",
 		lastUpdated: "1d ago",
-		accountNumber: "**** 1102",
+		accountNumber: "1122334455661102",
 		colorTheme: "from-slate-700 to-slate-900",
 	},
 	{
@@ -72,7 +73,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		currency: "USD",
 		institution: "Chase",
 		lastUpdated: "2h ago",
-		accountNumber: "**** 8842",
+		accountNumber: "4455667788998842",
 		expiry: "12/25",
 		colorTheme: "from-blue-700 to-blue-900",
 	},
@@ -85,6 +86,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		institution: "Coinbase",
 		lastUpdated: "Now",
 		investmentCategory: "crypto",
+		accountNumber: "9988776655443322",
 	},
 	{
 		id: "9",
@@ -93,7 +95,7 @@ export const MOCK_ACCOUNTS: Account[] = [
 		balance: 8400.0,
 		currency: "USD",
 		institution: "Robinhood",
-		lastUpdated: "Market Close",
 		investmentCategory: "stocks",
+		accountNumber: "1029384756102938",
 	},
 ];

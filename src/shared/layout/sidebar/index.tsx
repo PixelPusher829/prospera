@@ -1,10 +1,10 @@
 import type React from "react";
 import { useState } from "react";
-import SidebarMobileOverlay from "./SidebarMobileOverlay";
+import SidebarBottomActions from "./SidebarBottomActions";
 import SidebarCollapseButton from "./SidebarCollapseButton";
 import SidebarLogo from "./SidebarLogo";
+import SidebarMobileOverlay from "./SidebarMobileOverlay";
 import SidebarNav from "./SidebarNav";
-import SidebarBottomActions from "./SidebarBottomActions";
 
 interface SidebarProps {
 	isMobileOpen: boolean;

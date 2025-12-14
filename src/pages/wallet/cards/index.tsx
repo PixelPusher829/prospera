@@ -1,15 +1,17 @@
-import type React from "react";
-import type { Account } from "@/shared/types/types";
-import CreditCardVisual from "../CreditCardVisual";
+import AddPlaceholderButton from "@/pages/wallet/AddPlaceholderButton";
+import type { Account, AccountType } from "@/shared/types/types";
+import CreditCardVisual from "./CreditCardVisual";
 
 interface WalletCardsTabProps {
 	creditCards: Account[];
 	openEditAccountModal: (account: Account) => void;
+	openAddAccountModal: (type: AccountType | "Investment" | "Loan") => void;
 }
 
 const WalletCardsTab: React.FC<WalletCardsTabProps> = ({
 	creditCards,
 	openEditAccountModal,
+	openAddAccountModal,
 }) => {
 	return (
 		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -26,6 +28,10 @@ const WalletCardsTab: React.FC<WalletCardsTabProps> = ({
 					</div>
 				</div>
 			))}
+			<AddPlaceholderButton
+				onClick={() => openAddAccountModal("Credit")}
+				label="Add New Card"
+			/>
 		</div>
 	);
 };

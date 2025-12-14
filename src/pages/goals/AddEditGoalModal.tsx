@@ -1,10 +1,10 @@
 import { Calendar, DollarSign, Save, Target, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
+import Button from "@/shared/components/Button"; // Import Button component
+import { DatePicker, InputField } from "@/shared/components/forms";
 import { COLOR_PALETTE } from "@/shared/data/constants";
 import type { Goal } from "@/shared/types/types";
-import Button from "@/shared/components/Button"; // Import Button component
-import { InputField, DatePicker } from "@/shared/components/forms";
 
 interface AddEditGoalModalProps {
 	isOpen: boolean;
@@ -121,7 +121,7 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 						name="name"
 						value={currentGoal.name}
 						onChange={handleInputChange}
-						placeholder="e.g., New Car Fund"
+						placeholder="e.g. New Car Fund"
 						error={errors.name}
 					/>
 					<div className="grid grid-cols-2 gap-4">

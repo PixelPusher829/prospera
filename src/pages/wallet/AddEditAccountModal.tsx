@@ -1,10 +1,10 @@
 import { CheckCircle, Save, Trash2, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "@/shared/data/constants";
-import type { Account, AccountType } from "@/shared/types/types";
 import Button from "@/shared/components/Button";
 import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
+import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "@/shared/data/constants";
+import type { Account, AccountType } from "@/shared/types/types";
 
 interface AddEditAccountModalProps {
 	isOpen: boolean;
@@ -28,6 +28,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 		balance: "",
 		accountNumber: "",
 		colorTheme: COLOR_PALETTE[0],
+		expiry: "",
 	});
 	const [selectedAccountType, setSelectedAccountType] = useState<
 		AccountType | "Investment" | "Loan"
@@ -50,6 +51,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					balance: String(account.balance),
 					accountNumber: account.accountNumber || "",
 					colorTheme: account.colorTheme || COLOR_PALETTE[0],
+					expiry: account.expiry || "",
 				});
 				setSelectedAccountType(
 					account.type === "Investment"
@@ -67,6 +69,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					balance: "",
 					accountNumber: "",
 					colorTheme: COLOR_PALETTE[0],
+					expiry: "",
 				});
 				setSelectedAccountType(defaultAccountType);
 				setSelectedInvestmentCategory(INVESTMENT_CATEGORIES[0].value);
@@ -113,7 +116,11 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 		}
 
 		const generateRandomAccountNumber = () => {
-			return `**** **** **** ${Math.floor(1000 + Math.random() * 9000)}`;
+			let number = "";
+			for (let i = 0; i < 16; i++) {
+				number += Math.floor(Math.random() * 10);
+			}
+			return number;
 		};
 
 		const generateRandomAmount = () => {
@@ -150,6 +157,8 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 				selectedAccountType === "Investment"
 					? selectedInvestmentCategory
 					: undefined,
+			expiry:
+				selectedAccountType === "Credit" ? currentAccount.expiry : undefined,
 			iconBgClass:
 				selectedAccountType === "Investment"
 					? INVESTMENT_CATEGORIES.find(
@@ -183,176 +192,160 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 	};
 
 	const renderFields = () => {
-		const renderBalanceInput = (isEditable: boolean) => (
-			<div className="relative">
-				<span className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
-					$
-				</span>
-				<InputField
-					type="number"
-					name="balance"
-					value={currentAccount.balance}
-					onChange={handleInputChange}
-					readOnly={!isEditable}
-					className={`pl-7 ${!isEditable ? "bg-slate-100 text-slate-500" : ""}`}
-					placeholder="e.g., 5000"
-					error={errors.balance}
-				/>
+		const isEditing = !!account;
+
+		const renderBalanceInput = (
+			label: string,
+			name: string,
+			isEditable: boolean,
+		) => (
+			<div>
+				<label
+					className="mb-1 block text-sm font-medium text-slate-600"
+					htmlFor={name}
+				>
+					{label}
+				</label>
+				<div className="relative">
+					<span className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
+						$
+					</span>
+					<InputField
+						type="number"
+						name={name}
+						value={currentAccount.balance}
+						onChange={handleInputChange}
+						readOnly={!isEditable}
+						className={`pl-7 ${!isEditable ? "bg-slate-100 text-slate-500" : ""}`}
+						placeholder="e.g. 5000"
+						error={errors.balance}
+					/>
+				</div>
+				{errors.balance && (
+					<p className="mt-1 text-xs text-red-500">{errors.balance}</p>
+				)}
 			</div>
 		);
 
-		const commonFields = (
+		return (
 			<>
 				<InputField
-					label="Account Nickname"
+					label={
+						selectedAccountType === "Credit"
+							? "Card Nickname"
+							: selectedAccountType === "Loan"
+								? "Loan Name"
+								: selectedAccountType === "Investment"
+									? "Investment Name"
+									: "Account Nickname"
+					}
 					id="account-nickname"
 					name="name"
 					value={currentAccount.name}
 					onChange={handleInputChange}
-					placeholder="e.g., Everyday Checking"
-					readOnly={
-						!!account &&
-						selectedAccountType !== "Cash" &&
-						selectedAccountType !== "Credit" &&
-						selectedAccountType !== "Loan" &&
-						selectedAccountType !== "Investment"
+					placeholder={
+						selectedAccountType === "Credit"
+							? "e.g. Chase Sapphire"
+							: selectedAccountType === "Loan"
+								? "e.g. Car Loan"
+								: selectedAccountType === "Investment"
+									? "e.g. VTSAX Index Fund"
+									: "e.g. Everyday Checking"
 					}
 					error={errors.name}
 				/>
-				{!account && selectedAccountType === "Cash" && (
-					<div>
-						<label
-							className="mb-1 block text-sm font-medium text-slate-600"
-							htmlFor="balance"
-						>
-							Balance
-						</label>
-						{renderBalanceInput(true)}
-						{errors.balance && (
-							<p className="mt-1 text-xs text-red-500">{errors.balance}</p>
+
+				{selectedAccountType === "Cash" &&
+					(isEditing
+						? renderBalanceInput("Starting Amount", "balance", true)
+						: renderBalanceInput("Balance", "balance", true))}
+
+				{selectedAccountType !== "Cash" && (
+					<>
+						{selectedAccountType !== "Investment" &&
+							selectedAccountType !== "Credit" &&
+							selectedAccountType !== "Loan" && (
+								<InputField
+									label="Account Number"
+									id="account-number"
+									placeholder="e.g. 1234567890123456"
+									value={account?.accountNumber || "N/A"}
+									readOnly={isEditing}
+									className={`${
+										isEditing ? "bg-slate-100 text-slate-500" : ""
+									}`}
+								/>
+							)}
+
+						{selectedAccountType === "Credit" && (
+							<>
+								<InputField
+									label="Account Number"
+									id="account-number"
+									name="accountNumber"
+									placeholder="e.g. 1234567890123456"
+									value={currentAccount.accountNumber}
+									onChange={handleInputChange}
+									readOnly={!isEditing}
+									className={`${
+										!isEditing ? "bg-slate-100 text-slate-500" : ""
+									}`}
+								/>
+								<InputField
+									label="Expiry Date"
+									id="expiry-date"
+									name="expiry"
+									value={currentAccount.expiry}
+									onChange={handleInputChange}
+									readOnly={!isEditing}
+									className={`${
+										!isEditing ? "bg-slate-100 text-slate-500" : ""
+									}`}
+									placeholder="MM/YY"
+								/>
+							</>
 						)}
-					</div>
-				)}
-				{(!selectedAccountType || selectedAccountType !== "Cash") &&
-					account && (
-						<div>
-							<Button
-								variant="sync"
-								onClick={handleSyncIndividualAccount}
-								isLoading={isAccountSyncing}
-								type="button"
-								fullWidth={true}
+
+						{selectedAccountType === "Investment" ? (
+							<SelectField
+								label="Investment Category"
+								name="investmentCategory"
+								placeholder="Select category..."
+								value={selectedInvestmentCategory}
+								onValueChange={(value) => setSelectedInvestmentCategory(value)}
+								disabled={isEditing}
 							>
-								Sync Account
-							</Button>
-							{errors.balance && (
-								<p className="mt-1 text-xs text-red-500">{errors.balance}</p>
-							)}
-							{showAccountSyncNotification && (
-								<p className="mt-2 flex items-center justify-center gap-2 text-center text-base font-semibold text-green-600">
-									<CheckCircle size={18} />
-									Bank Sync Successful!
-								</p>
-							)}
-						</div>
-					)}
+								{INVESTMENT_CATEGORIES.map((category) => (
+									<SelectItem key={category.value} value={category.value}>
+										{category.label}
+									</SelectItem>
+								))}
+							</SelectField>
+						) : (
+							isEditing && (
+								<div className="pt-4">
+									<Button
+										variant="sync"
+										onClick={handleSyncIndividualAccount}
+										isLoading={isAccountSyncing}
+										type="button"
+										fullWidth={true}
+									>
+										Sync Account
+									</Button>
+									{showAccountSyncNotification && (
+										<p className="mt-2 flex items-center justify-center gap-2 text-center text-base font-semibold text-green-600">
+											<CheckCircle size={18} />
+											Bank Sync Successful!
+										</p>
+									)}
+								</div>
+							)
+						)}
+					</>
+				)}
 			</>
 		);
-
-		if (selectedAccountType === "Credit") {
-			return (
-				<>
-					<InputField
-						label="Card Nickname"
-						id="card-nickname"
-						name="name"
-						value={currentAccount.name}
-						onChange={handleInputChange}
-						placeholder="e.g., Chase Sapphire"
-						error={errors.name}
-					/>
-					{account && (
-						<>
-							<InputField
-								label="Account Number"
-								id="account-number"
-								value={account.accountNumber || "N/A"}
-								readOnly
-							/>
-							<InputField
-								label="Expiry Date"
-								id="expiry-date"
-								value={account.expiry || "MM/YY"}
-								readOnly
-							/>
-						</>
-					)}
-				</>
-			);
-		} else if (selectedAccountType === "Loan") {
-			return (
-				<>
-					<InputField
-						label="Loan Name"
-						id="loan-name"
-						name="name"
-						value={currentAccount.name}
-						onChange={handleInputChange}
-						placeholder="e.g., Car Loan"
-						error={errors.name}
-					/>
-					{account && (
-						<div>
-							<Button
-								variant="sync"
-								onClick={handleSyncIndividualAccount}
-								isLoading={isAccountSyncing}
-								type="button"
-							>
-								Sync Account
-							</Button>
-							{errors.balance && (
-								<p className="mt-1 text-xs text-red-500">{errors.balance}</p>
-							)}
-							{showAccountSyncNotification && (
-								<p className="mt-2 flex items-center justify-center gap-2 text-center text-base font-semibold text-green-600">
-									<CheckCircle size={18} />
-									Bank Sync Successful!
-								</p>
-							)}
-						</div>
-					)}
-				</>
-			);
-		} else if (selectedAccountType === "Investment") {
-			return (
-				<>
-					<InputField
-						label="Investment Name"
-						name="name"
-						value={currentAccount.name}
-						onChange={handleInputChange}
-						placeholder="e.g., VTSAX Index Fund"
-						error={errors.name}
-					/>
-					<SelectField
-						label="Investment Category"
-						name="investmentCategory"
-						value={selectedInvestmentCategory}
-						onValueChange={(value) => setSelectedInvestmentCategory(value)}
-						disabled={!!account}
-					>
-						{INVESTMENT_CATEGORIES.map((category) => (
-							<SelectItem key={category.value} value={category.value}>
-								{category.label}
-							</SelectItem>
-						))}
-					</SelectField>
-				</>
-			);
-		} else {
-			return commonFields;
-		}
 	};
 
 	return (
@@ -365,6 +358,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					<button
 						onClick={onClose}
 						className="rounded-full p-2 hover:bg-slate-100"
+						type="button"
 					>
 						<X size={20} />
 					</button>
@@ -372,28 +366,31 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 				<div className="space-y-4 p-6">
 					{!account && (
 						<>
-							<SelectField
-								label="Account Type"
-								name="selectedAccountType"
-								value={selectedAccountType}
-								onValueChange={(value) =>
-									setSelectedAccountType(
-										value as AccountType | "Investment" | "Loan",
-									)
-								}
-								disabled={defaultAccountType !== "Cash"}
-							>
-								<SelectItem value="Cash">Cash</SelectItem>
-								<SelectItem value="Credit">Credit</SelectItem>
-								<SelectItem value="Debit">Debit</SelectItem>
-								<SelectItem value="Savings">Savings</SelectItem>
-								<SelectItem value="Investment">Investment</SelectItem>
-								<SelectItem value="Loan">Loan</SelectItem>
-							</SelectField>
+							{defaultAccountType === "Cash" && (
+								<SelectField
+									label="Account Type"
+									name="selectedAccountType"
+									value={selectedAccountType}
+									placeholder="Select account type..."
+									onValueChange={(value) =>
+										setSelectedAccountType(
+											value as AccountType | "Investment" | "Loan",
+										)
+									}
+								>
+									<SelectItem value="Cash">Cash</SelectItem>
+									<SelectItem value="Credit">Credit</SelectItem>
+									<SelectItem value="Debit">Debit</SelectItem>
+									<SelectItem value="Savings">Savings</SelectItem>
+									<SelectItem value="Investment">Investment</SelectItem>
+									<SelectItem value="Loan">Loan</SelectItem>
+								</SelectField>
+							)}
 							{selectedAccountType !== "Cash" && (
 								<SelectField
 									label="Bank Branch"
 									name="selectedBankBranch"
+									placeholder="Select a bank..."
 									onValueChange={(value) => setSelectedBankBranch(value)}
 								>
 									<SelectItem value="Bank of America">
