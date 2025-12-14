@@ -1,7 +1,8 @@
 import * as Select from "@radix-ui/react-select";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ChevronDown } from "lucide-react";
-import React from "react";
+import React, { useCallback, useState } from "react";
+import { type ZodType, z } from "zod";
 
 const selectTriggerVariants = cva(
 	"flex h-11 w-full items-center justify-between rounded-md border border-slate-200 bg-transparent px-3 py-2 text-md ring-offset-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus:ring-violet-600",
@@ -29,21 +30,74 @@ const selectItemVariants = cva(
 	"relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-slate-100 focus:text-slate-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-slate-800 dark:focus:text-slate-50",
 );
 
-export interface SelectFieldProps
+export interface SelectFieldProps<T>
 	extends React.ComponentPropsWithoutRef<typeof Select.Root>,
 		VariantProps<typeof selectTriggerVariants> {
 	label?: string;
 	error?: string;
 	placeholder?: string;
 	children: React.ReactNode;
+	// Zod schema for validation
+	schema?: ZodType<T>;
+	// Callback for validated changes (value and error)
+	onValidatedChange?: (value: T, error?: string) => void;
 }
 
-const SelectField = React.forwardRef<HTMLButtonElement, SelectFieldProps>(
+const SelectField = React.forwardRef<
+	HTMLButtonElement,
+	SelectFieldProps<any> // Using any for now, will refine once usage is clearer
+>(
 	(
-		{ className, variant, label, error, placeholder, children, ...props },
+		{
+			className,
+			variant,
+			label,
+			error: externalError,
+			placeholder,
+			children,
+			schema,
+			onValidatedChange,
+			onValueChange, // Capture original onValueChange
+			...props
+		},
 		forwardedRef,
 	) => {
-		const selectVariant = error ? "error" : variant;
+		const [internalError, setInternalError] = useState<string | undefined>(
+			undefined,
+		);
+
+		const validate = useCallback(
+			(value: any) => {
+				if (schema) {
+					const result = schema.safeParse(value);
+					if (!result.success) {
+						setInternalError(result.error.errors[0].message);
+						return result.error.errors[0].message;
+					} else {
+						setInternalError(undefined);
+					}
+				}
+				return undefined;
+			},
+			[schema],
+		);
+
+		const handleValueChange = (value: any) => {
+			// Call original onValueChange
+			if (onValueChange) {
+				onValueChange(value);
+			}
+
+			// Perform validation and notify parent
+			const validationError = validate(value);
+			if (onValidatedChange) {
+				onValidatedChange(value as T, validationError);
+			}
+		};
+
+		const displayError = externalError || internalError;
+		const selectVariant = displayError ? "error" : variant;
+
 		return (
 			<div className="w-full">
 				{label && (
@@ -51,7 +105,7 @@ const SelectField = React.forwardRef<HTMLButtonElement, SelectFieldProps>(
 						{label}
 					</label>
 				)}
-				<Select.Root {...props}>
+				<Select.Root onValueChange={handleValueChange} {...props}>
 					<Select.Trigger
 						ref={forwardedRef}
 						className={selectTriggerVariants({
@@ -75,7 +129,9 @@ const SelectField = React.forwardRef<HTMLButtonElement, SelectFieldProps>(
 						</Select.Content>
 					</Select.Portal>
 				</Select.Root>
-				{error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+				{displayError && (
+					<p className="mt-1 text-sm text-red-500">{displayError}</p>
+				)}
 			</div>
 		);
 	},

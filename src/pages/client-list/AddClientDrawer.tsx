@@ -8,10 +8,20 @@ import {
 	X,
 } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { z } from "zod";
 import Button from "@/shared/components/Button";
 import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
 import { type Client, ClientStatus } from "@/shared/types/types";
+
+// Define Zod schema for client validation
+const clientSchema = z.object({
+	name: z.string().min(1, "Name is required."),
+	email: z.string().min(1, "Email is required.").email("Email is invalid."),
+	company: z.string().min(1, "Company is required."),
+	revenue: z.number().min(0, "Revenue cannot be negative."),
+	status: z.nativeEnum(ClientStatus, { message: "Status is required." }),
+});
 
 interface AddClientDrawerProps {
 	isOpen: boolean;
@@ -31,31 +41,27 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 		revenue: 0,
 		status: ClientStatus.Pending,
 	});
-	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 
-	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-	) => {
-		const { name, value } = e.target;
-		setNewClient((prev) => ({ ...prev, [name]: value }));
-		if (errors[name]) {
-			setErrors((prev) => ({ ...prev, [name]: "" }));
-		}
-	};
-
-	const validate = () => {
-		const newErrors: { [key: string]: string } = {};
-		if (!newClient.name) newErrors.name = "Name is required.";
-		if (!newClient.email) newErrors.email = "Email is required.";
-		else if (!/\S+@\S+\.\S+/.test(newClient.email))
-			newErrors.email = "Email is invalid.";
-		if (!newClient.company) newErrors.company = "Company is required.";
-		return newErrors;
-	};
+	const handleValidatedChange = useCallback(
+		(fieldName: keyof Client, value: any, error?: string) => {
+			setNewClient((prev) => ({ ...prev, [fieldName]: value }));
+			setErrors((prev) => ({ ...prev, [fieldName]: error }));
+		},
+		[],
+	);
 
 	const handleAddClient = () => {
-		const newErrors = validate();
-		if (Object.keys(newErrors).length > 0) {
+		// Validate all fields on submission
+		const validationResult = clientSchema.safeParse(newClient);
+
+		if (!validationResult.success) {
+			const newErrors: Record<string, string> = {};
+			validationResult.error.errors.forEach((err) => {
+				if (err.path.length > 0) {
+					newErrors[err.path[0]] = err.message;
+				}
+			});
 			setErrors(newErrors);
 			return;
 		}
@@ -117,7 +123,12 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 								label="Full Name"
 								name="name"
 								value={newClient.name}
-								onChange={handleInputChange}
+								onValidatedChange={(value, error) =>
+									handleValidatedChange("name", value, error)
+								}
+								schema={clientSchema
+									.pick({ name: true })
+									.transform((val) => val.name)}
 								placeholder="e.g. John Doe"
 								error={errors.name}
 							/>
@@ -127,7 +138,12 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 								name="email"
 								type="email"
 								value={newClient.email}
-								onChange={handleInputChange}
+								onValidatedChange={(value, error) =>
+									handleValidatedChange("email", value, error)
+								}
+								schema={clientSchema
+									.pick({ email: true })
+									.transform((val) => val.email)}
 								placeholder="e.g. john.doe@example.com"
 								error={errors.email}
 							/>
@@ -136,7 +152,12 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 								label="Company"
 								name="company"
 								value={newClient.company}
-								onChange={handleInputChange}
+								onValidatedChange={(value, error) =>
+									handleValidatedChange("company", value, error)
+								}
+								schema={clientSchema
+									.pick({ company: true })
+									.transform((val) => val.company)}
 								placeholder="e.g. Acme Inc."
 								error={errors.company}
 							/>
@@ -146,18 +167,31 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 									label="Revenue"
 									name="revenue"
 									type="number"
+									format="currency" // Assuming currency formatting for revenue
 									value={newClient.revenue}
-									onChange={handleInputChange}
+									onValidatedChange={(value, error) =>
+										handleValidatedChange(
+											"revenue",
+											parseFloat(value as string),
+											error,
+										)
+									}
+									schema={clientSchema
+										.pick({ revenue: true })
+										.transform((val) => val.revenue)}
+									error={errors.revenue}
 								/>
 								<SelectField
 									label="Status"
 									name="status"
 									value={newClient.status}
-									onValueChange={(value) =>
-										handleInputChange({
-											target: { name: "status", value },
-										} as React.ChangeEvent<HTMLSelectElement>)
+									onValidatedChange={(value, error) =>
+										handleValidatedChange("status", value, error)
 									}
+									schema={clientSchema
+										.pick({ status: true })
+										.transform((val) => val.status)}
+									error={errors.status}
 								>
 									<SelectItem value={ClientStatus.Pending}>Pending</SelectItem>
 									<SelectItem value={ClientStatus.Active}>Active</SelectItem>

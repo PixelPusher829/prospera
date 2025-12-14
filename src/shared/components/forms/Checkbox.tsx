@@ -1,5 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import type React from "react";
+import { useCallback, useState } from "react";
+import { type ZodType, z } from "zod";
 
 // const checkboxContainerVariants = cva("flex items-center space-x-2", {
 //   variants: {},
@@ -14,25 +16,82 @@ import type React from "react";
 //   },
 // );
 
-export interface CheckboxProps
+export interface CheckboxProps<T>
 	extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string;
+	// External error prop
+	error?: string;
+	// Zod schema for validation
+	schema?: ZodType<T>;
+	// Callback for validated changes (value and error)
+	onValidatedChange?: (value: T, error?: string) => void;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ className, label, ...props }) => {
+const Checkbox = <T,>({
+	className,
+	label,
+	error: externalError,
+	schema,
+	onValidatedChange,
+	onChange, // Capture original onChange
+	...props
+}: CheckboxProps<T>) => {
+	const [internalError, setInternalError] = useState<string | undefined>(
+		undefined,
+	);
+
+	const validate = useCallback(
+		(checkedValue: boolean) => {
+			if (schema) {
+				const result = schema.safeParse(checkedValue);
+				if (!result.success) {
+					setInternalError(result.error.errors[0].message);
+					return result.error.errors[0].message;
+				} else {
+					setInternalError(undefined);
+				}
+			}
+			return undefined;
+		},
+		[schema],
+	);
+
+	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const checked = e.target.checked;
+
+		// Call original onChange
+		if (onChange) {
+			onChange(e);
+		}
+
+		// Perform validation and notify parent
+		const validationError = validate(checked);
+		if (onValidatedChange) {
+			onValidatedChange(checked as T, validationError);
+		}
+	};
+
+	const displayError = externalError || internalError;
+
 	return (
-		<div className="flex items-center space-x-2">
-			<input
-				type="checkbox"
-				className={` h-7 w-5 shrink-0 rounded-sm border  ${className}`}
-				{...props}
-			/>
-			<label
-				htmlFor={props.id}
-				className="text-sm leading-none font-medium text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-200"
-			>
-				{label}
-			</label>
+		<div className="flex flex-col">
+			<div className="flex items-center space-x-2">
+				<input
+					type="checkbox"
+					className={` h-7 w-5 shrink-0 rounded-sm border  ${className}`}
+					onChange={handleCheckboxChange}
+					{...props}
+				/>
+				<label
+					htmlFor={props.id}
+					className="text-sm leading-none font-medium text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-200"
+				>
+					{label}
+				</label>
+			</div>
+			{displayError && (
+				<p className="mt-1 text-sm text-red-500">{displayError}</p>
+			)}
 		</div>
 	);
 };

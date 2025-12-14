@@ -1,10 +1,47 @@
 import { CheckCircle, Save, Trash2, X } from "lucide-react";
-import type React from "react";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "@/shared/components/Button";
 import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
 import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "@/shared/data/constants";
 import type { Account, AccountType } from "@/shared/types/types";
+import { z } from "zod";
+import { formatAccountNumber, formatCreditCard } from "@/shared/utils/formatters";
+
+// Define Zod schema for account validation
+const accountSchema = z.object({
+	name: z.string().min(1, "Account name is required."),
+	balance: z.preprocess(
+		(val) => Number(String(val).replace(/[^0-9.]/g, "")),
+		z.number().min(0, "Balance cannot be negative.").or(z.literal(NaN)),
+	),
+	accountNumber: z.string().optional(),
+	colorTheme: z.string().optional(),
+	expiry: z
+		.string()
+		.optional()
+		.refine(
+			(val) => {
+				if (!val) return true; // Optional field, no validation if empty
+				const [month, year] = val.split("/");
+				if (!month || !year || month.length !== 2 || year.length !== 2)
+					return false;
+				const currentYear = new Date().getFullYear() % 100;
+				const currentMonth = new Date().getMonth() + 1; // getMonth() is 0-indexed
+
+				const expMonth = parseInt(month, 10);
+				const expYear = parseInt(year, 10);
+
+				if (expMonth < 1 || expMonth > 12) return false;
+				if (expYear < currentYear) return false;
+				if (expYear === currentYear && expMonth < currentMonth) return false;
+
+				return true;
+			},
+			{
+				message: "Invalid expiry date (MM/YY)",
+			},
+		),
+});
 
 interface AddEditAccountModalProps {
 	isOpen: boolean;
@@ -23,7 +60,13 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 	account,
 	onDeleteAccount,
 }) => {
-	const [currentAccount, setCurrentAccount] = useState({
+	const [currentAccount, setCurrentAccount] = useState<
+		Partial<Omit<Account, "balance" | "accountNumber">> & {
+			balance: string;
+			accountNumber: string;
+			expiry: string;
+		}
+	>({
 		name: "",
 		balance: "",
 		accountNumber: "",
@@ -35,7 +78,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 	>(defaultAccountType);
 	const [selectedBankBranch, setSelectedBankBranch] =
 		useState("Bank of America");
-	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 	const [isAccountSyncing, setIsAccountSyncing] = useState(false);
 	const [showAccountSyncNotification, setShowAccountSyncNotification] =
 		useState(false);
@@ -49,7 +92,10 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 				setCurrentAccount({
 					name: account.name,
 					balance: String(account.balance),
-					accountNumber: account.accountNumber || "",
+					accountNumber:
+						account.type === "Credit"
+							? formatCreditCard(account.accountNumber || "")
+							: formatAccountNumber(account.accountNumber || ""),
 					colorTheme: account.colorTheme || COLOR_PALETTE[0],
 					expiry: account.expiry || "",
 				});
@@ -74,43 +120,53 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 				setSelectedAccountType(defaultAccountType);
 				setSelectedInvestmentCategory(INVESTMENT_CATEGORIES[0].value);
 			}
-			setErrors({});
+			setErrors({}); // Clear errors when modal opens
 		}
 	}, [isOpen, account, defaultAccountType]);
 
-	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-	) => {
-		const { name, value } = e.target;
-		setCurrentAccount((prev) => ({ ...prev, [name]: value }));
-		if (errors[name]) {
-			setErrors((prev) => ({ ...prev, [name]: "" }));
-		}
-	};
-
-	const validate = () => {
-		const newErrors: { [key: string]: string } = {};
-		if (!currentAccount.name.trim()) newErrors.name = "Name is required.";
-		if (!currentAccount.balance && selectedAccountType === "Cash") {
-			newErrors.balance = "Balance is required.";
-		} else if (
-			selectedAccountType === "Cash" &&
-			Number.isNaN(parseFloat(currentAccount.balance))
-		) {
-			newErrors.balance = "Balance must be a number.";
-		} else if (
-			selectedAccountType === "Cash" &&
-			parseFloat(currentAccount.balance) === 0
-		) {
-			newErrors.balance = "Balance cannot be zero for this account type.";
-		}
-
-		return newErrors;
-	};
+	const handleValidatedChange = useCallback(
+		(fieldName: keyof typeof currentAccount, value: any, error?: string) => {
+			setCurrentAccount((prev) => ({ ...prev, [fieldName]: value }));
+			setErrors((prev) => ({ ...prev, [fieldName]: error }));
+		},
+		[],
+	);
 
 	const handleSaveAccount = () => {
-		const newErrors = validate();
-		if (Object.keys(newErrors).length > 0) {
+		// Create a temporary schema for the current account type to handle conditional validation
+		const currentTypeSchema = accountSchema.superRefine((data, ctx) => {
+			if (selectedAccountType === "Cash" && Number(data.balance) <= 0) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: "Balance must be greater than zero for Cash accounts.",
+					path: ["balance"],
+				});
+			}
+			if (selectedAccountType === "Credit" && !data.accountNumber) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: "Account number is required for Credit accounts.",
+					path: ["accountNumber"],
+				});
+			}
+			if (selectedAccountType === "Credit" && !data.expiry) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: "Expiry date is required for Credit accounts.",
+					path: ["expiry"],
+				});
+			}
+		});
+
+		const validationResult = currentTypeSchema.safeParse(currentAccount);
+
+		if (!validationResult.success) {
+			const newErrors: Record<string, string> = {};
+			validationResult.error.errors.forEach((err) => {
+				if (err.path.length > 0) {
+					newErrors[err.path[0]] = err.message;
+				}
+			});
 			setErrors(newErrors);
 			return;
 		}
@@ -129,16 +185,14 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 
 		const accountToSave: Account = {
 			id: account ? account.id : new Date().toISOString(),
-			name: currentAccount.name,
+			name: currentAccount.name as string,
 			institution:
 				selectedAccountType === "Cash"
 					? ""
 					: account?.institution
 						? account.institution
 						: selectedBankBranch,
-			balance:
-				parseFloat(currentAccount.balance) ||
-				parseFloat(generateRandomAmount()),
+			balance: parseFloat(currentAccount.balance),
 			type:
 				selectedAccountType === "Investment"
 					? "Investment"
@@ -194,39 +248,6 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 	const renderFields = () => {
 		const isEditing = !!account;
 
-		const renderBalanceInput = (
-			label: string,
-			name: string,
-			isEditable: boolean,
-		) => (
-			<div>
-				<label
-					className="mb-1 block text-sm font-medium text-slate-600"
-					htmlFor={name}
-				>
-					{label}
-				</label>
-				<div className="relative">
-					<span className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
-						$
-					</span>
-					<InputField
-						type="number"
-						name={name}
-						value={currentAccount.balance}
-						onChange={handleInputChange}
-						readOnly={!isEditable}
-						className={`pl-7 ${!isEditable ? "bg-slate-100 text-slate-500" : ""}`}
-						placeholder="e.g. 5000"
-						error={errors.balance}
-					/>
-				</div>
-				{errors.balance && (
-					<p className="mt-1 text-xs text-red-500">{errors.balance}</p>
-				)}
-			</div>
-		);
-
 		return (
 			<>
 				<InputField
@@ -242,7 +263,10 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					id="account-nickname"
 					name="name"
 					value={currentAccount.name}
-					onChange={handleInputChange}
+					onValidatedChange={(value, error) =>
+						handleValidatedChange("name", value, error)
+					}
+					schema={accountSchema.pick({ name: true }).transform((val) => val.name)}
 					placeholder={
 						selectedAccountType === "Credit"
 							? "e.g. Chase Sapphire"
@@ -255,10 +279,21 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					error={errors.name}
 				/>
 
-				{selectedAccountType === "Cash" &&
-					(isEditing
-						? renderBalanceInput("Starting Amount", "balance", true)
-						: renderBalanceInput("Balance", "balance", true))}
+				{selectedAccountType === "Cash" && (
+					<InputField
+						label="Balance"
+						id="balance"
+						name="balance"
+						value={currentAccount.balance}
+						onValidatedChange={(value, error) =>
+							handleValidatedChange("balance", value, error)
+						}
+						schema={accountSchema.pick({ balance: true }).transform((val) => val.balance)}
+						format="currency"
+						placeholder="e.g. 5000"
+						error={errors.balance}
+					/>
+				)}
 
 				{selectedAccountType !== "Cash" && (
 					<>
@@ -268,12 +303,19 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 								<InputField
 									label="Account Number"
 									id="account-number"
+									name="accountNumber"
 									placeholder="e.g. 1234567890123456"
-									value={account?.accountNumber || "N/A"}
+									value={currentAccount.accountNumber}
+									onValidatedChange={(value, error) =>
+										handleValidatedChange("accountNumber", value, error)
+									}
+									schema={accountSchema.pick({ accountNumber: true }).transform((val) => val.accountNumber)}
+									format="creditCard" // Changed from "number" to "creditCard"
 									readOnly={isEditing}
 									className={`${
 										isEditing ? "bg-slate-100 text-slate-500" : ""
 									}`}
+									error={errors.accountNumber}
 								/>
 							)}
 
@@ -283,25 +325,34 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									label="Account Number"
 									id="account-number"
 									name="accountNumber"
-									placeholder="e.g. 1234567890123456"
+									placeholder="e.g. 1234 5678 9012 3456"
 									value={currentAccount.accountNumber}
-									onChange={handleInputChange}
-									readOnly={!isEditing}
+									onValidatedChange={(value, error) =>
+										handleValidatedChange("accountNumber", value, error)
+									}
+									schema={accountSchema.pick({ accountNumber: true }).transform((val) => val.accountNumber)}
+									format="creditCard"
+									readOnly={isEditing}
 									className={`${
-										!isEditing ? "bg-slate-100 text-slate-500" : ""
+										isEditing ? "bg-slate-100 text-slate-500" : ""
 									}`}
+									error={errors.accountNumber}
 								/>
 								<InputField
 									label="Expiry Date"
 									id="expiry-date"
 									name="expiry"
 									value={currentAccount.expiry}
-									onChange={handleInputChange}
-									readOnly={!isEditing}
-									className={`${
-										!isEditing ? "bg-slate-100 text-slate-500" : ""
-									}`}
+									onValidatedChange={(value, error) =>
+										handleValidatedChange("expiry", value, error)
+									}
+									schema={accountSchema.pick({ expiry: true }).transform((val) => val.expiry)}
 									placeholder="MM/YY"
+									readOnly={isEditing}
+									className={`${
+										isEditing ? "bg-slate-100 text-slate-500" : ""
+									}`}
+									error={errors.expiry}
 								/>
 							</>
 						)}
@@ -313,6 +364,8 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 								placeholder="Select category..."
 								value={selectedInvestmentCategory}
 								onValueChange={(value) => setSelectedInvestmentCategory(value)}
+								// No direct validation needed for SelectField for Investment category as it's pre-defined
+								// schema={accountSchema.pick({ investmentCategory: true })} // Removed as per previous changes
 								disabled={isEditing}
 							>
 								{INVESTMENT_CATEGORIES.map((category) => (
@@ -391,6 +444,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									label="Bank Branch"
 									name="selectedBankBranch"
 									placeholder="Select a bank..."
+									value={selectedBankBranch}
 									onValueChange={(value) => setSelectedBankBranch(value)}
 								>
 									<SelectItem value="Bank of America">
@@ -427,7 +481,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					<Button
 						variant="primary"
 						onClick={handleSaveAccount}
-						disabled={Object.keys(validate()).length > 0}
+						disabled={Object.values(errors).some((error) => error)}
 						icon={<Save size={18} />}
 					>
 						Save Account

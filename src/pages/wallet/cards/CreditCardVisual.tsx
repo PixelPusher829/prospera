@@ -1,5 +1,6 @@
 import type React from "react";
 import type { Account } from "@/shared/types/types";
+import { formatCreditCard } from "@/shared/utils/formatters";
 
 interface CreditCardVisualProps {
 	account: Account;
@@ -39,7 +40,7 @@ const CreditCardVisual: React.FC<CreditCardVisualProps> = ({
 				<div className="mb-2 flex items-center gap-4">
 					<div className="h-7 w-10 rounded border border-white/20 bg-yellow-200/20 backdrop-blur-sm"></div>
 					<div className="font-mono text-lg tracking-widest opacity-90">
-						{account.accountNumber || "**** **** **** 0000"}
+						{formatCreditCard(account.accountNumber || "").padEnd(19, "*")}
 					</div>
 				</div>
 				<div className="flex items-end justify-between">

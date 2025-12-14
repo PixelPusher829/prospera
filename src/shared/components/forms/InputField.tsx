@@ -1,5 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import type React from "react";
+import React, { useCallback, useState } from "react";
+import { type ZodType, z } from "zod";
+import { formatCreditCard, formatCurrency } from "@/shared/utils/formatters";
 
 const inputVariants = cva(
 	"flex h-11 w-full rounded-md border border-slate-200 bg-transparent px-3 py-2 text-md ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:ring-offset-slate-900 dark:placeholder:text-slate-400 dark:focus-visible:ring-violet-600",
@@ -19,36 +21,134 @@ const inputVariants = cva(
 	},
 );
 
-export interface InputProps
+// Define common format types for reusability
+type InputFormat = "creditCard" | "currency" | "number" | "text" | "none";
+
+export interface InputProps<T>
 	extends React.InputHTMLAttributes<HTMLInputElement>,
 		VariantProps<typeof inputVariants> {
 	label?: string;
+	// External error prop, can be used for server-side errors or parent component validation
 	error?: string;
 	icon?: React.ReactNode;
 	hideCalendarIcon?: boolean;
 	onIconClick?: () => void;
 	iconPosition?: "left" | "right";
+	// Zod schema for validation
+	schema?: ZodType<T>;
+	// Callback for validated changes (value and error)
+	onValidatedChange?: (value: T | string, error?: string) => void;
+	// Formatting type
+	format?: InputFormat;
 }
 
-const InputField: React.FC<InputProps> = ({
+const InputField = <T,>({
 	className,
 	variant,
 	label,
-	error,
+	error: externalError, // Renamed to avoid collision with internal error state
 	icon,
 	hideCalendarIcon,
 	type,
 	onIconClick,
 	iconPosition = "right",
+	schema,
+	onValidatedChange,
+	format = "none",
+	value, // Capture value prop for controlled component behavior
+	onChange, // Capture onChange prop
+	onBlur, // Capture onBlur prop
 	...props
-}) => {
-	const inputVariant = error ? "error" : variant;
-	const iconClasses = `absolute ${iconPosition === "left" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-slate-400`;
-
+}: InputProps<T>) => {
 	const hideCalendarIconClass =
 		hideCalendarIcon && type === "date"
 			? "appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-clear-button]:hidden"
 			: "";
+
+	const applyFormatting = useCallback(
+		(inputValue: string): string => {
+			switch (format) {
+				case "creditCard":
+					return formatCreditCard(inputValue);
+				case "currency":
+					return formatCurrency(inputValue);
+				case "number":
+					// Allow only numbers and a single decimal point
+					return inputValue.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+				case "text":
+				case "none":
+				default:
+					return inputValue;
+			}
+		},
+		[format],
+	);
+
+	const [internalError, setInternalError] = useState<string | undefined>(
+		undefined,
+	);
+	const [displayValue, setDisplayValue] = useState<string>(() =>
+		applyFormatting((value as string) || ""),
+	);
+
+	React.useEffect(() => {
+		setDisplayValue(applyFormatting((value as string) || ""));
+	}, [value, applyFormatting]);
+
+	const inputVariant = externalError || internalError ? "error" : variant;
+	const iconClasses = `absolute ${iconPosition === "left" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-slate-400`;
+
+	const validate = useCallback(
+		(inputValue: string) => {
+			if (schema) {
+				const result = schema.safeParse(inputValue);
+				if (!result.success) {
+					setInternalError(result.error.errors[0].message);
+					return result.error.errors[0].message;
+				} else {
+					setInternalError(undefined);
+				}
+			}
+			return undefined;
+		},
+		[schema],
+	);
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const rawValue = e.target.value;
+		const formattedValue = applyFormatting(rawValue);
+		setDisplayValue(formattedValue);
+
+		// Call original onChange
+		if (onChange) {
+			onChange(e);
+		}
+
+		// Perform validation and notify parent
+		const validationError = validate(formattedValue);
+		if (onValidatedChange) {
+			onValidatedChange(formattedValue as T, validationError);
+		}
+	};
+
+	const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		const rawValue = e.target.value;
+		const formattedValue = applyFormatting(rawValue); // Re-apply formatting on blur as well
+		setDisplayValue(formattedValue);
+
+		// Call original onBlur
+		if (onBlur) {
+			onBlur(e);
+		}
+
+		// Perform validation and notify parent
+		const validationError = validate(formattedValue);
+		if (onValidatedChange) {
+			onValidatedChange(formattedValue as T, validationError);
+		}
+	};
+
+	const displayError = externalError || internalError;
 
 	return (
 		<div className="w-full">
@@ -67,6 +167,9 @@ const InputField: React.FC<InputProps> = ({
 						variant: inputVariant,
 						className: `${icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : ""} ${className} ${hideCalendarIconClass}`,
 					})}
+					value={displayValue} // Ensure value is controlled
+					onChange={handleInputChange}
+					onBlur={handleInputBlur}
 					{...props}
 				/>
 				{icon && (
@@ -78,7 +181,9 @@ const InputField: React.FC<InputProps> = ({
 					</div>
 				)}
 			</div>
-			{error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+			{displayError && (
+				<p className="mt-1 text-sm text-red-500">{displayError}</p>
+			)}
 		</div>
 	);
 };

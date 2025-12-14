@@ -1,6 +1,7 @@
 import { Banknote, Landmark } from "lucide-react";
 import type React from "react";
 import type { Account } from "@/shared/types/types";
+import { formatAccountNumber } from "@/shared/utils/formatters";
 
 interface BankAccountRowProps {
 	account: Account;
@@ -22,7 +23,9 @@ const BankAccountRow: React.FC<BankAccountRowProps> = ({ account, onEdit }) => {
 				<div>
 					<h4 className="font-bold text-slate-700">{account.name}</h4>
 					<p className="text-xs text-slate-500">
-						{account.accountNumber} • {account.institution}
+						{account.type === "Cash"
+							? ""
+							: `**** ${account.accountNumber.slice(-4)} • `}{account.institution}
 					</p>
 				</div>
 			</div>
