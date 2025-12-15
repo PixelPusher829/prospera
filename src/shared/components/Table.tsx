@@ -48,13 +48,10 @@ const Table = <T extends {}>({
 	return (
 		<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
 			<div className="overflow-x-auto">
-				<div className="w-full text-left" role="table">
-					<div role="rowheader">
-						<div
-							className="flex items-center border-b border-slate-100 bg-slate-50 dark:border-slate-700 dark:bg-slate-900"
-							role="row"
-						>
-							<div className="flex-none w-12" role="columnheader">
+				<table className="w-full text-left table-auto">
+					<thead>
+						<tr className="border-b border-slate-100 bg-slate-50 dark:border-slate-700 dark:bg-slate-900">
+							<th className="w-12">
 								<div className="px-6 py-4">
 									<Checkbox
 										checked={allSelected}
@@ -62,13 +59,12 @@ const Table = <T extends {}>({
 										className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
 									/>
 								</div>
-							</div>
+							</th>
 							{columns.map((col, index) => (
-								<div
+								<th
 									key={index}
-									className={`flex-1 min-w-max cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400`}
+									className={`min-w-max cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400`}
 									onClick={() => handleSort(col.accessor)}
-									role="columnheader"
 								>
 									<div
 										className={`flex items-center gap-1 ${col.headerClassName || ""}`}
@@ -81,32 +77,28 @@ const Table = <T extends {}>({
 											/>
 										)}
 									</div>
-								</div>
+								</th>
 							))}
 							{renderRowActions && (
-								<div
-									className={`flex-none ${actionsColumnClassName}`}
-									role="columnheader"
-								>
+								<th className={actionsColumnClassName}>
 									<div className="px-6 py-4"></div>
-								</div>
+								</th>
 							)}
-						</div>
-					</div>
-					<div role="rowgroup">
+						</tr>
+					</thead>
+					<tbody>
 						{data.length > 0 ? (
 							data.map((row) => {
 								const id = getRowId(row);
 								return (
-									<div
+									<tr
 										key={id}
-										className={`group flex items-center border-b border-slate-100 transition-colors hover:bg-slate-50/50 focus:outline-none dark:border-slate-700 dark:hover:bg-slate-700/50 ${
+										className={`group border-b border-slate-100 transition-colors hover:bg-slate-50/50 focus:outline-none dark:border-slate-700 dark:hover:bg-slate-700/50 ${
 											onRowClick ? "cursor-pointer" : ""
 										}`}
 										onClick={() => onRowClick?.(row)}
-										role="row"
 									>
-										<div className="flex-none w-12" role="cell">
+										<td className="w-12">
 											<div className="px-6 py-4">
 												<Checkbox
 													checked={selectedIds.has(id)}
@@ -115,39 +107,35 @@ const Table = <T extends {}>({
 													className="h-4 w-4 rounded border-slate-200 text-pink-600 focus:ring-pink-500 dark:border-slate-600"
 												/>
 											</div>
-										</div>
+										</td>
 										{columns.map((col, index) => (
-											<div
+											<td
 												key={index}
-												className={`flex-1 min-w-0 ${col.className || ""}`}
-												role="cell"
+												className={`whitespace-nowrap px-6 py-4 ${col.className || ""}`}
 											>
-												<div className="px-6 py-4">{col.cell(row)}</div>
-											</div>
+												{col.cell(row)}
+											</td>
 										))}
 										{renderRowActions && (
-											<div
-												className={`flex-none text-center ${actionsColumnClassName}`}
-												role="cell"
-											>
+											<td className={`text-center ${actionsColumnClassName}`}>
 												<div className="px-6 py-4">{renderRowActions(row)}</div>
-											</div>
+											</td>
 										)}
-									</div>
+									</tr>
 								);
 							})
 						) : (
-							<div className="flex" role="row">
-								<div
-									className="flex-1 py-12 text-center text-slate-500 dark:text-slate-400"
-									role="cell"
+							<tr>
+								<td
+									colSpan={columns.length + (renderRowActions ? 2 : 1)}
+									className="py-12 text-center text-slate-500 dark:text-slate-400"
 								>
 									{noItemsMessage}
-								</div>
-							</div>
+								</td>
+							</tr>
 						)}
-					</div>
-				</div>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);
