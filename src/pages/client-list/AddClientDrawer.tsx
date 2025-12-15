@@ -88,12 +88,12 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 		<>
 			{isOpen && (
 				<div
-					className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm transition-opacity"
+					className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity dark:bg-black/80"
 					onClick={onClose}
 				/>
 			)}
 			<div
-				className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-out md:w-[480px] ${
+				className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-out md:w-[480px] dark:bg-slate-800 dark:shadow-2xl dark:shadow-slate-900/70 ${
 					isOpen ? "translate-x-0" : "translate-x-full"
 				} `}
 			>
@@ -101,16 +101,16 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 					{/* Drawer Header */}
 					<div className="flex items-center justify-between p-6">
 						<div>
-							<h2 className="text-xl font-bold text-slate-700">
+							<h2 className="text-xl font-bold text-slate-700 dark:text-white">
 								Add New Client
 							</h2>
-							<p className="text-sm text-slate-500">
+							<p className="text-sm text-slate-500 dark:text-slate-400">
 								Enter the details for the new client.
 							</p>
 						</div>
 						<button
 							onClick={onClose}
-							className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+							className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
 						>
 							<X size={20} />
 						</button>
@@ -204,7 +204,7 @@ const AddClientDrawer: React.FC<AddClientDrawerProps> = ({
 					</div>
 
 					{/* Drawer Footer */}
-					<div className="flex justify-end border-t border-slate-100 bg-slate-50 p-6">
+					<div className="flex justify-end border-t border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800">
 						<Button
 							variant="primary"
 							onClick={handleAddClient}

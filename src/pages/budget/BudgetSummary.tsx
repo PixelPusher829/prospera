@@ -10,7 +10,7 @@ const BudgetSummary: React.FC<BudgetSummaryProps> = ({
 	totalBudget,
 }) => {
 	return (
-		<div className="mb-10 flex flex-col items-center justify-between gap-8 rounded-3xl bg-slate-900 p-8 text-white md:flex-row dark:bg-slate-800">
+		<div className="mb-10 flex flex-col items-center justify-between gap-8 rounded-3xl bg-slate-700 p-8 text-white md:flex-row dark:bg-slate-800">
 			<div className="w-full flex-1">
 				<div className="mb-2 flex items-end justify-between">
 					<div>

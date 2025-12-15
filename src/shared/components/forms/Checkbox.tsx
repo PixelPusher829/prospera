@@ -18,7 +18,7 @@ import { type ZodType, z } from "zod";
 
 export interface CheckboxProps<T>
 	extends React.InputHTMLAttributes<HTMLInputElement> {
-	label: string;
+	label?: string; // Made label optional
 	// External error prop
 	error?: string;
 	// Zod schema for validation
@@ -78,19 +78,21 @@ const Checkbox = <T,>({
 			<div className="flex items-center space-x-2">
 				<input
 					type="checkbox"
-					className={` h-7 w-5 shrink-0 rounded-sm border  ${className}`}
+					className={` h-7 w-5 shrink-0 rounded-sm border border-slate-200 text-pink-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-pink-500 dark:focus-visible:ring-violet-500 dark:focus-visible:ring-offset-slate-900 ${className}`}
 					onChange={handleCheckboxChange}
 					{...props}
 				/>
-				<label
-					htmlFor={props.id}
-					className="text-sm leading-none font-medium text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-200"
-				>
-					{label}
-				</label>
+				{label && (
+					<label
+						htmlFor={props.id}
+						className="text-sm leading-none font-medium text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-200"
+					>
+						{label}
+					</label>
+				)}
 			</div>
 			{displayError && (
-				<p className="mt-1 text-sm text-red-500">{displayError}</p>
+				<p className="mt-1 text-sm text-red-500 dark:text-red-400">{displayError}</p>
 			)}
 		</div>
 	);

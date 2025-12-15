@@ -29,20 +29,20 @@ const StatCard: React.FC<StatCardProps> = ({
 	const growthColor = isExpense ? "red" : "green";
 
 	return (
-    <div className="flex h-64 flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm ">
+    <div className="flex h-64 flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:shadow-xl dark:shadow-slate-900/70">
       <div className="flex items-start justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2">
-            <div className="rounded-full bg-slate-50 p-2">
-              <Icon size={16} className="text-slate-700" />
+            <div className="rounded-full bg-slate-50 p-2 dark:bg-slate-700">
+              <Icon size={16} className="text-slate-700 dark:text-slate-300" />
             </div>
-            <span className="font-semibold text-slate-700">{title}</span>
+            <span className="font-semibold text-slate-700 dark:text-white">{title}</span>
           </div>
-          <h2 className="mt-2 text-3xl font-bold text-slate-700 @[200px]:text-4xl">
+          <h2 className="mt-2 text-3xl font-bold text-slate-700 @[200px]:text-4xl dark:text-white">
             ${amount.toLocaleString()}
           </h2>
         </div>
-        <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600">
+        <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
           USD <ChevronDown size={14} />
         </div>
       </div>
@@ -50,25 +50,25 @@ const StatCard: React.FC<StatCardProps> = ({
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <span
-            className={`flex items-center gap-1 rounded-lg bg-${growthColor}-100 px-2 py-0.5 text-xs font-bold text-${growthColor}-700`}
+            className={`flex items-center gap-1 rounded-lg bg-${growthColor}-100 px-2 py-0.5 text-xs font-bold text-${growthColor}-700 dark:bg-${growthColor}-900/30 dark:text-${growthColor}-400`}
           >
             <ArrowUpRight size={12} /> {growth}%
           </span>
           {!isExpense && (
-            <span className="text-xs text-slate-400">vs last month</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">vs last month</span>
           )}
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
-          <div className="flex w-full flex-shrink-0 items-center gap-2 rounded-xl bg-slate-50 p-2 text-slate-600 @[200px]:w-auto">
-            <div className="h-4 w-1 rounded-full bg-violet-200"></div>{" "}
+          <div className="flex w-full flex-shrink-0 items-center gap-2 rounded-xl bg-slate-50 p-2 text-slate-600 @[200px]:w-auto dark:bg-slate-700 dark:text-slate-300">
+            <div className="h-4 w-1 rounded-full bg-violet-200 dark:bg-violet-700"></div>{" "}
             {transactions} transactions
           </div>
-          <div className="flex w-full flex-shrink-0 items-center gap-2 rounded-xl bg-slate-50 p-2 text-slate-600 @[200px]:w-auto">
-            <div className="h-4 w-1 rounded-full bg-violet-400"></div>{" "}
+          <div className="flex w-full flex-shrink-0 items-center gap-2 rounded-xl bg-slate-50 p-2 text-slate-600 @[200px]:w-auto dark:bg-slate-700 dark:text-slate-300">
+            <div className="h-4 w-1 rounded-full bg-violet-400 dark:bg-violet-500"></div>{" "}
             {categories} categories
           </div>
         </div>
-        <p className="text-xs text-slate-400">{comparisonText}</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500">{comparisonText}</p>
       </div>
     </div>
   );

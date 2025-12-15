@@ -4,9 +4,9 @@ import Button from "@/shared/components/Button"; // Import Button component
 import { MOCK_TRANSACTIONS } from "@/shared/data/constants";
 
 const RecentTransactions: React.FC<{
-	setActiveTab: (tab: string) => void;
+  setActiveTab: (tab: string) => void;
 }> = ({ setActiveTab }) => {
-	return (
+  return (
     <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
       <div className="mb-6 flex items-center justify-between">
         <h3 className="text-lg font-bold text-slate-700 dark:text-white">
@@ -30,7 +30,7 @@ const RecentTransactions: React.FC<{
               <div
                 className={`rounded-full p-3 ${
                   t.type === "income"
-                    ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                    ? "bg-green-100 text-green-600 dark:bg-green-700/30 dark:text-green-400"
                     : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
                 }`}
               >

@@ -30,32 +30,34 @@ const HeroCard: React.FC<HeroCardProps> = ({
 
 	if (type === "primary") {
 		return (
-			<div className="group relative flex h-48 flex-col justify-between overflow-hidden rounded-3xl bg-slate-900 p-6 text-white shadow-xl dark:bg-violet-900/20">
-				<div className="absolute top-0 right-0 p-8 opacity-10 transition-opacity group-hover:opacity-20">
-					<Icon size={100} />
-				</div>
-				<div className="z-10">
-					<p className="mb-1 font-medium text-slate-400 dark:text-violet-200">
-						{title}
-					</p>
-					<h2 className="text-2xl @[200px]:text-3xl font-bold text-white">{value}</h2>
-				</div>
-				<div className="z-10 flex w-fit items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5 text-sm backdrop-blur-md">
-					<ArrowUpRight size={16} className="text-green-400" />
-					<span className="text-slate-200">{percentage}</span>
-				</div>
-			</div>
-		);
+      <div className="group relative flex h-48 flex-col justify-between overflow-hidden rounded-3xl bg-slate-700 p-6 border text-white shadow-xl dark:border-slate-700 dark:bg-slate-600/20 dark:shadow-2xl dark:shadow-slate-900/70">
+        <div className="absolute top-0 right-0 p-8 opacity-10 transition-opacity group-hover:opacity-20">
+          <Icon size={100} />
+        </div>
+        <div className="z-10">
+          <p className="mb-1 font-medium text-slate-400 dark:text-violet-200">
+            {title}
+          </p>
+          <h2 className="text-2xl font-bold text-white @[200px]:text-3xl">
+            {value}
+          </h2>
+        </div>
+        <div className="z-10 flex w-fit items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5 text-sm backdrop-blur-md">
+          <ArrowUpRight size={16} className="text-green-400" />
+          <span className="text-slate-200">{percentage}</span>
+        </div>
+      </div>
+    );
 	}
 
 	return (
 		<div
-			className="flex h-48 cursor-pointer flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-colors hover:border-green-200 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-green-700"
+			className="flex h-48 cursor-pointer flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-colors hover:border-green-200 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-green-700 dark:shadow-2xl dark:shadow-slate-900/70"
 			onClick={onClick}
 		>
 			<div>
 				<div className="mb-2 flex items-center gap-2">
-					<div className="rounded-full bg-green-100 p-2 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+					<div className="rounded-full bg-green-100 p-2 text-green-600 dark:bg-green-700/30 dark:text-green-400">
 						<Icon size={18} />
 					</div>
 					<span className="font-semibold text-slate-700 dark:text-white">

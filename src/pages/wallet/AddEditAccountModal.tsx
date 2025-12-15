@@ -323,7 +323,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									format="creditCard" // Changed from "number" to "creditCard"
 									readOnly={isEditing}
 									className={`${
-										isEditing ? "bg-slate-100 text-slate-500" : ""
+										isEditing ? "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400" : ""
 									}`}
 									error={errors.accountNumber}
 								/>
@@ -346,7 +346,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									format="creditCard"
 									readOnly={isEditing}
 									className={`${
-										isEditing ? "bg-slate-100 text-slate-500" : ""
+										isEditing ? "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400" : ""
 									}`}
 									error={errors.accountNumber}
 								/>
@@ -364,7 +364,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									placeholder="MM/YY"
 									readOnly={isEditing}
 									className={`${
-										isEditing ? "bg-slate-100 text-slate-500" : ""
+										isEditing ? "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400" : ""
 									}`}
 									error={errors.expiry}
 								/>
@@ -401,7 +401,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 										Sync Account
 									</Button>
 									{showAccountSyncNotification && (
-										<p className="mt-2 flex items-center justify-center gap-2 text-center text-base font-semibold text-green-600">
+										<p className="mt-2 flex items-center justify-center gap-2 text-center text-base font-semibold text-green-600 dark:text-green-400">
 											<CheckCircle size={18} />
 											Bank Sync Successful!
 										</p>
@@ -416,15 +416,15 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 	};
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-			<div className="m-4 w-full max-w-md rounded-2xl bg-white shadow-xl">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm dark:bg-black/70">
+			<div className="m-4 w-full max-w-md rounded-2xl bg-white shadow-xl dark:bg-slate-900 dark:shadow-2xl dark:shadow-slate-900/70">
 				<div className="flex items-center justify-between p-6">
-					<h2 className="text-xl font-bold">
+					<h2 className="text-xl font-bold dark:text-white">
 						{account ? "Edit" : "Add"} {selectedAccountType} Account
 					</h2>
 					<button
 						onClick={onClose}
-						className="rounded-full p-2 hover:bg-slate-100"
+						className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-200"
 						type="button"
 					>
 						<X size={20} />
@@ -473,7 +473,7 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					)}
 					{renderFields()}
 				</div>
-				<div className="flex items-center justify-between gap-4 rounded-b-2xl bg-slate-50 p-6">
+				<div className="flex items-center justify-between gap-4 rounded-b-2xl bg-slate-50 p-6 dark:bg-slate-800">
 					{account && onDeleteAccount && (
 						<Button
 							variant="danger"

@@ -49,32 +49,32 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 			{/* Slide-out Drawer Overlay */}
 			{isDrawerOpen && (
 				<div
-					className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm transition-opacity"
+					className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity dark:bg-black/80"
 					onClick={() => setIsDrawerOpen(false)}
 				/>
 			)}
 
 			{/* Slide-out Drawer Panel */}
 			<div
-				className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-out md:w-[480px] ${
+				className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-out md:w-[480px] dark:bg-slate-800 dark:shadow-2xl dark:shadow-slate-900/70 ${
 					isDrawerOpen ? "translate-x-0" : "translate-x-full"
 				} `}
 			>
 				{selectedClient && (
 					<div className="flex h-full flex-col">
 						{/* Drawer Header */}
-						<div className="flex items-center justify-between border-b border-slate-100 p-6">
+						<div className="flex items-center justify-between border-b border-slate-100 p-6 dark:border-slate-800">
 							<div>
-								<h2 className="text-xl font-bold text-slate-700">
+								<h2 className="text-xl font-bold text-slate-700 dark:text-white">
 									Client Details
 								</h2>
-								<p className="text-sm text-slate-500">
+								<p className="text-sm text-slate-500 dark:text-slate-400">
 									View and edit information
 								</p>
 							</div>
 							<button
 								onClick={() => setIsDrawerOpen(false)}
-								className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+								className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
 							>
 								<X size={20} />
 							</button>
@@ -94,11 +94,11 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 									<span
 										className={`mt-1 inline-block rounded px-2 py-0.5 text-xs font-medium ${
 											drawerForm.status === ClientStatus.Active
-												? "bg-green-100 text-green-800"
+												? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
 												: ""
 										} ${
 											drawerForm.status === ClientStatus.Pending
-												? "bg-amber-100 text-amber-800"
+												? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
 												: ""
 										} ${
 											drawerForm.status === ClientStatus.Inactive
@@ -165,18 +165,18 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 							</div>
 
 							{/* Mock Activity Feed */}
-							<div className="border-t border-slate-100 pt-6">
-								<h4 className="mb-4 font-semibold text-slate-700">
+							<div className="border-t border-slate-100 pt-6 dark:border-slate-800">
+								<h4 className="mb-4 font-semibold text-slate-700 dark:text-white">
 									Recent Activity
 								</h4>
 								<div className="space-y-4">
 									<div className="flex gap-3">
 										<div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-pink-400"></div>
 										<div>
-											<p className="text-sm text-slate-800">
+											<p className="text-sm text-slate-800 dark:text-slate-200">
 												Invoice #4023 sent
 											</p>
-											<p className="text-xs text-slate-400">
+											<p className="text-xs text-slate-400 dark:text-slate-500">
 												{drawerForm.lastContact}
 											</p>
 										</div>
@@ -184,10 +184,10 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 									<div className="flex gap-3">
 										<div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-slate-300"></div>
 										<div>
-											<p className="text-sm text-slate-800">
+											<p className="text-sm text-slate-800 dark:text-slate-200">
 												Email conversation regarding Q3 Budget
 											</p>
-											<p className="text-xs text-slate-400">1 month ago</p>
+											<p className="text-xs text-slate-400 dark:text-slate-500">1 month ago</p>
 										</div>
 									</div>
 								</div>
@@ -195,7 +195,7 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 						</div>
 
 						{/* Drawer Footer */}
-						<div className="flex items-center justify-between border-t border-slate-100 bg-slate-50 p-6">
+						<div className="flex items-center justify-between border-t border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800">
 							<button
 								onClick={() => {
 									if (window.confirm("Delete this client?")) {
@@ -205,7 +205,7 @@ const ClientDetailDrawer: React.FC<ClientDetailDrawerProps> = ({
 										setIsDrawerOpen(false);
 									}
 								}}
-								className="rounded-xl p-3 text-red-500 transition-colors hover:bg-red-50"
+								className="rounded-xl p-3 text-red-500 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
 							>
 								<Trash2 size={20} />
 							</button>

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
 	:root {
 		--primary-red: #f05b57;
@@ -50,10 +52,10 @@
 		@apply bg-gradient-to-b from-[var(--primary-red)] to-[var(--primary-pink)] content-[''] absolute inset-0 rounded-2xl opacity-0 transition-all duration-300;
 	}
 	.sidebar-nav-item.active {
-		@apply text-white shadow-lg shadow-red-200/50;
+		@apply text-white shadow-lg shadow-red-200/50 dark:shadow-none;
 	}
 	.sidebar-nav-item.active::before {
-		@apply opacity-100;
+		@apply opacity-100 dark:opacity-0;
 	}
 	.sidebar-nav-item > * {
 		@apply relative; /* to ensure content is above pseudo-element */

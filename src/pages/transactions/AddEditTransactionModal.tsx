@@ -107,15 +107,15 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-			<div className="m-4 w-full max-w-md rounded-2xl bg-white shadow-xl">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm dark:bg-black/70">
+			<div className="m-4 w-full max-w-md rounded-2xl bg-white shadow-xl dark:bg-slate-900 dark:shadow-2xl dark:shadow-slate-900/70">
 				<div className="flex items-center justify-between p-6">
-					<h2 className="text-xl font-bold">
+					<h2 className="text-xl font-bold dark:text-white">
 						{transaction ? "Edit Transaction" : "Add Transaction"}
 					</h2>
 					<button
 						onClick={onClose}
-						className="rounded-full p-2 hover:bg-slate-100"
+						className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
 					>
 						<X size={20} />
 					</button>
@@ -181,7 +181,7 @@ const AddEditTransactionModal: React.FC<AddEditTransactionModalProps> = ({
 						<SelectItem value="cleared">Cleared</SelectItem>
 					</SelectField>
 				</div>
-				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6">
+				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6 dark:bg-slate-800">
 					<Button
 						variant="primary"
 						onClick={handleSaveTransaction}

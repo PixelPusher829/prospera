@@ -40,7 +40,7 @@ const Analytics: React.FC = () => {
         {" "}
         <Button
           variant="secondary"
-          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
           icon={<LayoutGrid size={18} />}
         >
           Export Report
@@ -48,7 +48,7 @@ const Analytics: React.FC = () => {
       </Header>
 
       {/* Stats Row */}
-      <div className="grid w-full grid-cols-1 gap-6 @4xl:grid-cols-3 overflow-x-hidden">
+      <div className="grid w-full grid-cols-1 p-0.5 gap-6 overflow-x-hidden @4xl:grid-cols-3">
         <StatCard
           title="Total balance"
           amount={MOCK_SUMMARY.balance}
@@ -95,7 +95,7 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* Charts Section 1 */}
-      <div className="grid grid-cols-1 gap-6 @3xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-y-6 @3xl:grid-cols-3 @3xl:gap-6">
         <BalanceOverview />
         <ExpenseStatistics />
       </div>

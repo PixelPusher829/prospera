@@ -6,16 +6,12 @@ import ThemeToggleButton from "./ThemeToggleButton";
 interface SidebarBottomActionsProps {
 	isCollapsed: boolean;
 	onClick: (path: string) => void; // Updated signature
-	isDarkMode: boolean;
-	toggleTheme: () => void;
 	activeTab: string; // Added activeTab prop
 }
 
 const SidebarBottomActions: React.FC<SidebarBottomActionsProps> = ({
 	isCollapsed,
 	onClick,
-	isDarkMode,
-	toggleTheme,
 	activeTab,
 }) => {
 	return (
@@ -53,8 +49,6 @@ const SidebarBottomActions: React.FC<SidebarBottomActionsProps> = ({
 				inactiveClassName=""
 			/>
 			<ThemeToggleButton
-				isDarkMode={isDarkMode}
-				toggleTheme={toggleTheme}
 				isCollapsed={isCollapsed}
 			/>
 		</div>

@@ -77,11 +77,11 @@ const InlineEditCell: React.FC<InlineEditCellProps> = ({
 
 					minWidth: "8ch",
 				}}
-				className={`cursor-pointer rounded-sm px-2 py-1 outline transition-all duration-400 ease-in-out ${
+				className={`cursor-pointer rounded-sm px-2 py-1 outline transition-all duration-400 ease-in-out dark:text-white ${
 					isEditing
-						? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none"
-						: "bg-white border-transparent outline-transparent outline-offset-5"
-				} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent"} `}
+						? "rounded-sm bg-white outline-violet-300 focus:ring-2 focus:ring-violet-300 focus:outline-none dark:bg-slate-800 dark:outline-violet-600 dark:focus:ring-violet-600"
+						: "bg-white border-transparent outline-transparent outline-offset-5 dark:bg-slate-800 dark:border-transparent dark:outline-transparent"
+				} ${!isEditing && "outline-offset-0 hover:text-violet-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] hover:outline-transparent dark:hover:text-violet-400 dark:hover:shadow-[0_0_15px_rgba(139,92,246,0.5)]"} `}
 			/>
 		</div>
 	);

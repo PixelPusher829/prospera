@@ -4,13 +4,13 @@ import { type ZodType, z } from "zod";
 import { formatCreditCard, formatCurrency } from "@/shared/utils/formatters";
 
 const inputVariants = cva(
-	"flex h-11 w-full rounded-md border border-slate-200 bg-transparent px-3 py-2 text-md ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:ring-offset-slate-900 dark:placeholder:text-slate-400 dark:focus-visible:ring-violet-600",
+	"flex h-11 w-full rounded-md border border-slate-200 bg-transparent px-3 py-2 text-md dark:bg-white/5 text-slate-900 dark:text-slate-50 ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:ring-offset-slate-900 dark:placeholder:text-slate-400 dark:focus-visible:ring-violet-600",
 	{
 		variants: {
 			variant: {
 				default: "",
 				error:
-					"border-red-500 text-red-500 placeholder:text-red-400 focus-visible:ring-red-500",
+					"border-red-500 text-red-500 placeholder:text-red-400 focus-visible:ring-red-500 dark:border-red-600 dark:text-red-400 dark:placeholder:text-red-500 dark:focus-visible:ring-red-600",
 				inline:
 					"border-transparent bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
 			},
@@ -96,7 +96,7 @@ const InputField = <T,>({
 	}, [value, applyFormatting]);
 
 	const inputVariant = externalError || internalError ? "error" : variant;
-	const iconClasses = `absolute ${iconPosition === "left" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-slate-400`;
+	const iconClasses = `absolute ${iconPosition === "left" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400`;
 
 	const validate = useCallback(
 		(inputValue: string) => {
@@ -182,7 +182,7 @@ const InputField = <T,>({
 				)}
 			</div>
 			{displayError && (
-				<p className="mt-1 text-sm text-red-500">{displayError}</p>
+				<p className="mt-1 text-sm text-red-500 dark:text-red-400">{displayError}</p>
 			)}
 		</div>
 	);

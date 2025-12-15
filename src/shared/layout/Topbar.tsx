@@ -6,7 +6,6 @@ export default function Topbar({
 	onMenuClick,
 }: {
 	onMenuClick: () => void;
-	isDarkMode: boolean;
 }): React.FC {
 	return (
 		<header className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-100 bg-white/80 px-6 py-4 backdrop-blur-md transition-colors lg:justify-end dark:border-slate-800 dark:bg-slate-900/80">

@@ -102,15 +102,15 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-			<div className="m-4 w-full max-w-md rounded-2xl bg-white shadow-xl">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm dark:bg-black/70">
+			<div className="m-4 w-full max-w-md rounded-2xl bg-white shadow-xl dark:bg-slate-900 dark:shadow-2xl dark:shadow-slate-900/70">
 				<div className="flex items-center justify-between p-6">
-					<h2 className="text-xl font-bold">
+					<h2 className="text-xl font-bold dark:text-white">
 						{goal ? "Edit Goal" : "Create New Goal"}
 					</h2>
 					<button
 						onClick={onClose}
-						className="rounded-full p-2 hover:bg-slate-100"
+						className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
 					>
 						<X size={20} />
 					</button>
@@ -153,7 +153,7 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 						error={errors.deadline}
 					/>
 					<div>
-						<label className="mb-1 block text-sm font-medium text-slate-600">
+						<label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
 							Color
 						</label>
 						<div className="flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 									}
 									className={`h-8 w-8 cursor-pointer rounded-full border-2 ${
 										currentGoal.color === color
-											? "border-violet-500"
+											? "border-violet-500 dark:border-violet-400"
 											: "border-transparent"
 									}`}
 									style={{ backgroundColor: color }}
@@ -174,7 +174,7 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
 						</div>
 					</div>
 				</div>
-				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6">
+				<div className="flex justify-end rounded-b-2xl bg-slate-50 p-6 dark:bg-slate-800">
 					<Button
 						variant="primary"
 						onClick={handleSaveGoal}

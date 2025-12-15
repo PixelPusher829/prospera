@@ -19,7 +19,7 @@ const AddPlaceholderButton: React.FC<AddPlaceholderButtonProps> = ({
 
 	return (
 		<button type="button" onClick={onClick} className={mergedClassName}>
-			<div className="flex items-center justify-center rounded-full transition-transform group-hover:scale-120 dark:bg-slate-800">
+			<div className="flex items-center justify-center rounded-full transition-transform group-hover:scale-120 ">
 				<Plus
 					size={24}
 					className="text-slate-400 dark:text-slate-400 group-hover:text-violet-500"

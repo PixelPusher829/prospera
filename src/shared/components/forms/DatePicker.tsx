@@ -145,7 +145,7 @@ const DatePicker = <T,>({
 				{...props}
 			/>
 			{isPickerOpen && (
-				<div className="absolute z-50 mt-1 rounded-md border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
+				<div className="absolute z-50 mt-1 rounded-md border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
 					<DayPicker
 						mode="single"
 						selected={selectedDay}
@@ -157,9 +157,9 @@ const DatePicker = <T,>({
 							nav_button_next: "text-slate-700 dark:text-slate-200",
 							head_cell: "text-slate-500 dark:text-slate-400",
 							day: "text-slate-700 dark:text-slate-200",
-							day_selected: "bg-violet-600 text-white hover:bg-violet-700",
+							day_selected: "bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-800",
 							day_today: "font-bold",
-							day_disabled: "text-slate-400 opacity-50",
+							day_disabled: "text-slate-400 opacity-50 dark:text-slate-500",
 						}}
 					/>
 				</div>

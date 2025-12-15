@@ -9,8 +9,6 @@ import SidebarNav from "./SidebarNav";
 interface SidebarProps {
 	isMobileOpen: boolean;
 	setIsMobileOpen: (open: boolean) => void;
-	isDarkMode: boolean;
-	toggleTheme: () => void;
 	activeTab: string;
 	setActiveTab: (tab: string) => void;
 }
@@ -18,8 +16,6 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({
 	isMobileOpen,
 	setIsMobileOpen,
-	isDarkMode,
-	toggleTheme,
 	activeTab,
 	setActiveTab,
 }) => {
@@ -65,8 +61,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 					<SidebarBottomActions
 						isCollapsed={isCollapsed}
 						onClick={handleNavLinkClick}
-						isDarkMode={isDarkMode}
-						toggleTheme={toggleTheme}
 						activeTab={activeTab}
 					/>
 				</div>

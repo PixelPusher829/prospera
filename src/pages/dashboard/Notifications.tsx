@@ -5,7 +5,7 @@ const Notifications: React.FC = () => {
 	return (
 		<div className="flex h-48 flex-col overflow-y-auto rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
 			<div className="mb-4 flex items-center gap-2">
-				<div className="rounded-full bg-amber-100 p-2 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
+				<div className="rounded-full bg-amber-100 p-2 text-amber-600 dark:bg-amber-700/30 dark:text-amber-400">
 					<Bell size={18} />
 				</div>
 				<span className="font-semibold text-slate-700 dark:text-white">

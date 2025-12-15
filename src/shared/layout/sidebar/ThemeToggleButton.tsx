@@ -1,17 +1,16 @@
 import { Moon, Sun } from "lucide-react";
 import type React from "react";
+import { useTheme } from "@/shared/contexts/ThemeContext";
 
 interface ThemeToggleButtonProps {
-	isDarkMode: boolean;
-	toggleTheme: () => void;
 	isCollapsed?: boolean;
 }
 
 const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = ({
-	isDarkMode,
-	toggleTheme,
 	isCollapsed = false,
 }) => {
+    const { isDarkMode, toggleTheme } = useTheme();
+
 	return (
 		<div
 			className={`flex items-center pt-4 ${
