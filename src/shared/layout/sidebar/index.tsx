@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SidebarBottomActions from "./SidebarBottomActions";
 import SidebarCollapseButton from "./SidebarCollapseButton";
 import SidebarLogo from "./SidebarLogo";
@@ -24,6 +24,13 @@ const Sidebar: React.FC<SidebarProps> = ({
 	setActiveTab,
 }) => {
 	const [isCollapsed, setIsCollapsed] = useState(false);
+
+	// Force unfold in mobile mode
+	useEffect(() => {
+		if (isMobileOpen) {
+			setIsCollapsed(false);
+		}
+	}, [isMobileOpen]);
 
 	const handleNavLinkClick = (path) => {
 		if (isMobileOpen) {

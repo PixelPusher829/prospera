@@ -46,7 +46,7 @@ const ClientTable: React.FC<ClientTableProps> = ({
 								onSave={(val) => updateClient(client.id, { name: val })}
 							/>
 						</div>
-						<div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+						<div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
 							<Mail size={10} /> {client.email}
 						</div>
 					</div>

@@ -14,16 +14,16 @@ const WalletLoansTab: React.FC<WalletLoansTabProps> = ({
 	openAddAccountModal,
 }) => {
 	return (
-		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{loanAccounts.map((acc) => (
-				<LoanRow key={acc.id} account={acc} onEdit={openEditAccountModal} />
-			))}
-			<AddPlaceholderButton
-				onClick={() => openAddAccountModal("Loan")}
-				label="Add Loan"
-			/>
-		</div>
-	);
+    <div className="@container grid grid-cols-1 @2xl:grid-cols-2 @4xl:grid-cols-3">
+      {loanAccounts.map((acc) => (
+        <LoanRow key={acc.id} account={acc} onEdit={openEditAccountModal} />
+      ))}
+      <AddPlaceholderButton
+        onClick={() => openAddAccountModal("Loan")}
+        label="Add Loan"
+      />
+    </div>
+  );
 };
 
 export default WalletLoansTab;

@@ -66,7 +66,7 @@ const Table = <T extends {}>({
 							{columns.map((col, index) => (
 								<div
 									key={index}
-									className={`flex-1 cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400`}
+									className={`flex-1 min-w-max cursor-pointer px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase hover:text-slate-700 dark:text-slate-400`}
 									onClick={() => handleSort(col.accessor)}
 									role="columnheader"
 								>
@@ -119,7 +119,7 @@ const Table = <T extends {}>({
 										{columns.map((col, index) => (
 											<div
 												key={index}
-												className={`flex-1 ${col.className || ""}`}
+												className={`flex-1 min-w-0 ${col.className || ""}`}
 												role="cell"
 											>
 												<div className="px-6 py-4">{col.cell(row)}</div>

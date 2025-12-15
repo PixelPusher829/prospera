@@ -25,7 +25,8 @@ const BankAccountRow: React.FC<BankAccountRowProps> = ({ account, onEdit }) => {
 					<p className="text-xs text-slate-500">
 						{account.type === "Cash"
 							? ""
-							: `**** ${account.accountNumber.slice(-4)} • `}{account.institution}
+							: `**** ${account.accountNumber.slice(-4)} • `}
+						{account.institution}
 					</p>
 				</div>
 			</div>

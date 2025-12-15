@@ -23,9 +23,9 @@ const NavLink: React.FC<NavLinkProps> = ({
 	activeClassName = "bg-primary-gradient text-white shadow-lg shadow-violet-200/50",
 	inactiveClassName = "text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200",
 }) => {
-	const commonClasses = `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
-		isCollapsed ? "justify-center" : ""
-	} ${className}`;
+	const commonClasses = `flex max-w-xs items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
+    isCollapsed ? "justify-center" : ""
+  } ${className}`;
 
 	const finalClassName = `${commonClasses} w-full ${isActive ? activeClassName : inactiveClassName}`;
 

@@ -18,9 +18,9 @@ const WalletSummaryCards: React.FC<WalletSummaryCardsProps> = ({
 	totalLiabilities,
 }) => {
 	return (
-		<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+		<div className="grid grid-cols-1 gap-6 @2xl:grid-cols-3">
 			{/* Net Worth */}
-			<div className="relative flex min-h-[160px] flex-col justify-between overflow-hidden rounded-3xl bg-slate-900 p-6 text-white">
+			<div className="container relative flex min-h-[160px] flex-col justify-between overflow-hidden rounded-3xl bg-slate-900 p-6 text-white">
 				<div className="absolute top-0 right-0 p-8 opacity-10">
 					<WalletIcon size={80} />
 				</div>
@@ -28,7 +28,7 @@ const WalletSummaryCards: React.FC<WalletSummaryCardsProps> = ({
 					<p className="mb-1 font-medium text-slate-400 dark:text-violet-200">
 						Net Worth
 					</p>
-					<h2 className="text-3xl font-bold text-white">
+					<h2 className="text-2xl @[200px]:text-3xl font-bold text-white">
 						${netWorth.toLocaleString()}
 					</h2>
 				</div>
@@ -39,7 +39,7 @@ const WalletSummaryCards: React.FC<WalletSummaryCardsProps> = ({
 			</div>
 
 			{/* Total Assets */}
-			<div className="flex min-h-[160px] flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+			<div className="container flex min-h-[160px] flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
 				<div className="mb-2 flex items-center gap-3">
 					<div className="rounded-lg bg-emerald-100 p-2 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
 						<TrendingUp size={20} />
@@ -49,7 +49,7 @@ const WalletSummaryCards: React.FC<WalletSummaryCardsProps> = ({
 					</span>
 				</div>
 				<div>
-					<h2 className="text-2xl font-bold text-emerald-600">
+					<h2 className="text-xl @[200px]:text-2xl font-bold text-emerald-600">
 						${totalAssets.toLocaleString()}
 					</h2>
 					<p className="mt-1 text-xs text-slate-400 dark:text-slate-300">
@@ -59,7 +59,7 @@ const WalletSummaryCards: React.FC<WalletSummaryCardsProps> = ({
 			</div>
 
 			{/* Total Liabilities */}
-			<div className="flex min-h-[160px] flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+			<div className="container flex min-h-[160px] flex-col justify-between rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
 				<div className="mb-2 flex items-center gap-3">
 					<div className="rounded-lg bg-red-100 p-2 text-red-600 dark:bg-red-900/30 dark:text-red-400">
 						<ShieldCheck size={20} />
@@ -69,7 +69,7 @@ const WalletSummaryCards: React.FC<WalletSummaryCardsProps> = ({
 					</span>
 				</div>
 				<div>
-					<h2 className="text-2xl font-bold text-red-600">
+					<h2 className="text-xl @[200px]:text-2xl font-bold text-red-600">
 						${totalLiabilities.toLocaleString()}
 					</h2>
 					<p className="mt-1 text-xs text-slate-400 dark:text-slate-300">

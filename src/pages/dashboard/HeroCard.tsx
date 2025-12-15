@@ -38,7 +38,7 @@ const HeroCard: React.FC<HeroCardProps> = ({
 					<p className="mb-1 font-medium text-slate-400 dark:text-violet-200">
 						{title}
 					</p>
-					<h2 className="text-3xl font-bold text-white">{value}</h2>
+					<h2 className="text-2xl @[200px]:text-3xl font-bold text-white">{value}</h2>
 				</div>
 				<div className="z-10 flex w-fit items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5 text-sm backdrop-blur-md">
 					<ArrowUpRight size={16} className="text-green-400" />
@@ -66,11 +66,11 @@ const HeroCard: React.FC<HeroCardProps> = ({
 			<div>
 				<div className="mb-2 flex items-end justify-between">
 					<div>
-						<h3 className="font-bold text-slate-700 dark:text-white">
+						<h3 className="text-base @[150px]:text-lg @[200px]:text-xl font-bold text-slate-700 dark:text-white">
 							{value}
 						</h3>
 					</div>
-					<span className="text-xl font-bold text-green-600 dark:text-green-400">
+					<span className="text-lg @[150px]:text-xl font-bold text-green-600 dark:text-green-400">
 						{percentage}
 					</span>
 				</div>

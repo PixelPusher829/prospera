@@ -14,7 +14,7 @@ const WalletAccountsTab: React.FC<WalletAccountsTabProps> = ({
 	openAddAccountModal,
 }) => {
 	return (
-		<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+		<div className="@container grid grid-cols-1 gap-6 md:grid-cols-2">
 			{liquidAccounts.map((acc) => (
 				<BankAccountRow
 					key={acc.id}

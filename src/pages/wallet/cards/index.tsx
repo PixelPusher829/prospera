@@ -14,7 +14,7 @@ const WalletCardsTab: React.FC<WalletCardsTabProps> = ({
 	openAddAccountModal,
 }) => {
 	return (
-		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+		<div className="@container grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{creditCards.map((acc) => (
 				<div key={acc.id} className="space-y-2">
 					<CreditCardVisual account={acc} onEdit={openEditAccountModal} />

@@ -16,7 +16,7 @@
 	}
 
 	.container {
-		@apply mx-auto max-w-[1600px] space-y-8 p-6 lg:p-10;
+		@apply mx-auto max-w-[1600px] space-y-8 p-6;
 	}
 }
 

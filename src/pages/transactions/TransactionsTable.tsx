@@ -50,9 +50,9 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 			header: "Payee",
 			accessor: "payee",
 			cell: (transaction) => (
-				<div className="flex items-center gap-3">
+				<div className="flex items-center gap-3 min-w-0">
 					<div
-						className={`rounded-full p-2 ${
+						className={`rounded-full p-2 flex-shrink-0 ${
 							transaction.type === "income"
 								? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
 								: "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
@@ -64,9 +64,14 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 							<ArrowUpRight size={14} />
 						)}
 					</div>
-					<span className="text-sm font-medium text-slate-700 dark:text-white">
-						{transaction.payee}
-					</span>
+					<div className="flex-1 min-w-0">
+						<h4 className="text-sm font-medium text-slate-700 dark:text-white overflow-hidden text-ellipsis whitespace-nowrap">
+							{transaction.payee}
+						</h4>
+						<p className="text-xs text-slate-500 dark:text-slate-400 overflow-hidden text-ellipsis whitespace-nowrap">
+							{transaction.date} • {transaction.category}
+						</p>
+					</div>
 				</div>
 			),
 		},
@@ -75,7 +80,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
 			accessor: "category",
 			cell: (transaction) => (
 				<div className="relative inline-block">
-					<span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
+					<span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
 						{transaction.category}
 					</span>
 					<select

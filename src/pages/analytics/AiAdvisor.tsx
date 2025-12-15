@@ -14,7 +14,7 @@ const AiAdvisor: React.FC<AiAdvisorProps> = ({
 	generateInsight,
 }) => {
 	return (
-		<div className="flex flex-col rounded-3xl bg-gradient-to-br from-violet-600 to-indigo-700 p-6 text-white shadow-lg shadow-violet-200">
+		<div className="flex flex-col rounded-3xl bg-gradient-to-br from-violet-600 to-indigo-700 p-6 text-white shadow-lg shadow-violet-200 @lg:col-span-2">
 			<div className="mb-4 flex items-center gap-3">
 				<div className="rounded-xl bg-white/20 p-2 backdrop-blur-sm">
 					<Sparkles size={20} className="text-yellow-300" />

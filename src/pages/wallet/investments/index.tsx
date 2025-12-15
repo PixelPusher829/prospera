@@ -14,7 +14,7 @@ const WalletInvestmentsTab: React.FC<WalletInvestmentsTabProps> = ({
 	openAddAccountModal,
 }) => {
 	return (
-		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+		<div className="@container grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{investAccounts.map((acc) => (
 				<InvestmentRow
 					key={acc.id}

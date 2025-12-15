@@ -68,7 +68,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onEdit }) => {
 			</div>
 
 			<div className="mb-2 flex items-end justify-between">
-				<span className="text-3xl font-bold text-slate-700 dark:text-white">
+				<span className="text-2xl @[200px]:text-3xl font-bold text-slate-700 dark:text-white">
 					${goal.currentAmount.toLocaleString()}
 				</span>
 				<span className="mb-1 text-sm font-medium text-slate-500 dark:text-slate-400">

@@ -13,7 +13,7 @@ import { BUDGET_VS_EXPENSE } from "@/shared/data/constants";
 
 const BudgetComparison: React.FC = () => {
 	return (
-		<div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm lg:col-span-2">
+		<div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm @lg:col-span-2">
 			<div className="mb-6 flex items-center justify-between">
 				<h3 className="text-lg font-bold text-slate-700">
 					Comparing of budget and expense

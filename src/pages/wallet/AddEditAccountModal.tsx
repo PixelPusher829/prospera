@@ -1,11 +1,15 @@
 import { CheckCircle, Save, Trash2, X } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { z } from "zod";
 import Button from "@/shared/components/Button";
 import { InputField, SelectField, SelectItem } from "@/shared/components/forms";
 import { COLOR_PALETTE, INVESTMENT_CATEGORIES } from "@/shared/data/constants";
 import type { Account, AccountType } from "@/shared/types/types";
-import { z } from "zod";
-import { formatAccountNumber, formatCreditCard } from "@/shared/utils/formatters";
+import {
+	formatAccountNumber,
+	formatCreditCard,
+} from "@/shared/utils/formatters";
 
 // Define Zod schema for account validation
 const accountSchema = z.object({
@@ -266,7 +270,9 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 					onValidatedChange={(value, error) =>
 						handleValidatedChange("name", value, error)
 					}
-					schema={accountSchema.pick({ name: true }).transform((val) => val.name)}
+					schema={accountSchema
+						.pick({ name: true })
+						.transform((val) => val.name)}
 					placeholder={
 						selectedAccountType === "Credit"
 							? "e.g. Chase Sapphire"
@@ -288,7 +294,9 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 						onValidatedChange={(value, error) =>
 							handleValidatedChange("balance", value, error)
 						}
-						schema={accountSchema.pick({ balance: true }).transform((val) => val.balance)}
+						schema={accountSchema
+							.pick({ balance: true })
+							.transform((val) => val.balance)}
 						format="currency"
 						placeholder="e.g. 5000"
 						error={errors.balance}
@@ -309,7 +317,9 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									onValidatedChange={(value, error) =>
 										handleValidatedChange("accountNumber", value, error)
 									}
-									schema={accountSchema.pick({ accountNumber: true }).transform((val) => val.accountNumber)}
+									schema={accountSchema
+										.pick({ accountNumber: true })
+										.transform((val) => val.accountNumber)}
 									format="creditCard" // Changed from "number" to "creditCard"
 									readOnly={isEditing}
 									className={`${
@@ -330,7 +340,9 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									onValidatedChange={(value, error) =>
 										handleValidatedChange("accountNumber", value, error)
 									}
-									schema={accountSchema.pick({ accountNumber: true }).transform((val) => val.accountNumber)}
+									schema={accountSchema
+										.pick({ accountNumber: true })
+										.transform((val) => val.accountNumber)}
 									format="creditCard"
 									readOnly={isEditing}
 									className={`${
@@ -346,7 +358,9 @@ const AddEditAccountModal: React.FC<AddEditAccountModalProps> = ({
 									onValidatedChange={(value, error) =>
 										handleValidatedChange("expiry", value, error)
 									}
-									schema={accountSchema.pick({ expiry: true }).transform((val) => val.expiry)}
+									schema={accountSchema
+										.pick({ expiry: true })
+										.transform((val) => val.expiry)}
 									placeholder="MM/YY"
 									readOnly={isEditing}
 									className={`${
